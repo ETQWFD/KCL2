@@ -3,30 +3,35 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>KCL2 Console</title>
+<title>KCL Console</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 256 256%22%3E%3Crect width=%22256%22 height=%22256%22 rx=%2248%22 fill=%22%230a7a45%22/%3E%3Cpath d=%22M42 38h50v74l62-74h64l-79 80 85 100h-70l-62-73v73H42z%22 fill=%22%23041610%22/%3E%3C/svg%3E">
 <style>
 *{box-sizing:border-box}body{margin:0;background:#08160e;color:#e8f2ea;font-family:"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;line-height:1.65}
-.wrap{max-width:920px;margin:0 auto;padding:40px 22px}
+.wrap{max-width:960px;margin:0 auto;padding:40px 22px}
 h1{font-size:26px;margin:0 0 4px;letter-spacing:-.01em}
 .sub{color:#8aa895;font-size:13px;margin-bottom:26px}
 .card{background:#0e2116;border:1px solid #21402c;border-radius:16px;padding:24px;margin-bottom:20px}
 .card h2{font-size:17px;margin:0 0 16px}
+.tag{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.04em;padding:3px 10px;border-radius:999px;background:#123a26;color:#7fe0ac;border:1px solid #22573c;margin-left:8px;vertical-align:middle}
 label{display:block;font-size:13px;color:#9db9a8;margin:14px 0 6px}
-input[type=password],input[type=text],textarea{width:100%;padding:12px 13px;border-radius:10px;border:1px solid #33553f;background:#081a10;color:#eef6ef;font-size:15px;font-family:inherit}
+input[type=password],input[type=text],textarea,select{width:100%;padding:12px 13px;border-radius:10px;border:1px solid #33553f;background:#081a10;color:#eef6ef;font-size:15px;font-family:inherit}
 textarea{min-height:150px;resize:vertical}
 button{padding:11px 20px;border:0;border-radius:10px;background:#0c9d57;color:#fff;font-weight:700;font-size:15px;cursor:pointer}
 button.ghost{background:transparent;border:1px solid #3a5f47;color:#cfe6d6}
 .row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.seg{display:inline-flex;border:1px solid #33553f;border-radius:10px;overflow:hidden}
+.seg button{border-radius:0;background:transparent;color:#9db9a8;padding:10px 18px;font-weight:600}
+.seg button.on{background:#0c9d57;color:#fff}
 .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
 .stat{background:#081a10;border:1px solid #234a32;border-radius:14px;padding:18px}
 .stat b{display:block;font-size:28px;letter-spacing:-.02em}
 .stat span{font-size:13px;color:#93aa9b}
-.asset{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid #1d3a28;font-size:14px}
+.asset{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid #1d3a28;font-size:14px;gap:10px}
+.asset span{word-break:break-all}
 .switch{display:flex;align-items:center;gap:9px;margin:16px 0;font-size:14px;color:#bcd4c4}
 .switch input{width:18px;height:18px}
 .muted{color:#7f978a;font-size:12.5px;margin-top:10px}
-.toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%);background:#0f7c46;color:#fff;padding:12px 20px;border-radius:10px;font-size:14px;opacity:0;transition:opacity .25s;pointer-events:none;max-width:90vw}
+.toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%);background:#0f7c46;color:#fff;padding:12px 20px;border-radius:10px;font-size:14px;opacity:0;transition:opacity .25s;pointer-events:none;max-width:90vw;z-index:9}
 .toast.show{opacity:1}.toast.err{background:#a23b3b}
 .hidden{display:none}
 @media(max-width:680px){.stats{grid-template-columns:1fr}}
@@ -34,8 +39,8 @@ button.ghost{background:transparent;border:1px solid #3a5f47;color:#cfe6d6}
 </head>
 <body>
 <div class="wrap">
-  <h1>KCL2 Console</h1>
-  <div class="sub">不公开的运维页面。下载量来自 GitHub Release 公共接口；公告通过 GitHub Contents 接口写入仓库。</div>
+  <h1>KCL Console</h1>
+  <div class="sub">不公开的运维页面。下载量分别来自 KCL2 与 KCL CE 两个仓库的 GitHub Release 公共接口；公告通过 Contents 接口写入 Pages 仓库，再分别下发给对应启动器。</div>
 
   <div class="card" id="gateCard">
     <h2>访问验证</h2>
@@ -47,84 +52,115 @@ button.ghost{background:transparent;border:1px solid #3a5f47;color:#cfe6d6}
 
   <div id="panel" class="hidden">
     <div class="card">
-      <h2>下载统计</h2>
+      <h2>下载统计 · KCL2</h2>
       <div class="stats">
-        <div class="stat"><b id="sTag">-</b><span>最新版本</span></div>
-        <div class="stat"><b id="sLatest">-</b><span>最新版总下载次数</span></div>
-        <div class="stat"><b id="sTotal">-</b><span>近 100 个版本累计下载</span></div>
+        <div class="stat"><b id="aTag">-</b><span>最新版本</span></div>
+        <div class="stat"><b id="aLatest">-</b><span>最新版总下载次数</span></div>
+        <div class="stat"><b id="aTotal">-</b><span>近 100 个版本累计下载</span></div>
       </div>
-      <div style="margin-top:18px" id="assets"></div>
-      <div class="muted" id="sTime"></div>
+      <div style="margin-top:18px" id="aAssets"></div>
+      <div class="muted" id="aTime"></div>
+    </div>
+
+    <div class="card">
+      <h2>下载统计 · KCL CE <span class="tag">社区版</span></h2>
+      <div class="stats">
+        <div class="stat"><b id="bTag">-</b><span>最新版本</span></div>
+        <div class="stat"><b id="bLatest">-</b><span>最新版总下载次数</span></div>
+        <div class="stat"><b id="bTotal">-</b><span>近 100 个版本累计下载</span></div>
+      </div>
+      <div style="margin-top:18px" id="bAssets"></div>
+      <div class="muted" id="bTime"></div>
     </div>
 
     <div class="card">
       <h2>向启动器发布公告</h2>
+      <div class="seg" id="targetSeg">
+        <button type="button" data-t="kcl2" class="on" onclick="setTarget('kcl2')">KCL2</button>
+        <button type="button" data-t="ce" onclick="setTarget('ce')">KCL CE（社区版）</button>
+      </div>
+      <div class="muted" id="targetHint">当前编辑：发往 <b>KCL2</b> 的公告（announce.json）。</div>
       <label>公告标题</label>
       <input type="text" id="aTitle" placeholder="KCL2 公告" maxlength="40">
-      <label>公告正文（启动器启动时弹窗展示，换行有效）</label>
-      <textarea id="aContent" placeholder="在此填写要推送给所有 KCL2 用户的内容"></textarea>
-      <div class="switch"><input type="checkbox" id="aEnabled"><span>立即向启动器展示该公告（取消勾选则暂不展示，但仍保存内容）</span></div>
-      <label>GitHub 访问令牌（需要对 ETQWFD/KCL2 的 Contents 写权限；仅用于本次写入，不勾选记住则不会保存）</label>
+      <label>公告正文（对应启动器启动时弹窗展示，换行有效）</label>
+      <textarea id="aContent" placeholder="在此填写要推送的内容"></textarea>
+      <div class="switch"><input type="checkbox" id="aEnabled"><span>立即向该启动器展示该公告（取消勾选则暂不展示，但仍保存内容）</span></div>
+      <label>GitHub 访问令牌（需要对 ETQWFD/KCL2 的 Contents 写权限；两个公告文件都在 Pages 仓库内；仅用于本次写入，不勾选记住则不会保存）</label>
       <input type="password" id="aToken" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" autocomplete="off">
       <div class="switch"><input type="checkbox" id="aRemember"><span>在此浏览器记住令牌</span></div>
       <div class="row" style="margin-top:16px">
-        <button onclick="publishAnnounce(true)">保存并发布</button>
-        <button class="ghost" onclick="loadAnnounce()">重新拉取当前公告</button>
+        <button onclick="publishAnnounce()">保存并发布</button>
+        <button class="ghost" onclick="loadAnnounce()">重新拉取当前目标公告</button>
       </div>
-      <div class="muted">发布后 GitHub Pages 通常在 1 分钟内更新；启动器按公告 id 仅对每条新公告弹一次。</div>
+      <div class="muted">发布后 GitHub Pages 通常在 1 分钟内更新；KCL2 与 KCL CE 的公告互相独立，启动器按公告 id 对每条新公告仅弹一次。</div>
     </div>
   </div>
 </div>
 <div class="toast" id="toast"></div>
 
 <script>
-const repo="ETQWFD/KCL2";
-const announcePath="website/announce.json";
+const statsRepo={kcl2:"ETQWFD/KCL2",ce:"ETQWFD/KCL-CE"};
+const contentRepo="ETQWFD/KCL2";
+const announceFile={kcl2:"website/announce.json",ce:"website/announce-ce.json"};
+const label={kcl2:"KCL2",ce:"KCL CE"};
+let target="kcl2";
 function toast(msg,isErr){const t=document.getElementById("toast");t.textContent=msg;t.className="toast show"+(isErr?" err":"");clearTimeout(t._t);t._t=setTimeout(()=>{t.className="toast"},2600)}
 function login(){if(document.getElementById("pass").value==="1234"){sessionStorage.setItem("kcl_dan","1");enter()}else{toast("口令不正确",true)}}
-function enter(){document.getElementById("gateCard").classList.add("hidden");document.getElementById("panel").classList.remove("hidden");loadStats();loadAnnounce();const saved=localStorage.getItem("kcl_pat");if(saved)document.getElementById("aToken").value=saved}
+function enter(){document.getElementById("gateCard").classList.add("hidden");document.getElementById("panel").classList.remove("hidden");loadStats("kcl2");loadStats("ce");loadAnnounce();const saved=localStorage.getItem("kcl_pat");if(saved)document.getElementById("aToken").value=saved}
 function n(v){return new Intl.NumberFormat("zh-CN").format(v||0)}
 async function api(u,opt){const r=await fetch(u,Object.assign({headers:{Accept:"application/vnd.github+json"}},opt||{}));if(!r.ok)throw new Error((await r.text().catch(()=>""))||r.status);return r.json()}
-async function loadStats(){
+async function loadStats(which){
+  const repo=statsRepo[which],p=which==="kcl2"?"a":"b";
   try{
     const[latest,releases]=await Promise.all([
       api(`https://api.github.com/repos/${repo}/releases/latest`),
       api(`https://api.github.com/repos/${repo}/releases?per_page=100`)]);
     const lc=latest.assets.reduce((s,a)=>s+a.download_count,0);
     const tot=releases.reduce((s,r)=>s+r.assets.reduce((x,a)=>x+a.download_count,0),0);
-    document.getElementById("sTag").textContent=latest.tag_name;
-    document.getElementById("sLatest").textContent=n(lc);
-    document.getElementById("sTotal").textContent=n(tot);
-    document.getElementById("sTime").textContent="发布时间："+new Date(latest.published_at).toLocaleString("zh-CN");
-    document.getElementById("assets").innerHTML=latest.assets.length?latest.assets.map(a=>`<div class="asset"><span>${a.name}</span><b>${n(a.download_count)}</b></div>`).join(""):"<div class='muted'>暂无资产</div>";
-  }catch(e){document.getElementById("assets").innerHTML="<div class='muted'>暂时无法读取 GitHub 数据。</div>"}
+    document.getElementById(p+"Tag").textContent=latest.tag_name;
+    document.getElementById(p+"Latest").textContent=n(lc);
+    document.getElementById(p+"Total").textContent=n(tot);
+    document.getElementById(p+"Time").textContent="发布时间："+new Date(latest.published_at).toLocaleString("zh-CN");
+    document.getElementById(p+"Assets").innerHTML=latest.assets.length?latest.assets.map(a=>`<div class="asset"><span>${a.name}</span><b>${n(a.download_count)}</b></div>`).join(""):"<div class='muted'>暂无资产</div>";
+  }catch(e){document.getElementById(p+"Assets").innerHTML="<div class='muted'>暂时无法读取 "+label[which]+" 的 GitHub 数据。</div>"}
+}
+function setTarget(t){
+  target=t;
+  document.querySelectorAll("#targetSeg button").forEach(b=>b.classList.toggle("on",b.dataset.t===t));
+  document.getElementById("targetHint").innerHTML=`当前编辑：发往 <b>${label[t]}</b> 的公告（${t==="kcl2"?"announce.json":"announce-ce.json"}）。`;
+  document.getElementById("aTitle").placeholder=label[t]+" 公告";
+  loadAnnounce();
 }
 async function loadAnnounce(){
   try{
-    const j=await api(`https://raw.githubusercontent.com/${repo}/main/${announcePath}?t=${Date.now()}`);
+    const j=await api(`https://raw.githubusercontent.com/${contentRepo}/main/${announceFile[target]}?t=${Date.now()}`);
     document.getElementById("aTitle").value=j.title||"";
     document.getElementById("aContent").value=j.content||"";
     document.getElementById("aEnabled").checked=!!j.enabled;
-  }catch(e){toast("拉取公告失败",true)}
+  }catch(e){
+    document.getElementById("aTitle").value="";document.getElementById("aContent").value="";document.getElementById("aEnabled").checked=false;
+    toast("拉取 "+label[target]+" 公告失败，将按新建处理",true);
+  }
 }
-async function publishAnnounce(force){
+async function publishAnnounce(){
   const token=document.getElementById("aToken").value.trim();
   if(!token){toast("需要填写 GitHub 令牌",true);return}
   if(document.getElementById("aRemember").checked)localStorage.setItem("kcl_pat",token);else localStorage.removeItem("kcl_pat");
-  const title=document.getElementById("aTitle").value.trim()||"KCL2 公告";
+  const path=announceFile[target];
+  const title=document.getElementById("aTitle").value.trim()||label[target]+" 公告";
   const content=document.getElementById("aContent").value;
   const enabled=document.getElementById("aEnabled").checked;
   if(enabled&&!content.trim()){toast("启用公告时正文不能为空",true);return}
   const today=new Date();const pad=x=>String(x).padStart(2,"0");
   const date=`${today.getFullYear()}${pad(today.getMonth()+1)}${pad(today.getDate())}`;
-  const id=date+"-"+pad(today.getHours())+pad(today.getMinutes());
+  const id=date+"-"+(target==="ce"?"ce-":"")+pad(today.getHours())+pad(today.getMinutes());
   const payload={id:id,enabled:enabled,title:title,content:content,updated:`${today.getFullYear()}-${pad(today.getMonth()+1)}-${pad(today.getDate())}`};
   try{
     let sha="";
-    try{const ex=await api(`https://api.github.com/repos/${repo}/contents/${announcePath}`,{headers:{Accept:"application/vnd.github+json",Authorization:"Bearer "+token}});sha=ex.sha}catch(e){}
-    const body=JSON.stringify({message:"Publish KCL2 announcement "+id,content:btoa(unescape(encodeURIComponent(JSON.stringify(payload,null,2)))),branch:"main",sha:sha},null,0);
-    await fetch(`https://api.github.com/repos/${repo}/contents/${announcePath}`,{method:"PUT",headers:{Accept:"application/vnd.github+json",Authorization:"Bearer "+token,"Content-Type":"application/json"},body:body}).then(r=>{if(!r.ok)throw new Error(r.status)});
-    toast("公告已保存，Pages 将在约 1 分钟内生效");
+    try{const ex=await api(`https://api.github.com/repos/${contentRepo}/contents/${path}`,{headers:{Accept:"application/vnd.github+json",Authorization:"Bearer "+token}});sha=ex.sha}catch(e){}
+    const body=JSON.stringify({message:"Publish "+label[target]+" announcement "+id,content:btoa(unescape(encodeURIComponent(JSON.stringify(payload,null,2)))),branch:"main",sha:sha},null,0);
+    await fetch(`https://api.github.com/repos/${contentRepo}/contents/${path}`,{method:"PUT",headers:{Accept:"application/vnd.github+json",Authorization:"Bearer "+token,"Content-Type":"application/json"},body:body}).then(r=>{if(!r.ok)throw new Error(r.status)});
+    toast(label[target]+" 公告已保存，Pages 将在约 1 分钟内生效");
   }catch(e){toast("写入失败，请检查令牌权限："+e.message,true)}
 }
 document.getElementById("pass").addEventListener("keydown",e=>{if(e.key==="Enter")login()});
