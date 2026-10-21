@@ -89,6 +89,7 @@ button.ghost{background:transparent;border:1px solid #3a5f47;color:#cfe6d6}
       <div class="seg" id="targetSeg">
         <button type="button" data-t="kcl2" class="on" onclick="setTarget('kcl2')">KCL2</button>
         <button type="button" data-t="ce" onclick="setTarget('ce')">KCL CE（社区版）</button>
+        <button type="button" data-t="mobile" onclick="setTarget('mobile')">KCL（Android 手机版）</button>
       </div>
       <div class="muted" id="targetHint">当前编辑：发往 <b>KCL2</b> 的公告（announce.json）。</div>
       <label>公告标题</label>
@@ -96,14 +97,14 @@ button.ghost{background:transparent;border:1px solid #3a5f47;color:#cfe6d6}
       <label>公告正文（对应启动器启动时弹窗展示，换行有效）</label>
       <textarea id="aContent" placeholder="在此填写要推送的内容"></textarea>
       <div class="switch"><input type="checkbox" id="aEnabled"><span>立即向该启动器展示该公告（取消勾选则暂不展示，但仍保存内容）</span></div>
-      <label>GitHub 访问令牌（需要对 ETQWFD/KCL2 的 Contents 写权限；两个公告文件都在 Pages 仓库内；仅用于本次写入，不勾选记住则不会保存）</label>
+      <label>GitHub 访问令牌（需要对 ETQWFD/KCL2 与 ETQWFD/KCL-Mobile 的 Contents 写权限；仅用于本次写入，不勾选记住则不会保存）</label>
       <input type="password" id="aToken" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" autocomplete="off">
       <div class="switch"><input type="checkbox" id="aRemember"><span>在此浏览器记住令牌</span></div>
       <div class="row" style="margin-top:16px">
         <button onclick="publishAnnounce()">保存并发布</button>
         <button class="ghost" onclick="loadAnnounce()">重新拉取当前目标公告</button>
       </div>
-      <div class="muted">发布后 GitHub Pages 通常在 1 分钟内更新；KCL2 与 KCL CE 的公告互相独立，启动器按公告 id 对每条新公告仅弹一次。</div>
+      <div class="muted">KCL2 / KCL CE 公告写入 Pages 仓库（announce*.json），约 1 分钟生效；KCL 手机版公告按 FCL Announcement v2 格式写入 KCL-Mobile 仓库的 announcement_v2.txt，正文同时作为中英文内容。三类公告互相独立，启动器按公告 id 对每条新公告仅弹一次。</div>
     </div>
   </div>
 </div>
@@ -112,7 +113,9 @@ button.ghost{background:transparent;border:1px solid #3a5f47;color:#cfe6d6}
 <script>
 const statsRepo={kcl2:"ETQWFD/KCL2",ce:"ETQWFD/KCL-CE",mobile:"ETQWFD/KCL-Mobile"};
 const contentRepo="ETQWFD/KCL2";
-const announceFile={kcl2:"website/announce.json",ce:"website/announce-ce.json"};
+const mobileRepo="ETQWFD/KCL-Mobile";
+const announceFile={kcl2:"website/announce.json",ce:"website/announce-ce.json",mobile:"announcement_v2.txt"};
+const announceRepo={kcl2:contentRepo,ce:contentRepo,mobile:mobileRepo};
 const label={kcl2:"KCL2",ce:"KCL CE",mobile:"KCL Mobile"};
 let target="kcl2";
 function toast(msg,isErr){const t=document.getElementById("toast");t.textContent=msg;t.className="toast show"+(isErr?" err":"");clearTimeout(t._t);t._t=setTimeout(()=>{t.className="toast"},2600)}
@@ -141,40 +144,59 @@ async function loadStats(which){
 function setTarget(t){
   target=t;
   document.querySelectorAll("#targetSeg button").forEach(b=>b.classList.toggle("on",b.dataset.t===t));
-  document.getElementById("targetHint").innerHTML=`当前编辑：发往 <b>${label[t]}</b> 的公告（${t==="kcl2"?"announce.json":"announce-ce.json"}）。`;
+  document.getElementById("targetHint").innerHTML=`当前编辑：发往 <b>${label[t]}</b> 的公告（${t==="mobile"?"announcement_v2.txt（KCL-Mobile 仓库）":announceFile[t]}）。`;
   document.getElementById("aTitle").placeholder=label[t]+" 公告";
   loadAnnounce();
 }
 async function loadAnnounce(){
+  const path=announceFile[target],repo=announceRepo[target];
   try{
-    const j=await api(`https://raw.githubusercontent.com/${contentRepo}/main/${announceFile[target]}?t=${Date.now()}`);
-    document.getElementById("aTitle").value=j.title||"";
-    document.getElementById("aContent").value=j.content||"";
-    document.getElementById("aEnabled").checked=!!j.enabled;
+    const raw=await (await fetch(`https://raw.githubusercontent.com/${repo}/main/${path}?t=${Date.now()}`,{cache:"no-store"})).text();
+    const j=JSON.parse(raw);
+    if(target==="mobile"){
+      const pick=arr=>{const z=(arr||[]).find(c=>(c.lang||"").indexOf("zh")===0)||(arr||[])[0];return z?z.text:""};
+      document.getElementById("aTitle").value=pick(j.title);
+      document.getElementById("aContent").value=pick(j.content);
+      document.getElementById("aEnabled").checked=!j.outdated;
+    }else{
+      document.getElementById("aTitle").value=j.title||"";
+      document.getElementById("aContent").value=j.content||"";
+      document.getElementById("aEnabled").checked=!!j.enabled;
+    }
   }catch(e){
     document.getElementById("aTitle").value="";document.getElementById("aContent").value="";document.getElementById("aEnabled").checked=false;
-    toast("拉取 "+label[target]+" 公告失败，将按新建处理",true);
+    toast("拉取 "+label[target]+" 公告为空或失败，将按新建处理",true);
   }
 }
 async function publishAnnounce(){
   const token=document.getElementById("aToken").value.trim();
   if(!token){toast("需要填写 GitHub 令牌",true);return}
   if(document.getElementById("aRemember").checked)localStorage.setItem("kcl_pat",token);else localStorage.removeItem("kcl_pat");
-  const path=announceFile[target];
+  const path=announceFile[target],repo=announceRepo[target];
   const title=document.getElementById("aTitle").value.trim()||label[target]+" 公告";
   const content=document.getElementById("aContent").value;
   const enabled=document.getElementById("aEnabled").checked;
   if(enabled&&!content.trim()){toast("启用公告时正文不能为空",true);return}
   const today=new Date();const pad=x=>String(x).padStart(2,"0");
-  const date=`${today.getFullYear()}${pad(today.getMonth()+1)}${pad(today.getDate())}`;
-  const id=date+"-"+(target==="ce"?"ce-":"")+pad(today.getHours())+pad(today.getMinutes());
-  const payload={id:id,enabled:enabled,title:title,content:content,updated:`${today.getFullYear()}-${pad(today.getMonth()+1)}-${pad(today.getDate())}`};
+  let payload,id,msg;
+  if(target==="mobile"){
+    id=parseInt(`${today.getFullYear()}${pad(today.getMonth()+1)}${pad(today.getDate())}${pad(today.getHours())}${pad(today.getMinutes())}`,10);
+    payload={id:id,significant:false,outdated:!enabled,minVersion:-1,maxVersion:-1,specificLang:["zh","en"],
+      title:[{lang:"zh",text:title},{lang:"en",text:title}],
+      date:`${today.getFullYear()}-${pad(today.getMonth()+1)}-${pad(today.getDate())}`,
+      content:[{lang:"zh",text:content},{lang:"en",text:content}]};
+    msg="Publish KCL Mobile announcement "+id;
+  }else{
+    id=`${today.getFullYear()}${pad(today.getMonth()+1)}${pad(today.getDate())}-${target==="ce"?"ce-":""}${pad(today.getHours())}${pad(today.getMinutes())}`;
+    payload={id:id,enabled:enabled,title:title,content:content,updated:`${today.getFullYear()}-${pad(today.getMonth()+1)}-${pad(today.getDate())}`};
+    msg="Publish "+label[target]+" announcement "+id;
+  }
   try{
     let sha="";
-    try{const ex=await api(`https://api.github.com/repos/${contentRepo}/contents/${path}`,{headers:{Accept:"application/vnd.github+json",Authorization:"Bearer "+token}});sha=ex.sha}catch(e){}
-    const body=JSON.stringify({message:"Publish "+label[target]+" announcement "+id,content:btoa(unescape(encodeURIComponent(JSON.stringify(payload,null,2)))),branch:"main",sha:sha},null,0);
-    await fetch(`https://api.github.com/repos/${contentRepo}/contents/${path}`,{method:"PUT",headers:{Accept:"application/vnd.github+json",Authorization:"Bearer "+token,"Content-Type":"application/json"},body:body}).then(r=>{if(!r.ok)throw new Error(r.status)});
-    toast(label[target]+" 公告已保存，Pages 将在约 1 分钟内生效");
+    try{const ex=await api(`https://api.github.com/repos/${repo}/contents/${path}`,{headers:{Accept:"application/vnd.github+json",Authorization:"Bearer "+token}});sha=ex.sha}catch(e){}
+    const body=JSON.stringify({message:msg,content:btoa(unescape(encodeURIComponent(JSON.stringify(payload,null,2)))),branch:"main",sha:sha},null,0);
+    await fetch(`https://api.github.com/repos/${repo}/contents/${path}`,{method:"PUT",headers:{Accept:"application/vnd.github+json",Authorization:"Bearer "+token,"Content-Type":"application/json"},body:body}).then(r=>{if(!r.ok)throw new Error(r.status)});
+    toast(label[target]+" 公告已保存，启动器下次启动时读取");
   }catch(e){toast("写入失败，请检查令牌权限："+e.message,true)}
 }
 document.getElementById("pass").addEventListener("keydown",e=>{if(e.key==="Enter")login()});
