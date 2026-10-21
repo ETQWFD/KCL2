@@ -1,1 +1,17 @@
-{"id": 202610221200, "significant": false, "outdated": false, "minVersion": -1, "maxVersion": -1, "specificLang": ["zh", "en"], "title": [{"lang": "zh", "text": "连通性测试"}, {"lang": "en", "text": "connectivity test"}], "date": "2026-10-22", "content": [{"lang": "zh", "text": "后台手机公告发送链路测试。"}, {"lang": "en", "text": "admin mobile announcement path test."}]}
+{
+  "id": 0,
+  "significant": false,
+  "outdated": true,
+  "minVersion": -1,
+  "maxVersion": -1,
+  "specificLang": [],
+  "title": [
+    { "lang": "zh", "text": "KCL 公告" },
+    { "lang": "en", "text": "KCL Announcement" }
+  ],
+  "date": "2026-10-22",
+  "content": [
+    { "lang": "zh", "text": "" },
+    { "lang": "en", "text": "" }
+  ]
+}
