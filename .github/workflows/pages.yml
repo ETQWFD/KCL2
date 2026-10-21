@@ -29,7 +29,7 @@ jobs:
       - name: Stage site
         run: |
           mkdir -p _site
-          cp website/index.html website/manual.html website/dan.html website/announce.json announce-ce.json website/favicon.ico _site/
+          cp website/index.html website/manual.html website/dan.html website/announce.json website/announce-ce.json website/favicon.ico _site/
           if [ -d website/assets ]; then cp -r website/assets _site/; fi
       - uses: actions/upload-pages-artifact@v3
         with:
