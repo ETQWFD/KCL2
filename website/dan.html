@@ -97,14 +97,14 @@ button.ghost{background:transparent;border:1px solid #3a5f47;color:#cfe6d6}
       <label>公告正文（对应启动器启动时弹窗展示，换行有效）</label>
       <textarea id="aContent" placeholder="在此填写要推送的内容"></textarea>
       <div class="switch"><input type="checkbox" id="aEnabled"><span>立即向该启动器展示该公告（取消勾选则暂不展示，但仍保存内容）</span></div>
-      <label>GitHub 访问令牌（需要对 ETQWFD/KCL2 与 ETQWFD/KCL-Mobile 的 Contents 写权限；仅用于本次写入，不勾选记住则不会保存）</label>
+      <label>GitHub 访问令牌（只需对 ETQWFD/KCL2 有 Contents 写权限；三类公告都保存在该 Pages 仓库内；仅用于本次写入，不勾选记住则不会保存）</label>
       <input type="password" id="aToken" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" autocomplete="off">
       <div class="switch"><input type="checkbox" id="aRemember"><span>在此浏览器记住令牌</span></div>
       <div class="row" style="margin-top:16px">
         <button onclick="publishAnnounce()">保存并发布</button>
         <button class="ghost" onclick="loadAnnounce()">重新拉取当前目标公告</button>
       </div>
-      <div class="muted">KCL2 / KCL CE 公告写入 Pages 仓库（announce*.json），约 1 分钟生效；KCL 手机版公告按 FCL Announcement v2 格式写入 KCL-Mobile 仓库的 announcement_v2.txt，正文同时作为中英文内容。三类公告互相独立，启动器按公告 id 对每条新公告仅弹一次。</div>
+      <div class="muted">三类公告全部保存在 KCL2 Pages 仓库内：KCL2 用 announce.json、KCL CE 用 announce-ce.json、KCL 手机版用 FCL Announcement v2 格式的 announcement-mobile.json（手机版启动器直接拉取该地址）。只需一个对 KCL2 仓库有 Contents 写权限的令牌即可发布全部三类；约 1 分钟生效，启动器按公告 id 对每条新公告仅弹一次。</div>
     </div>
   </div>
 </div>
@@ -114,8 +114,8 @@ button.ghost{background:transparent;border:1px solid #3a5f47;color:#cfe6d6}
 const statsRepo={kcl2:"ETQWFD/KCL2",ce:"ETQWFD/KCL-CE",mobile:"ETQWFD/KCL-Mobile"};
 const contentRepo="ETQWFD/KCL2";
 const mobileRepo="ETQWFD/KCL-Mobile";
-const announceFile={kcl2:"website/announce.json",ce:"website/announce-ce.json",mobile:"announcement_v2.txt"};
-const announceRepo={kcl2:contentRepo,ce:contentRepo,mobile:mobileRepo};
+const announceFile={kcl2:"website/announce.json",ce:"website/announce-ce.json",mobile:"website/announcement-mobile.json"};
+const announceRepo={kcl2:contentRepo,ce:contentRepo,mobile:contentRepo};
 const label={kcl2:"KCL2",ce:"KCL CE",mobile:"KCL Mobile"};
 let target="kcl2";
 function toast(msg,isErr){const t=document.getElementById("toast");t.textContent=msg;t.className="toast show"+(isErr?" err":"");clearTimeout(t._t);t._t=setTimeout(()=>{t.className="toast"},2600)}
@@ -144,7 +144,7 @@ async function loadStats(which){
 function setTarget(t){
   target=t;
   document.querySelectorAll("#targetSeg button").forEach(b=>b.classList.toggle("on",b.dataset.t===t));
-  document.getElementById("targetHint").innerHTML=`当前编辑：发往 <b>${label[t]}</b> 的公告（${t==="mobile"?"announcement_v2.txt（KCL-Mobile 仓库）":announceFile[t]}）。`;
+  document.getElementById("targetHint").innerHTML=`当前编辑：发往 <b>${label[t]}</b> 的公告（${t==="mobile"?"announcement-mobile.json（FCL Announcement v2）":announceFile[t]}）。`;
   document.getElementById("aTitle").placeholder=label[t]+" 公告";
   loadAnnounce();
 }

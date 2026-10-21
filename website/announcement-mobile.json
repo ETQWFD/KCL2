@@ -1,0 +1,17 @@
+{
+  "id": 0,
+  "significant": false,
+  "outdated": true,
+  "minVersion": -1,
+  "maxVersion": -1,
+  "specificLang": [],
+  "title": [
+    { "lang": "zh", "text": "KCL 公告" },
+    { "lang": "en", "text": "KCL Announcement" }
+  ],
+  "date": "2026-10-22",
+  "content": [
+    { "lang": "zh", "text": "" },
+    { "lang": "en", "text": "" }
+  ]
+}
