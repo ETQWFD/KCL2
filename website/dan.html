@@ -74,6 +74,17 @@ button.ghost{background:transparent;border:1px solid #3a5f47;color:#cfe6d6}
     </div>
 
     <div class="card">
+      <h2>下载统计 · KCL Mobile <span class="tag">Android</span></h2>
+      <div class="stats">
+        <div class="stat"><b id="mTag">-</b><span>最新版本</span></div>
+        <div class="stat"><b id="mLatest">-</b><span>最新版总下载次数</span></div>
+        <div class="stat"><b id="mTotal">-</b><span>近 100 个版本累计下载</span></div>
+      </div>
+      <div style="margin-top:18px" id="mAssets"></div>
+      <div class="muted" id="mTime"></div>
+    </div>
+
+    <div class="card">
       <h2>向启动器发布公告</h2>
       <div class="seg" id="targetSeg">
         <button type="button" data-t="kcl2" class="on" onclick="setTarget('kcl2')">KCL2</button>
@@ -99,21 +110,24 @@ button.ghost{background:transparent;border:1px solid #3a5f47;color:#cfe6d6}
 <div class="toast" id="toast"></div>
 
 <script>
-const statsRepo={kcl2:"ETQWFD/KCL2",ce:"ETQWFD/KCL-CE"};
+const statsRepo={kcl2:"ETQWFD/KCL2",ce:"ETQWFD/KCL-CE",mobile:"ETQWFD/KCL-Mobile"};
 const contentRepo="ETQWFD/KCL2";
 const announceFile={kcl2:"website/announce.json",ce:"website/announce-ce.json"};
-const label={kcl2:"KCL2",ce:"KCL CE"};
+const label={kcl2:"KCL2",ce:"KCL CE",mobile:"KCL Mobile"};
 let target="kcl2";
 function toast(msg,isErr){const t=document.getElementById("toast");t.textContent=msg;t.className="toast show"+(isErr?" err":"");clearTimeout(t._t);t._t=setTimeout(()=>{t.className="toast"},2600)}
 function login(){if(document.getElementById("pass").value==="1234"){sessionStorage.setItem("kcl_dan","1");enter()}else{toast("口令不正确",true)}}
-function enter(){document.getElementById("gateCard").classList.add("hidden");document.getElementById("panel").classList.remove("hidden");loadStats("kcl2");loadStats("ce");loadAnnounce();const saved=localStorage.getItem("kcl_pat");if(saved)document.getElementById("aToken").value=saved}
+function enter(){document.getElementById("gateCard").classList.add("hidden");document.getElementById("panel").classList.remove("hidden");loadStats("kcl2");loadStats("ce");loadStats("mobile");loadAnnounce();const saved=localStorage.getItem("kcl_pat");if(saved)document.getElementById("aToken").value=saved}
 function n(v){return new Intl.NumberFormat("zh-CN").format(v||0)}
 async function api(u,opt){const r=await fetch(u,Object.assign({headers:{Accept:"application/vnd.github+json"}},opt||{}));if(!r.ok)throw new Error((await r.text().catch(()=>""))||r.status);return r.json()}
 async function loadStats(which){
-  const repo=statsRepo[which],p=which==="kcl2"?"a":"b";
+  const repo=statsRepo[which],p=which==="kcl2"?"a":(which==="mobile"?"m":"b");
+  const latestUrl=which==="mobile"
+    ? `https://api.github.com/repos/${repo}/releases/tags/continuous`
+    : `https://api.github.com/repos/${repo}/releases/latest`;
   try{
     const[latest,releases]=await Promise.all([
-      api(`https://api.github.com/repos/${repo}/releases/latest`),
+      api(latestUrl),
       api(`https://api.github.com/repos/${repo}/releases?per_page=100`)]);
     const lc=latest.assets.reduce((s,a)=>s+a.download_count,0);
     const tot=releases.reduce((s,r)=>s+r.assets.reduce((x,a)=>x+a.download_count,0),0);
