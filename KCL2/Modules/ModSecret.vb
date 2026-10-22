@@ -15,7 +15,7 @@ Friend Module ModSecret
         Return Settings.Get(Of String)("SystemKCL2MsClientId")
     End Function
     'CurseForge API Key
-    Public CurseForgeAPIKey As String = If(Environment.GetEnvironmentVariable("KCL2_CURSEFORGE_API_KEY"), "")
+    Public CurseForgeAPIKey As String = If(Environment.GetEnvironmentVariable("KCL2_CURSEFORGE_API_KEY"), "$2a$10$6L8AkVsaGMcZR36i8XvCr.O4INa2zvDwMhooYdLZU0bb/E78AsT0m")
     '用于匿名数据收集的腾讯云日志服务上报 URL，形如 https://{region}.cls.tencentcs.com/track?topic_id={topic_id}
     Public Const ClsBaseUrl As String = ""
 
