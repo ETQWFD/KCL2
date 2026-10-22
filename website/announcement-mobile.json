@@ -1,17 +1,32 @@
 {
-  "id": 0,
+  "id": 202610222143,
   "significant": false,
-  "outdated": true,
+  "outdated": false,
   "minVersion": -1,
   "maxVersion": -1,
-  "specificLang": [],
+  "specificLang": [
+    "zh",
+    "en"
+  ],
   "title": [
-    { "lang": "zh", "text": "KCL 公告" },
-    { "lang": "en", "text": "KCL Announcement" }
+    {
+      "lang": "zh",
+      "text": "KCL 公告"
+    },
+    {
+      "lang": "en",
+      "text": "KCL 公告"
+    }
   ],
   "date": "2026-10-22",
   "content": [
-    { "lang": "zh", "text": "" },
-    { "lang": "en", "text": "" }
+    {
+      "lang": "zh",
+      "text": "预告，将恢复所有下载功能"
+    },
+    {
+      "lang": "en",
+      "text": "预告，将恢复所有下载功能"
+    }
   ]
 }
