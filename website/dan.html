@@ -98,14 +98,14 @@ button.ghost{background:transparent;border:1px solid #3a5f47;color:#cfe6d6}
       <label>公告正文（对应启动器启动时弹窗展示，换行有效）</label>
       <textarea id="aContent" placeholder="在此填写要推送的内容"></textarea>
       <div class="switch"><input type="checkbox" id="aEnabled"><span>立即向该启动器展示该公告（取消勾选则暂不展示，但仍保存内容）</span></div>
-      <label>GitHub 访问令牌（只需对 ETQWFD/KCL2 有 Contents 写权限；三类公告都保存在该 Pages 仓库内；仅用于本次写入，不勾选记住则不会保存）</label>
+      <label>GitHub 访问令牌（需对 ETQWFD/KCL2 有 Contents 写权限；发布 KCL CE 公告时还需对 ETQWFD/KCL-CE 有 Contents 权限；仅用于本次写入，不勾选记住则不会保存）</label>
       <input type="password" id="aToken" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" autocomplete="off">
       <div class="switch"><input type="checkbox" id="aRemember"><span>在此浏览器记住令牌</span></div>
       <div class="row" style="margin-top:16px">
         <button onclick="publishAnnounce()">保存并发布</button>
         <button class="ghost" onclick="loadAnnounce()">重新拉取当前目标公告</button>
       </div>
-      <div class="muted">三类公告全部保存在 KCL2 Pages 仓库内：KCL2 用 announce.json、KCL CE 用 announce-ce.json、KCL 手机版用 FCL Announcement v2 格式的 announcement-mobile.json（手机版启动器直接拉取该地址）。只需一个对 KCL2 仓库有 Contents 写权限的令牌即可发布全部三类；约 1 分钟生效，启动器按公告 id 对每条新公告仅弹一次。</div>
+      <div class="muted">三类公告全部保存在 KCL2 Pages 仓库内：KCL2 用 announce.json、KCL CE 用 announce-ce.json、KCL 手机版用 FCL Announcement v2 格式的 announcement-mobile.json（手机版启动器直接拉取该地址）。KCL2 与手机版公告写入 KCL2 Pages 仓库；KCL CE 公告会额外同步写入 KCL-CE 仓库（update/apiv2/announcement.json），故发 CE 公告的令牌需同时具备 KCL2 与 KCL-CE 的 Contents 写权限；约 1 分钟生效，启动器按公告 id 对每条新公告仅弹一次。</div>
     </div>
   </div>
 </div>
@@ -115,6 +115,7 @@ button.ghost{background:transparent;border:1px solid #3a5f47;color:#cfe6d6}
 const statsRepo={kcl2:"ETQWFD/KCL2",ce:"ETQWFD/KCL-CE",mobile:"ETQWFD/KCL-Mobile"};
 const contentRepo="ETQWFD/KCL2";
 const mobileRepo="ETQWFD/KCL-Mobile";
+const ceRepo="ETQWFD/KCL-CE",ceAnnPath="update/apiv2/announcement.json";
 const announceFile={kcl2:"website/announce.json",ce:"website/announce-ce.json",mobile:"website/announcement-mobile.json"};
 const announceRepo={kcl2:contentRepo,ce:contentRepo,mobile:contentRepo};
 const label={kcl2:"KCL2",ce:"KCL CE",mobile:"KCL Mobile"};
@@ -197,6 +198,14 @@ async function publishAnnounce(){
     try{const ex=await api(`https://api.github.com/repos/${repo}/contents/${path}`,{headers:{Accept:"application/vnd.github+json",Authorization:"Bearer "+token}});sha=ex.sha}catch(e){}
     const body=JSON.stringify({message:msg,content:btoa(unescape(encodeURIComponent(JSON.stringify(payload,null,2)))),branch:"main",sha:sha},null,0);
     await fetch(`https://api.github.com/repos/${repo}/contents/${path}`,{method:"PUT",headers:{Accept:"application/vnd.github+json",Authorization:"Bearer "+token,"Content-Type":"application/json"},body:body}).then(r=>{if(!r.ok)throw new Error(r.status)});
+    if(target==="ce"){
+      const dateStr=`${today.getFullYear()}-${pad(today.getMonth()+1)}-${pad(today.getDate())}`;
+      const ceObj=enabled?{content:[{id:id,title:title,detail:content,date:dateStr}]}:{content:[]};
+      let ceSha="";
+      try{const ex2=await api(`https://api.github.com/repos/${ceRepo}/contents/${ceAnnPath}`,{headers:{Accept:"application/vnd.github+json",Authorization:"Bearer "+token}});ceSha=ex2.sha}catch(e){}
+      const ceBody=JSON.stringify({message:"Publish KCL CE announcement "+id,content:btoa(unescape(encodeURIComponent(JSON.stringify(ceObj,null,2)))),branch:"main",sha:ceSha});
+      await fetch(`https://api.github.com/repos/${ceRepo}/contents/${ceAnnPath}`,{method:"PUT",headers:{Accept:"application/vnd.github+json",Authorization:"Bearer "+token,"Content-Type":"application/json"},body:ceBody}).then(r=>{if(!r.ok)throw new Error("CE公告 "+r.status)});
+    }
     toast(label[target]+" 公告已保存，启动器下次启动时读取");
   }catch(e){toast("写入失败，请检查令牌权限："+e.message,true)}
 }
