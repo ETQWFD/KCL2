@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>下载 · KCL 系列启动器</title>
+<meta name="description" content="下载 KCL2、KCL CE 社区版与 KCL Android 手机版 Minecraft 启动器，支持 Windows x64/ARM64 与安卓。">
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="apple-touch-icon" href="assets/logo.png">
+<style>
+:root{--green:#0b7a46;--green-d:#075c35;--ink:#16241c;--mut:#5b6c61;--line:#e2ece5;--bg:#f7faf8}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;line-height:1.7}
+a{color:var(--green);text-decoration:none}
+.wrap{max-width:1000px;margin:0 auto;padding:0 22px}
+header.nav{position:sticky;top:0;background:rgba(247,250,248,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);z-index:10}
+.nav .wrap{display:flex;align-items:center;gap:18px;height:60px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:19px;color:var(--green-d)}
+.brand img{width:30px;height:30px;border-radius:7px;display:block}
+.nav .sp{flex:1}
+.nav a.navlink{color:var(--mut);font-size:15px}
+.nav a.navlink:hover{color:var(--green)}
+.hero{padding:44px 0 20px}
+.hero h1{font-size:34px;margin:0 0 10px;letter-spacing:-.02em}
+.hero p{color:var(--mut);margin:0;max-width:720px}
+.cards{padding:26px 0 10px;display:grid;grid-template-columns:1fr;gap:18px}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:26px;display:grid;grid-template-columns:84px 1fr;gap:22px}
+.card .ic{width:84px;height:84px;border-radius:18px;object-fit:contain;background:#fff;border:1px solid var(--line)}
+.card h2{margin:2px 0 4px;font-size:23px}
+.card .sub{color:var(--mut);font-size:14.5px;margin:0 0 16px}
+.meta{font-size:13.5px;color:var(--mut);margin:0 0 16px}
+.meta code{background:#eef4f0;padding:1px 6px;border-radius:5px}
+.dlrow{display:flex;gap:10px;flex-wrap:wrap}
+.btn{display:inline-block;padding:11px 20px;border-radius:9px;font-weight:700;font-size:15px}
+.btn.primary{background:var(--green);color:#fff}
+.btn.primary:hover{background:var(--green-d)}
+.btn.sec{background:#fff;color:var(--green-d);border:1px solid #bcd8c8}
+.btn.sec:hover{border-color:var(--green)}
+.btn.mini{padding:8px 14px;font-size:13.5px;font-weight:600}
+.tag{display:inline-block;font-size:12px;font-weight:700;color:var(--green-d);background:#e6f3ec;border:1px solid #cfe7da;border-radius:20px;padding:2px 11px;margin-left:8px;vertical-align:middle}
+.notice{margin:26px 0 10px;background:#eef7f1;border:1px solid #cde7d8;border-radius:12px;padding:18px 20px;color:#27513b;font-size:14px}
+.notice b{color:var(--green-d)}
+.back{display:inline-block;margin:18px 0 0;font-size:14.5px}
+footer{border-top:1px solid var(--line);padding:24px 0 40px;color:var(--mut);font-size:13px;margin-top:20px}
+@media(max-width:680px){.card{grid-template-columns:1fr}.card .ic{width:64px;height:64px}.hero h1{font-size:27px}}
+</style>
+</head>
+<body>
+<header class="nav"><div class="wrap">
+  <div class="brand"><img src="assets/logo.png" alt="KCL">KCL</div>
+  <div class="sp"></div>
+  <a class="navlink" href="index.html">首页</a>
+  <a class="navlink" href="manual.html">使用手册</a>
+  <a class="navlink" href="https://github.com/ETQWFD/KCL2">源码</a>
+</div></header>
+
+<section class="hero wrap">
+  <h1>选择版本下载</h1>
+  <p>三个版本共用同一官网与后台。Windows 主力用 KCL2；偏好社区渠道用 KCL CE；安卓手机用 KCL。全部支持微软正版登录与 BMCLAPI 加速下载。</p>
+</section>
+
+<div class="wrap cards">
+
+  <div class="card" id="kcl2">
+    <img class="ic" src="assets/logo.png" alt="KCL2 图标">
+    <div>
+      <h2>KCL2<span class="tag">Windows · 主力</span></h2>
+      <p class="sub">基于 Plain Craft Launcher 2 的单文件启动器。解压即用，首次运行在同目录生成 KCL 与 .minecraft 两个文件夹。</p>
+      <p class="meta">系统：Windows 7 及以上 64 位，需 <code>.NET Framework 4.8</code>。单文件 EXE，无多余 DLL。</p>
+      <div class="dlrow">
+        <a class="btn primary" href="https://github.com/ETQWFD/KCL2/releases/download/continuous/KCL2-portable.zip">下载 KCL2（ZIP）</a>
+        <a class="btn sec" href="https://github.com/ETQWFD/KCL2/releases/latest/download/KCL2.exe">单独下载 KCL2.exe</a>
+        <a class="btn sec mini" href="#dotnet">启动报错？下 .NET 补丁</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" id="ce">
+    <img class="ic" src="favicon.ico" alt="KCL CE 图标">
+    <div>
+      <h2>KCL CE<span class="tag">Windows · 社区版</span></h2>
+      <p class="sub">基于 PCL Community 官方社区版（现代 C# / .NET）改造，界面与 KCL2 一致，走独立更新通道与公告。</p>
+      <p class="meta">系统：Windows 10 / 11 64 位（.NET 运行时已内置，免安装）。不确定电脑架构就下 <code>x64</code>。</p>
+      <div class="dlrow">
+        <a class="btn primary" href="https://github.com/ETQWFD/KCL-CE/releases/latest">下载 KCL CE（版本页，含 x64 / ARM64）</a>
+        <a class="btn sec" href="https://github.com/ETQWFD/KCL-CE/releases/latest/download/KCL-CE-2.15.2-kcl.1-x64.zip">KCL CE x64 ZIP（直链）</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" id="mobile">
+    <img class="ic" src="assets/kcl-mobile.png" alt="KCL 手机版图标">
+    <div>
+      <h2>KCL<span class="tag">Android · 手机版</span></h2>
+      <p class="sub">基于 FCL（Fold Craft Launcher）再发行，在手机上运行 Minecraft Java 版，支持模组加载与全版本。</p>
+      <p class="meta">系统：Android 8.0 及以上（arm64 / armv8，主流手机均可）。正式版，安装前请卸载旧版本以免残留地区提示。</p>
+      <div class="dlrow">
+        <a class="btn primary" href="https://github.com/ETQWFD/KCL-Mobile/releases/latest">下载 KCL 手机版 APK</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" id="dotnet">
+    <img class="ic" src="assets/logo.png" alt="依赖补丁">
+    <div>
+      <h2>.NET Framework 4.8 依赖补丁<span class="tag">仅 KCL2 需要</span></h2>
+      <p class="sub">仅当双击 KCL2.exe 提示缺少 .NET Framework 时才需要。运行后自动下载安装依赖，完成后会提示并退出。KCL CE 与手机版无需此补丁。</p>
+      <div class="dlrow">
+        <a class="btn sec" href="https://github.com/ETQWFD/KCL2/releases/download/continuous/KCL2DependencySetup.exe">下载 KCL2DependencySetup.exe</a>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="wrap">
+  <div class="notice">
+    <b>责任与运营：</b>KCL 系列不运营 Minecraft，也不运营任何多人服务器。未成年人充值、服务器封禁、道具纠纷、支付退款或服务器管理规则，请联系对应服主、服务器管理组、支付渠道或 Microsoft / Mojang 官方支持。桌面版基于 Plain Craft Launcher 2（含社区版）修改、遵循 MIT，原作者龙腾猫跃 / LTCat 及 PCL Community 保留署名；Android 版基于 FCL 再发行、遵循 GPL-v3。所有改动由 ETC Team（龙腾OS）按“现状”提供。
+  </div>
+  <a class="back" href="index.html">← 返回首页</a>
+</div>
+
+<footer><div class="wrap">
+  KCL · ETC Team。Minecraft 及相关标识归 Microsoft / Mojang 所有。
+</div></footer>
+</body>
+</html>
