@@ -6,13 +6,16 @@ Friend Module ModSecret
     Public Const VersionBranchMain As String = "OpenSource"
     '在开源版的注册表与常规版的注册表隔离，以防数据冲突
     Public Const RegFolder As String = "KCL2Debug"
-    '用于微软登录的 ClientId
-    Public OAuthClientId As String = If(Environment.GetEnvironmentVariable("KCL2_MS_CLIENT_ID"), "")
+    '用于微软登录的 ClientId（KCL2：未配置时回退到内置公共客户端 ID，取自原版启动器，免配置即可正版登录）
+    Public Const BuiltInMsClientId As String = "d903cc0e-c3b4-4a3c-b347-06c2e6269be0"
+    Public OAuthClientId As String = If(Environment.GetEnvironmentVariable("KCL2_MS_CLIENT_ID"), BuiltInMsClientId)
 
     Friend Function GetOAuthClientId() As String
         Dim EnvClientId As String = Environment.GetEnvironmentVariable("KCL2_MS_CLIENT_ID")
         If Not String.IsNullOrEmpty(EnvClientId) Then Return EnvClientId
-        Return Settings.Get(Of String)("SystemKCL2MsClientId")
+        Dim UserClientId As String = Settings.Get(Of String)("SystemKCL2MsClientId")
+        If Not String.IsNullOrEmpty(UserClientId) Then Return UserClientId
+        Return BuiltInMsClientId
     End Function
     'CurseForge API Key
     Public CurseForgeAPIKey As String = If(Environment.GetEnvironmentVariable("KCL2_CURSEFORGE_API_KEY"), "$2a$10$6L8AkVsaGMcZR36i8XvCr.O4INa2zvDwMhooYdLZU0bb/E78AsT0m")
