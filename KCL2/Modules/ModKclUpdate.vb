@@ -5,7 +5,10 @@ Imports Newtonsoft.Json.Linq
 Friend Module ModKclUpdate
 
     '更新与公告来源（均指向 ETQWFD/KCL2 自有仓库与其 GitHub Pages）
-    Private Const CommitApi As String = "https://api.github.com/repos/ETQWFD/KCL2/commits/main"
+    '更新判定比对 continuous 发布“实际构建 exe 所用提交”（release 的 target_commitish），
+    '而不是 main 分支 HEAD：只改官网网页等非代码提交也会推进 main HEAD，但不会重建 exe，
+    '若比对 HEAD 会导致下载到的仍是旧 exe、每次启动都误报“发现新版本”的死循环。
+    Private Const ReleaseApi As String = "https://api.github.com/repos/ETQWFD/KCL2/releases/tags/continuous"
     Private Const ExeUrl As String = "https://github.com/ETQWFD/KCL2/releases/download/continuous/KCL2.exe"
     Private Const AnnounceUrl As String = "https://etqwfd.github.io/KCL2/announce.json"
 
@@ -59,11 +62,21 @@ Friend Module ModKclUpdate
         End Sub, "KCL2 启动更新检查", ThreadPriority.BelowNormal)
     End Sub
 
-    ''' <summary>远程 main 的提交短 SHA；网络失败返回空串。</summary>
+    ''' <summary>线上 continuous 发布实际构建所用提交的短 SHA（= 当前可下载 exe 的构建号）；网络失败返回空串。</summary>
     Private Function GetRemoteShortSha() As String
-        Dim Json As String = NetRequestByClientRetry(CommitApi, RequireJson:=True, SimulateBrowserHeaders:=True)
-        Dim Sha As String = JObject.Parse(Json).Value(Of String)("sha")
-        Return If(String.IsNullOrEmpty(Sha), "", Sha.ToLowerInvariant().Substring(0, Math.Min(7, Sha.Length)))
+        Dim Json As String = NetRequestByClientRetry(ReleaseApi, RequireJson:=True, SimulateBrowserHeaders:=True)
+        Dim Sha As String = JObject.Parse(Json).Value(Of String)("target_commitish")
+        If String.IsNullOrEmpty(Sha) Then Return ""
+        Sha = Sha.Trim().ToLowerInvariant()
+        'target_commitish 理论上是 40 位完整 SHA；若异常返回分支名等非哈希值则判定为取不到，避免误报
+        If Sha.Length < 7 Then Return ""
+        Dim hex As Integer = 0
+        For Each ch As Char In Sha
+            If Not ((ch >= "0"c And ch <= "9"c) OrElse (ch >= "a"c And ch <= "f"c)) Then Return ""
+            hex += 1
+            If hex >= 40 Then Exit For
+        Next
+        Return Sha.Substring(0, 7)
     End Function
 
     Private Sub CheckUpdateOnStartup()
