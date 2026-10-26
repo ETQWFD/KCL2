@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-26T17:10:08.486987+00:00",
+  "generated_at": "2026-10-26T21:47:01.931777+00:00",
   "repos": {
     "kcl2": {
       "repo": "ETQWFD/KCL2",
@@ -8,18 +8,18 @@
       "prerelease": false,
       "published_at": "2026-10-26T10:38:41Z",
       "html_url": "https://github.com/ETQWFD/KCL2/releases/tag/continuous",
-      "latest_downloads": 2,
-      "total_downloads": 2,
+      "latest_downloads": 4,
+      "total_downloads": 4,
       "assets": [
         {
           "name": "KCL2-portable.zip",
-          "download_count": 1,
+          "download_count": 2,
           "size": 2563579,
           "updated_at": "2026-10-26T10:38:41Z"
         },
         {
           "name": "KCL2.exe",
-          "download_count": 1,
+          "download_count": 2,
           "size": 5618176,
           "updated_at": "2026-10-26T10:38:41Z"
         },
@@ -38,12 +38,12 @@
       "prerelease": false,
       "published_at": "2026-10-25T10:52:19Z",
       "html_url": "https://github.com/ETQWFD/KCL-CE/releases/tag/v2.15.9-kcl.1",
-      "latest_downloads": 2,
-      "total_downloads": 31,
+      "latest_downloads": 4,
+      "total_downloads": 33,
       "assets": [
         {
           "name": "KCL-CE-2.15.9-kcl.1-arm64.exe",
-          "download_count": 0,
+          "download_count": 1,
           "size": 81732696,
           "updated_at": "2026-10-25T10:52:18Z"
         },
@@ -55,7 +55,7 @@
         },
         {
           "name": "KCL-CE-2.15.9-kcl.1-x64.exe",
-          "download_count": 0,
+          "download_count": 1,
           "size": 86120555,
           "updated_at": "2026-10-25T10:52:18Z"
         },
