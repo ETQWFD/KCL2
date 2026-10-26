@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-10-26T10:37:36.947574+00:00",
+  "generated_at": "2026-10-26T17:10:08.486987+00:00",
   "repos": {
     "kcl2": {
       "repo": "ETQWFD/KCL2",
       "tag": "continuous",
       "name": "KCL2 Continuous Build",
       "prerelease": false,
-      "published_at": "2026-10-25T10:52:48Z",
+      "published_at": "2026-10-26T10:38:41Z",
       "html_url": "https://github.com/ETQWFD/KCL2/releases/tag/continuous",
       "latest_downloads": 2,
       "total_downloads": 2,
@@ -14,20 +14,20 @@
         {
           "name": "KCL2-portable.zip",
           "download_count": 1,
-          "size": 2563620,
-          "updated_at": "2026-10-25T10:52:47Z"
+          "size": 2563579,
+          "updated_at": "2026-10-26T10:38:41Z"
         },
         {
           "name": "KCL2.exe",
           "download_count": 1,
           "size": 5618176,
-          "updated_at": "2026-10-25T10:52:47Z"
+          "updated_at": "2026-10-26T10:38:41Z"
         },
         {
           "name": "KCL2DependencySetup.exe",
           "download_count": 0,
           "size": 145408,
-          "updated_at": "2026-10-25T10:52:47Z"
+          "updated_at": "2026-10-26T10:38:41Z"
         }
       ]
     },
@@ -38,8 +38,8 @@
       "prerelease": false,
       "published_at": "2026-10-25T10:52:19Z",
       "html_url": "https://github.com/ETQWFD/KCL-CE/releases/tag/v2.15.9-kcl.1",
-      "latest_downloads": 1,
-      "total_downloads": 30,
+      "latest_downloads": 2,
+      "total_downloads": 31,
       "assets": [
         {
           "name": "KCL-CE-2.15.9-kcl.1-arm64.exe",
@@ -61,7 +61,7 @@
         },
         {
           "name": "KCL-CE-2.15.9-kcl.1-x64.zip",
-          "download_count": 1,
+          "download_count": 2,
           "size": 80486109,
           "updated_at": "2026-10-25T10:52:18Z"
         }
@@ -74,12 +74,12 @@
       "prerelease": false,
       "published_at": "2026-10-21T14:18:30Z",
       "html_url": "https://github.com/ETQWFD/KCL-Mobile/releases/tag/continuous",
-      "latest_downloads": 3,
-      "total_downloads": 3,
+      "latest_downloads": 4,
+      "total_downloads": 4,
       "assets": [
         {
           "name": "KCL-Mobile.apk",
-          "download_count": 3,
+          "download_count": 4,
           "size": 346596852,
           "updated_at": "2026-10-24T14:43:36Z"
         }
