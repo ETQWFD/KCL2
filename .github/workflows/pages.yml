@@ -31,7 +31,9 @@ jobs:
           mkdir -p _site
           cp website/index.html website/manual.html website/dan.html website/download.html website/announce.json website/announce-ce.json website/announcement-mobile.json website/favicon.ico _site/
           cp website/CNAME _site/CNAME
+          cp website/.nojekyll _site/.nojekyll
           if [ -d website/assets ]; then cp -r website/assets _site/; fi
+          if [ -d website/_data ]; then cp -r website/_data _site/; fi
       - uses: actions/upload-pages-artifact@v3
         with:
           path: ./_site

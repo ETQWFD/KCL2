@@ -64,9 +64,10 @@ footer{border-top:1px solid var(--line);padding:24px 0 40px;color:var(--mut);fon
   <div class="card" id="kcl2">
     <img class="ic" src="assets/logo.png" alt="KCL2 图标">
     <div>
-      <h2>KCL2<span class="tag">Windows · 主力</span><span class="tag">最新构建 2026-10-25</span></h2>
+      <h2>KCL2<span class="tag">Windows · 主力</span><span class="tag" id="v-kcl2">最新构建</span></h2>
       <p class="sub">基于 Plain Craft Launcher 2 的单文件启动器。解压即用，首次运行在同目录生成 KCL 与 .minecraft 两个文件夹。</p>
       <p class="meta">系统：Windows 7 及以上 64 位，需 <code>.NET Framework 4.8</code>。单文件 EXE，无多余 DLL。</p>
+      <p class="meta" id="cnt-kcl2"></p>
       <div class="dlrow">
         <a class="btn primary" href="https://github.com/ETQWFD/KCL2/releases/download/continuous/KCL2-portable.zip">下载 KCL2（ZIP）</a>
         <a class="btn sec" href="https://github.com/ETQWFD/KCL2/releases/download/continuous/KCL2.exe">单独下载 KCL2.exe</a>
@@ -78,12 +79,13 @@ footer{border-top:1px solid var(--line);padding:24px 0 40px;color:var(--mut);fon
   <div class="card" id="ce">
     <img class="ic" src="favicon.ico" alt="KCL CE 图标">
     <div>
-      <h2>KCL CE<span class="tag">Windows · 社区版</span><span class="tag">v2.15.9</span></h2>
+      <h2>KCL CE<span class="tag">Windows · 社区版</span><span class="tag" id="v-ce">最新版本</span></h2>
       <p class="sub">基于 PCL Community 官方社区版（现代 C# / .NET）改造，界面与 KCL2 一致，走独立更新通道与公告。</p>
       <p class="meta">系统：Windows 10 / 11 64 位（.NET 运行时已内置，免安装）。不确定电脑架构就下 <code>x64</code>。</p>
+      <p class="meta" id="cnt-ce"></p>
       <div class="dlrow">
         <a class="btn primary" href="https://github.com/ETQWFD/KCL-CE/releases/latest">下载 KCL CE（版本页，含 x64 / ARM64）</a>
-        <a class="btn sec" href="https://github.com/ETQWFD/KCL-CE/releases/latest/download/KCL-CE-2.15.9-kcl.1-x64.zip">KCL CE x64 ZIP（直链）</a>
+        <a class="btn sec" id="ce-zip" href="https://github.com/ETQWFD/KCL-CE/releases/latest">KCL CE x64 ZIP（直链）</a>
       </div>
     </div>
   </div>
@@ -91,9 +93,10 @@ footer{border-top:1px solid var(--line);padding:24px 0 40px;color:var(--mut);fon
   <div class="card" id="mobile">
     <img class="ic" src="assets/kcl-mobile.png" alt="KCL 手机版图标">
     <div>
-      <h2>KCL<span class="tag">Android · 手机版</span><span class="tag">最新构建 2026-10-24</span></h2>
+      <h2>KCL<span class="tag">Android · 手机版</span><span class="tag" id="v-mobile">最新构建</span></h2>
       <p class="sub">基于 FCL（Fold Craft Launcher）再发行，在手机上运行 Minecraft Java 版，支持模组加载与全版本。</p>
       <p class="meta">系统：Android 8.0 及以上（arm64 / armv8，主流手机均可）。正式版，安装前请卸载旧版本以免残留地区提示。</p>
+      <p class="meta" id="cnt-mobile"></p>
       <div class="dlrow">
         <a class="btn primary" href="https://github.com/ETQWFD/KCL-Mobile/releases/latest">下载 KCL 手机版 APK</a>
       </div>
@@ -123,5 +126,33 @@ footer{border-top:1px solid var(--line);padding:24px 0 40px;color:var(--mut);fon
 <footer><div class="wrap">
   KCL · ETC Team。Minecraft 及相关标识归 Microsoft / Mojang 所有。
 </div></footer>
+<script>
+// 版本号、发布日期与真实下载量从定时快照 _data/stats.json 读取，保证官网始终展示真实最新版
+(function(){
+  function fmtDate(iso){try{return new Date(iso).toLocaleDateString('zh-CN')}catch(e){return ''}}
+  function num(v){return new Intl.NumberFormat('zh-CN').format(v||0)}
+  fetch('_data/stats.json?t='+Date.now(),{cache:'no-store'})
+    .then(r=>r.json())
+    .then(j=>{
+      var rs=j.repos||{};
+      function fill(key,tagId,cntId,isCE){
+        var d=rs[key];if(!d)return;
+        var tag=document.getElementById(tagId),cnt=document.getElementById(cntId);
+        if(tag){
+          if(key==='ce'){tag.textContent='v'+String(d.tag||'').replace(/^v/,'').split('-')[0];}
+          else{tag.textContent='最新构建 '+(fmtDate(d.published_at)||'');}
+        }
+        if(cnt){cnt.textContent='最新版下载 '+num(d.latest_downloads)+' 次 · 近期版本累计 '+num(d.total_downloads)+' 次（GitHub 实时统计，每30分钟刷新）';}
+      }
+      fill('kcl2','v-kcl2','cnt-kcl2');
+      fill('ce','v-ce','cnt-ce');
+      fill('mobile','v-mobile','cnt-mobile');
+      var ce=rs.ce;
+      if(ce){var zip=(ce.assets||[]).find(a=>/x64\.zip$/i.test(a.name));
+        if(zip){var a=document.getElementById('ce-zip');if(a)a.href=ce.html_url.replace(/\/tag\/.*/,'/download/'+encodeURIComponent(zip.name));}}
+    })
+    .catch(()=>{/* 快照暂不可用时保留页面默认文案 */});
+})();
+</script>
 </body>
 </html>

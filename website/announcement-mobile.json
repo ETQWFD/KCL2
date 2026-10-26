@@ -1,5 +1,5 @@
 {
-  "id": 202610222143,
+  "id": 202610261031,
   "significant": false,
   "outdated": false,
   "minVersion": -1,
@@ -11,22 +11,22 @@
   "title": [
     {
       "lang": "zh",
-      "text": "KCL 公告"
+      "text": "KCL 手机版下载已全面恢复"
     },
     {
       "lang": "en",
-      "text": "KCL 公告"
+      "text": "KCL Mobile downloads restored"
     }
   ],
-  "date": "2026-10-22",
+  "date": "2026-10-26",
   "content": [
     {
       "lang": "zh",
-      "text": "预告，将恢复所有下载功能"
+      "text": "KCL 手机版已解除地区下载限制：游戏版本、资源包与联机相关下载恢复正常，并修复部分机型渲染器不兼容导致的闪退。如遇问题请到官网 https://etc.os.kg/ 下载最新 APK，或加入官方 QQ 群 1121514619 反馈。"
     },
     {
       "lang": "en",
-      "text": "预告，将恢复所有下载功能"
+      "text": "KCL Mobile has restored game, resource pack and related downloads, and fixed renderer crashes on some devices. Get the latest APK at https://etc.os.kg/."
     }
   ]
 }

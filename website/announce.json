@@ -1,7 +1,7 @@
 {
-  "id": "20261021-01",
-  "enabled": false,
-  "title": "KCL2 公告",
-  "content": "",
-  "updated": "2026-10-21"
+  "id": "20261026-01",
+  "enabled": true,
+  "title": "KCL2 已更新至最新构建",
+  "content": "KCL2 最新构建已发布：版本下载、加载器安装、整合包管理与微软正版登录均可正常使用，默认绿色主题。\n下载与说明请访问官网 https://etc.os.kg/\n如有问题可在设置-软件信息中加入官方 QQ 群联系开发者龙腾OS（ETC Team）。",
+  "updated": "2026-10-26"
 }

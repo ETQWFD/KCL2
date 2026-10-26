@@ -1,0 +1,60 @@
+name: Refresh Stats And Deploy
+
+# 用仓库自带 GITHUB_TOKEN（已鉴权，不受匿名 60 次/小时限流）定时汇总三仓真实下载量，
+# 生成 website/_data/stats.json，提交后直接部署 Pages（GITHUB_TOKEN 的提交不会触发 push 型工作流，故本工作流自行部署）。
+on:
+  schedule:
+    - cron: '*/30 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  stats:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Gather real release stats
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          mkdir -p website/_data
+          python3 .github/scripts/gen_stats.py
+      - name: Commit stats if changed
+        id: commit
+        run: |
+          git config user.name "ETC Team"
+          git config user.email "2416444244@qq.com"
+          git add website/_data/stats.json
+          if git diff --cached --quiet; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "stats unchanged"
+          else
+            git commit -m "stats: refresh real release download counts"
+            git push
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+      - uses: actions/configure-pages@v5
+      - name: Stage site
+        run: |
+          mkdir -p _site
+          cp website/index.html website/manual.html website/dan.html website/download.html website/announce.json website/announce-ce.json website/announcement-mobile.json website/favicon.ico _site/
+          cp website/CNAME _site/CNAME
+          cp website/.nojekyll _site/.nojekyll
+          if [ -d website/assets ]; then cp -r website/assets _site/; fi
+          if [ -d website/_data ]; then cp -r website/_data _site/; fi
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./_site
+      - id: deployment
+        uses: actions/deploy-pages@v4
