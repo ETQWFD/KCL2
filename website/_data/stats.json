@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-26T21:47:01.931777+00:00",
+  "generated_at": "2026-10-26T21:57:25.708921+00:00",
   "repos": {
     "kcl2": {
       "repo": "ETQWFD/KCL2",
@@ -33,37 +33,37 @@
     },
     "ce": {
       "repo": "ETQWFD/KCL-CE",
-      "tag": "v2.15.9-kcl.1",
-      "name": "KCL CE v2.15.9-kcl.1",
+      "tag": "v2.15.10-kcl.1",
+      "name": "KCL CE v2.15.10-kcl.1",
       "prerelease": false,
-      "published_at": "2026-10-25T10:52:19Z",
-      "html_url": "https://github.com/ETQWFD/KCL-CE/releases/tag/v2.15.9-kcl.1",
-      "latest_downloads": 4,
+      "published_at": "2026-10-26T21:53:11Z",
+      "html_url": "https://github.com/ETQWFD/KCL-CE/releases/tag/v2.15.10-kcl.1",
+      "latest_downloads": 0,
       "total_downloads": 33,
       "assets": [
         {
-          "name": "KCL-CE-2.15.9-kcl.1-arm64.exe",
-          "download_count": 1,
-          "size": 81732696,
-          "updated_at": "2026-10-25T10:52:18Z"
-        },
-        {
-          "name": "KCL-CE-2.15.9-kcl.1-arm64.zip",
+          "name": "KCL-CE-2.15.10-kcl.1-arm64.exe",
           "download_count": 0,
-          "size": 75415691,
-          "updated_at": "2026-10-25T10:52:17Z"
+          "size": 81805836,
+          "updated_at": "2026-10-26T21:53:05Z"
         },
         {
-          "name": "KCL-CE-2.15.9-kcl.1-x64.exe",
-          "download_count": 1,
-          "size": 86120555,
-          "updated_at": "2026-10-25T10:52:18Z"
+          "name": "KCL-CE-2.15.10-kcl.1-arm64.zip",
+          "download_count": 0,
+          "size": 75487689,
+          "updated_at": "2026-10-26T21:53:11Z"
         },
         {
-          "name": "KCL-CE-2.15.9-kcl.1-x64.zip",
-          "download_count": 2,
-          "size": 80486109,
-          "updated_at": "2026-10-25T10:52:18Z"
+          "name": "KCL-CE-2.15.10-kcl.1-x64.exe",
+          "download_count": 0,
+          "size": 86193437,
+          "updated_at": "2026-10-26T21:53:07Z"
+        },
+        {
+          "name": "KCL-CE-2.15.10-kcl.1-x64.zip",
+          "download_count": 0,
+          "size": 80559093,
+          "updated_at": "2026-10-26T21:53:07Z"
         }
       ]
     },
