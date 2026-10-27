@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-27T10:14:10.890447+00:00",
+  "generated_at": "2026-10-27T13:03:15.643380+00:00",
   "repos": {
     "kcl2": {
       "repo": "ETQWFD/KCL2",
@@ -38,8 +38,8 @@
       "prerelease": false,
       "published_at": "2026-10-27T10:07:30Z",
       "html_url": "https://github.com/ETQWFD/KCL-CE/releases/tag/v2.15.11-kcl.1",
-      "latest_downloads": 0,
-      "total_downloads": 37,
+      "latest_downloads": 13,
+      "total_downloads": 50,
       "assets": [
         {
           "name": "KCL-CE-2.15.11-kcl.1-arm64.exe",
@@ -61,7 +61,7 @@
         },
         {
           "name": "KCL-CE-2.15.11-kcl.1-x64.zip",
-          "download_count": 0,
+          "download_count": 13,
           "size": 80558897,
           "updated_at": "2026-10-27T10:07:28Z"
         }
