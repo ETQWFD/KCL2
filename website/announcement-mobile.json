@@ -1,6 +1,6 @@
 {
-  "id": 202610261031,
-  "significant": false,
+  "id": 202610310001,
+  "significant": true,
   "outdated": false,
   "minVersion": -1,
   "maxVersion": -1,
@@ -11,22 +11,22 @@
   "title": [
     {
       "lang": "zh",
-      "text": "KCL 手机版下载已全面恢复"
+      "text": "KCL Mobile 1.3.1-kcl.1 正式发布"
     },
     {
       "lang": "en",
-      "text": "KCL Mobile downloads restored"
+      "text": "KCL Mobile 1.3.1-kcl.1 released"
     }
   ],
-  "date": "2026-10-26",
+  "date": "2026-10-31",
   "content": [
     {
       "lang": "zh",
-      "text": "KCL 手机版已解除地区下载限制：游戏版本、资源包与联机相关下载恢复正常，并修复部分机型渲染器不兼容导致的闪退。如遇问题请到官网 https://etc.os.kg/ 下载最新 APK，或加入官方 QQ 群 1121514619 反馈。"
+      "text": "全新 Zalith-Launcher 移植内核（包名 com.kcl.pcl）：保留陶瓦联机并新增 KCL 社区联机大厅；修复低内存真机联机闪退；作者龙腾OS（ETC Team），赞助 https://b23.tv/o42pOXH。更新源已切换至本仓库，可直接检查更新。"
     },
     {
       "lang": "en",
-      "text": "KCL Mobile has restored game, resource pack and related downloads, and fixed renderer crashes on some devices. Get the latest APK at https://etc.os.kg/."
+      "text": "New Zalith-Launcher based KCL Mobile (package com.kcl.pcl): Terracotta online + new KCL community lobby; fixed crash on low-memory devices; author LongTengOS (ETC Team). Update source switched to this repo."
     }
   ]
 }
