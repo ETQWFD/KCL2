@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-30T11:15:04.118871+00:00",
+  "generated_at": "2026-10-30T17:06:50.026500+00:00",
   "repos": {
     "kcl2": {
       "repo": "ETQWFD/KCL2",
@@ -8,12 +8,12 @@
       "prerelease": false,
       "published_at": "2026-10-26T10:38:41Z",
       "html_url": "https://github.com/ETQWFD/KCL2/releases/tag/continuous",
-      "latest_downloads": 6,
-      "total_downloads": 6,
+      "latest_downloads": 7,
+      "total_downloads": 7,
       "assets": [
         {
           "name": "KCL2-portable.zip",
-          "download_count": 4,
+          "download_count": 5,
           "size": 2563579,
           "updated_at": "2026-10-26T10:38:41Z"
         },
@@ -38,8 +38,8 @@
       "prerelease": false,
       "published_at": "2026-10-27T10:07:30Z",
       "html_url": "https://github.com/ETQWFD/KCL-CE/releases/tag/v2.15.11-kcl.1",
-      "latest_downloads": 15,
-      "total_downloads": 52,
+      "latest_downloads": 21,
+      "total_downloads": 58,
       "assets": [
         {
           "name": "KCL-CE-2.15.11-kcl.1-arm64.exe",
@@ -55,13 +55,13 @@
         },
         {
           "name": "KCL-CE-2.15.11-kcl.1-x64.exe",
-          "download_count": 0,
+          "download_count": 2,
           "size": 86193474,
           "updated_at": "2026-10-27T10:07:29Z"
         },
         {
           "name": "KCL-CE-2.15.11-kcl.1-x64.zip",
-          "download_count": 15,
+          "download_count": 19,
           "size": 80558897,
           "updated_at": "2026-10-27T10:07:28Z"
         }
@@ -74,12 +74,12 @@
       "prerelease": false,
       "published_at": "2026-10-21T14:18:30Z",
       "html_url": "https://github.com/ETQWFD/KCL-Mobile/releases/tag/continuous",
-      "latest_downloads": 4,
-      "total_downloads": 4,
+      "latest_downloads": 5,
+      "total_downloads": 7,
       "assets": [
         {
           "name": "KCL-Mobile.apk",
-          "download_count": 4,
+          "download_count": 5,
           "size": 346596852,
           "updated_at": "2026-10-24T14:43:36Z"
         }
