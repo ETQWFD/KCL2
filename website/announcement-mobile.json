@@ -1,17 +1,1 @@
-{
-  "id": 202610311001,
-  "significant": true,
-  "outdated": false,
-  "minVersion": -1,
-  "maxVersion": -1,
-  "specificLang": ["zh", "en"],
-  "title": [
-    {"lang": "zh", "text": "KCL Mobile 1.3.1-kcl.3 正式发布"},
-    {"lang": "en", "text": "KCL Mobile 1.3.1-kcl.3 released"}
-  ],
-  "date": "2026-10-31",
-  "content": [
-    {"lang": "zh", "text": "KCL Mobile 1.3.1-kcl.3（200052）：修复老版本游戏（如 a1.0.17_02）在内置 JRE8 上进入游戏即崩溃（FloatBuffer NoSuchMethodError，LWJGL 已改用 JDK8 编译兼容）；崩溃弹窗新增「上报给开发者」按钮（一键调用手机邮箱发至 2416444244@qq.com）；关于页补回龙腾猫跃鸣谢。保留陶瓦联机与 KCL 社区联机大厅，可在软件内直接检查更新。赞助 https://b23.tv/o42pOXH。"},
-    {"lang": "en", "text": "KCL Mobile 1.3.1-kcl.3 (200052): fixed the crash when entering old versions (e.g. a1.0.17_02) on the built-in JRE 8 (FloatBuffer NoSuchMethodError; LWJGL now compiled with JDK 8); the crash dialog has a new \"Report to developer\" button that opens the device mail app addressed to 2416444244@qq.com; LTCatt restored in the About page. Terracotta online and the KCL community lobby are kept. Sponsor: https://b23.tv/o42pOXH."}
-  ]
-}
+{"id": 202610311002, "significant": true, "outdated": false, "minVersion": -1, "maxVersion": -1, "specificLang": ["zh", "en"], "title": [{"lang": "zh", "text": "KCL Mobile 1.3.1-kcl.4 正式发布"}, {"lang": "en", "text": "KCL Mobile 1.3.1-kcl.4 released"}], "date": "2026-10-31", "content": [{"lang": "zh", "text": "KCL Mobile 1.3.1-kcl.4（200053）发布：合并原作者仓库 1.3.2~1.3.5 全部修复——① 快捷栏命中偏移修复，物品栏/背包可正常点选；② Java 运行库自检，打开启动器自动检测，缺就补装内置运行库；③ 控制布局编辑器不再空屏，冷启动自动补默认布局。上一版已修复进入老版本游戏崩溃（FloatBuffer）并新增崩溃上报给开发者（2416444244@qq.com）。包名 com.kcl.pcl 不变，可直接覆盖安装。"}, {"lang": "en", "text": "KCL Mobile 1.3.1-kcl.4 (200053): merged upstream 1.3.2~1.3.5 fixes — hotbar hit offset fixed so the inventory is tappable, Java runtime self-check with auto-install, control layout editor no longer opens blank. Crash reporting to 2416444244@qq.com kept. Package com.kcl.pcl unchanged; install over the old version."}]}
