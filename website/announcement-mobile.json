@@ -1,32 +1,17 @@
 {
-  "id": 202610310001,
+  "id": 202610311001,
   "significant": true,
   "outdated": false,
   "minVersion": -1,
   "maxVersion": -1,
-  "specificLang": [
-    "zh",
-    "en"
-  ],
+  "specificLang": ["zh", "en"],
   "title": [
-    {
-      "lang": "zh",
-      "text": "KCL Mobile 1.3.1-kcl.1 正式发布"
-    },
-    {
-      "lang": "en",
-      "text": "KCL Mobile 1.3.1-kcl.1 released"
-    }
+    {"lang": "zh", "text": "KCL Mobile 1.3.1-kcl.3 正式发布"},
+    {"lang": "en", "text": "KCL Mobile 1.3.1-kcl.3 released"}
   ],
   "date": "2026-10-31",
   "content": [
-    {
-      "lang": "zh",
-      "text": "全新 Zalith-Launcher 移植内核（包名 com.kcl.pcl）：保留陶瓦联机并新增 KCL 社区联机大厅；修复低内存真机联机闪退；作者龙腾OS（ETC Team），赞助 https://b23.tv/o42pOXH。更新源已切换至本仓库，可直接检查更新。"
-    },
-    {
-      "lang": "en",
-      "text": "New Zalith-Launcher based KCL Mobile (package com.kcl.pcl): Terracotta online + new KCL community lobby; fixed crash on low-memory devices; author LongTengOS (ETC Team). Update source switched to this repo."
-    }
+    {"lang": "zh", "text": "KCL Mobile 1.3.1-kcl.3（200052）：修复老版本游戏（如 a1.0.17_02）在内置 JRE8 上进入游戏即崩溃（FloatBuffer NoSuchMethodError，LWJGL 已改用 JDK8 编译兼容）；崩溃弹窗新增「上报给开发者」按钮（一键调用手机邮箱发至 2416444244@qq.com）；关于页补回龙腾猫跃鸣谢。保留陶瓦联机与 KCL 社区联机大厅，可在软件内直接检查更新。赞助 https://b23.tv/o42pOXH。"},
+    {"lang": "en", "text": "KCL Mobile 1.3.1-kcl.3 (200052): fixed the crash when entering old versions (e.g. a1.0.17_02) on the built-in JRE 8 (FloatBuffer NoSuchMethodError; LWJGL now compiled with JDK 8); the crash dialog has a new \"Report to developer\" button that opens the device mail app addressed to 2416444244@qq.com; LTCatt restored in the About page. Terracotta online and the KCL community lobby are kept. Sponsor: https://b23.tv/o42pOXH."}
   ]
 }
