@@ -1,1 +1,32 @@
-{"id": 202610312126, "significant": true, "outdated": false, "minVersion": -1, "maxVersion": -1, "specificLang": ["zh", "en"], "title": [{"lang": "zh", "text": "KCL Mobile 1.3.1-kcl.5 v2 发布：双 APK（KCL Mobile + KCL CE）"}, {"lang": "en", "text": "KCL Mobile 1.3.1-kcl.5 v2 released: dual APKs (KCL Mobile + KCL CE)"}], "date": "2026-10-31", "content": [{"lang": "zh", "text": "KCL Mobile 1.3.1-kcl.5（200054）v2 更新：① 新增桌面快捷方式「导出启动脚本」；② 修复微软/正版登录皮肤不显示（微软 profile 直链）；③ 日志持久化追加与一键清除；④ 社区大厅入口清理为官方 QQ 群；⑤ 缺 Java 自动补装；⑥ 下载并发优化为 16，并修复游戏渲染线程崩溃。同时新增 KCL CE 社区版 APK（包名 com.kcl.ce），与 KCL Mobile（com.kcl.pcl）可共存安装，社区大厅/联机完整保留，下载见 GitHub Release。包名 com.kcl.pcl 不变，可直接覆盖安装 kcl.4。"}, {"lang": "en", "text": "KCL Mobile 1.3.1-kcl.5 (200054) v2: ① new home-screen shortcut \"export launch script\"; ② fixed Microsoft/premium-login skin not showing (Microsoft profile direct link); ③ log persistence (append) and one-tap clear; ④ community-lobby entry cleaned to the official QQ group; ⑤ auto-install when Java is missing; ⑥ download concurrency tuned to 16 and the game render-thread crash fixed. A new KCL CE community APK (package com.kcl.ce) is also released — it installs alongside KCL Mobile (com.kcl.pcl) with the community lobby/multiplayer fully kept; download on GitHub Release. Package com.kcl.pcl unchanged; install over kcl.4."}]}
+{
+  "id": 202610312330,
+  "significant": true,
+  "outdated": false,
+  "minVersion": -1,
+  "maxVersion": -1,
+  "specificLang": [
+    "zh",
+    "en"
+  ],
+  "title": [
+    {
+      "lang": "zh",
+      "text": "KCL Mobile 1.3.1-kcl.5 v3 发布：APK 体积优化至 88MB + JRE 在线补装"
+    },
+    {
+      "lang": "en",
+      "text": "KCL Mobile 1.3.1-kcl.5 v3 released: APK slimmed to 88MB + online JRE install"
+    }
+  ],
+  "date": "2026-10-31",
+  "content": [
+    {
+      "lang": "zh",
+      "text": "KCL Mobile 1.3.1-kcl.5（200054）v3 体积优化更新：① APK 体积从 173MB 优化至 88MB——内置 JRE 精简为 Java 8，Java 17/21/25 在需要时首次启动自动联网补装（SHA-256 校验），离线环境仍可启动 Java 8 游戏；② KCL CE 社区版（com.kcl.ce）与 KCL Mobile（com.kcl.pcl）体积同步优化至 88MB，功能完全一致，仍可共存安装；③ 其余 v2 功能不变（导出启动脚本、微软/正版登录皮肤修复、日志持久化、社区大厅/联机、缺 Java 自动补装、下载并发 16 等）。包名 com.kcl.pcl 不变，可直接覆盖安装。下载见 GitHub Release。"
+    },
+    {
+      "lang": "en",
+      "text": "KCL Mobile 1.3.1-kcl.5 (200054) v3 size optimization: ① APK slimmed from 173MB to 88MB — the bundled JRE is trimmed to Java 8, and Java 17/21/25 are auto-installed online on first need (SHA-256 verified); offline, Java 8 games still launch; ② the KCL CE community build (com.kcl.ce) is slimmed to 88MB in sync with identical features and still installs alongside KCL Mobile (com.kcl.pcl); ③ all v2 features unchanged (export launch script, Microsoft/premium-login skin fix, log persistence, community lobby/multiplayer, auto Java install, download concurrency 16, etc.). Package com.kcl.pcl unchanged; install directly over previous versions. Download on GitHub Release."
+    }
+  ]
+}
