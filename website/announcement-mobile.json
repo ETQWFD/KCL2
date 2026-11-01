@@ -1,6 +1,6 @@
 {
-  "id": 202611010145,
-  "significant": true,
+  "id": 202611011048,
+  "significant": false,
   "outdated": false,
   "minVersion": -1,
   "maxVersion": -1,
@@ -11,22 +11,22 @@
   "title": [
     {
       "lang": "zh",
-      "text": "KCL Mobile 1.3.1-kcl.5 v4 发布：日志诊断修复 + 联机 VPN 修复 + 远程内容源容错"
+      "text": "KCL Mobile 1.3.1-kcl.5 v5 修复已发布"
     },
     {
       "lang": "en",
-      "text": "KCL Mobile 1.3.1-kcl.5 v4 released: logging diagnostics fix + multiplayer VPN fix + remote-content source resilience"
+      "text": "KCL Mobile 1.3.1-kcl.5 v5 fixes released"
     }
   ],
   "date": "2026-11-01",
   "content": [
     {
       "lang": "zh",
-      "text": "KCL Mobile 1.3.1-kcl.5（200054）v4 更新：① 日志诊断修复，崩溃/异常排查更准；② 远程内容源容错——默认站点下线时正确处理、未配置源静默跳过、参数可经 MMKV 配置，均不影响主流程；③ 联机 VPN 修复——根因修复进程错配、建立失败时有限次自动重试，并给出明确提示「联机 VPN 建立失败，请检查系统 VPN 权限后重试」；④ 启动/下载链路核查确认——Java 在线补装（17/21/25）与 Fetcher 断点续传闭环均正常；⑤ 双 APK（主版 com.kcl.pcl + KCL CE 社区版 com.kcl.ce）同步更新、功能一致、仍可共存安装；⑥ v4 双 APK 体积均为约 88.2MB（沿用 v3 体积优化与 JRE 在线补装方案）。包名不变，可直接覆盖安装。下载见 GitHub Release。"
+      "text": "KCL Mobile v5（构建号 200055）修复：① 修复 Krypton Wrapper 渲染器在 PowerVR/Imagination GPU 上着色器编译失败崩溃（自动改用 Pure GL4ES，并记忆自动切换）；② 修复 JNA 在 Android 上 libc.so.6 加载失败（内存信息/朗读）；③ 修复本地账号 msa 类型导致的 authlib 401 报错；④ 低内存设备流畅度优化；⑤ 关于页新增原仓库作者条目。请前往官网 https://etc.os.kg/ 或 GitHub Releases 下载更新。"
     },
     {
       "lang": "en",
-      "text": "KCL Mobile 1.3.1-kcl.5 (200054) v4: ① logging-diagnostics fix for more accurate crash/exception triage; ② remote-content source resilience — a taken-default endpoint is handled correctly, unconfigured sources are skipped silently, and parameters are MMKV-configurable, none affecting the main flow; ③ multiplayer VPN fix — root-cause fixed the process mismatch, finite auto-retries on setup failure, and a clear prompt \"Multiplayer VPN setup failed; please check system VPN permission and retry\"; ④ startup/download path verified — online Java install (17/21/25) and the Fetcher resume-on-retry loop both confirmed working; ⑤ dual APKs (main com.kcl.pcl + KCL CE com.kcl.ce) updated in sync, feature-identical and still installable side by side; ⑥ both v4 APKs are ~88.2MB (keeping the v3 slimdown and online-JRE approach). Package names unchanged; install directly over previous versions. Download on GitHub Release."
+      "text": "KCL Mobile v5 (build 200055) fixes: renderer auto-switch on PowerVR/Imagination GPUs to prevent shader-compile crashes; JNA libc.so.6 loading fix; local-account auth 401 fix; smoothness tuning for low-memory devices; original-repo author added to the About page. Download at https://etc.os.kg/."
     }
   ]
 }
