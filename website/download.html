@@ -59,6 +59,8 @@ footer{border-top:1px solid var(--line);padding:24px 0 40px;color:var(--mut);fon
   <p>三个版本共用同一官网与后台。Windows 主力用 KCL2；偏好社区渠道用 KCL CE；安卓手机用 KCL。全部支持微软正版登录与 BMCLAPI 加速下载。</p>
 </section>
 
+<div id="announce" class="notice" style="display:none"></div>
+
 <div class="wrap cards">
 
   <div class="card" id="kcl2">
@@ -153,6 +155,45 @@ footer{border-top:1px solid var(--line);padding:24px 0 40px;color:var(--mut);fon
         if(zip){var a=document.getElementById('ce-zip');if(a)a.href=ce.html_url.replace(/\/tag\/.*/,'/download/'+encodeURIComponent(zip.name));}}
     })
     .catch(()=>{/* 快照暂不可用时保留页面默认文案 */});
+})();
+</script>
+<script>
+// KCL Mobile 公告渲染：后台 dan.html 发布的 announcement-mobile.json（FCL Announcement v2）在官网即时展示
+(function(){
+  var BOX=document.getElementById('announce');
+  if(!BOX)return;
+  function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+  function pick(arr){
+    if(!arr||!arr.length)return '';
+    var z=arr.filter(function(c){return (c.lang||'').toLowerCase().indexOf('zh')===0})[0]
+        ||arr.filter(function(c){return (c.lang||'').toLowerCase().indexOf('en')===0})[0]
+        ||arr[0];
+    return z?z.text:'';
+  }
+  function best(j){
+    var list=Array.isArray(j)?j:[j];
+    if(!list.length||!list[0])return null;
+    var m=list[0];
+    list.forEach(function(a){if(a&&Number(a.id)>Number(m.id))m=a});
+    return m;
+  }
+  function render(a){
+    if(!a)return;
+    if(a.outdated){console.log('[announce] skipped, outdated id='+a.id);return}
+    var t=pick(a.title),c=pick(a.content);
+    if(!t&&!c){console.log('[announce] empty text, id='+a.id);return}
+    BOX.innerHTML='<b>最新公告 · '+esc(t)+'</b>'
+      +'<div style="color:var(--mut);font-size:13px;margin:4px 0 8px">'+esc(a.date||'')+'</div>'
+      +'<div>'+esc(c)+'</div>';
+    BOX.style.display='block';
+  }
+  var RAW='https://raw.githubusercontent.com/ETQWFD/KCL2/main/website/announcement-mobile.json';
+  var CDN='https://cdn.jsdelivr.net/gh/ETQWFD/KCL2@main/website/announcement-mobile.json';
+  fetch(RAW+'?t='+Date.now(),{cache:'no-store'})
+    .then(function(r){if(!r.ok)throw new Error('raw HTTP '+r.status);return r.json()})
+    .catch(function(){return fetch(CDN).then(function(r){if(!r.ok)throw new Error('cdn HTTP '+r.status);return r.json()})})
+    .then(function(j){render(best(j))})
+    .catch(function(e){console.log('[announce] not shown:',e&&e.message)})
 })();
 </script>
 </body>

@@ -289,6 +289,13 @@ async function publishAnnounce(){
       if(enabled&&cnt===0)throw new Error("回读发现启动器侧公告仍为空，发布未生效");
       logLine("  · 回读成功：启动器侧当前公告 "+cnt+" 条");
     }
+    if(target==="mobile"){
+      logLine("② 等待 6 秒后回读 announcement-mobile.json 做校验…");
+      await new Promise(r=>setTimeout(r,6000));
+      const back=JSON.parse(await rawGet(repo,path));
+      if(String(back.id)!==String(id))throw new Error("回读公告 id 不匹配（期望 "+id+"，实际 "+(back?back.id:"解析失败")+"），发布可能未生效");
+      logLine("  · 回读成功：当前公告 id "+back.id+"（outdated="+!!back.outdated+"）");
+    }
     toast(label[target]+" 公告已发布并校验，启动器下次启动读取（约 1 分钟生效）");
     logLine("完成。启动器按公告 id 仅弹一次；如本机曾见过同 id 不会重复弹。");
   }catch(e){

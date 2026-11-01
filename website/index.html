@@ -69,6 +69,7 @@ footer{border-top:1px solid var(--line);padding:26px 0;color:var(--mut);font-siz
 <section class="hero"><div class="wrap">
   <h1>当常见启动器暂时不可用时，<br>仍要有一个能进入游戏的入口。</h1>
   <p class="lead">KCL2 基于 Plain Craft Launcher 2 二次开发，保留版本下载、加载器安装、整合包管理、版本隔离与微软正版登录。版本文件默认同时走 Mojang 官方源与 BMCLAPI 镜像源，任一源失败会自动切换，支持多线程与断点续传。</p>
+  <div id="announce" class="notice" style="display:none"></div>
   <div class="dl">
     <a class="btn primary" href="download.html">选择版本下载</a>
     <a class="btn sec" href="download.html#dotnet">.NET 依赖补丁（仅启动报错时需要）</a>
@@ -154,5 +155,44 @@ footer{border-top:1px solid var(--line);padding:26px 0;color:var(--mut);font-siz
 <footer><div class="wrap">
   KCL2 · ETC Team · 基于 Plain Craft Launcher 2 的第三方修改，遵循 MIT 许可。Minecraft 及相关标识归 Microsoft / Mojang 所有。
 </div></footer>
+<script>
+// KCL Mobile 公告渲染：后台 dan.html 发布的 announcement-mobile.json（FCL Announcement v2）在官网即时展示
+(function(){
+  var BOX=document.getElementById('announce');
+  if(!BOX)return;
+  function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+  function pick(arr){
+    if(!arr||!arr.length)return '';
+    var z=arr.filter(function(c){return (c.lang||'').toLowerCase().indexOf('zh')===0})[0]
+        ||arr.filter(function(c){return (c.lang||'').toLowerCase().indexOf('en')===0})[0]
+        ||arr[0];
+    return z?z.text:'';
+  }
+  function best(j){
+    var list=Array.isArray(j)?j:[j];
+    if(!list.length||!list[0])return null;
+    var m=list[0];
+    list.forEach(function(a){if(a&&Number(a.id)>Number(m.id))m=a});
+    return m;
+  }
+  function render(a){
+    if(!a)return;
+    if(a.outdated){console.log('[announce] skipped, outdated id='+a.id);return}
+    var t=pick(a.title),c=pick(a.content);
+    if(!t&&!c){console.log('[announce] empty text, id='+a.id);return}
+    BOX.innerHTML='<b>最新公告 · '+esc(t)+'</b>'
+      +'<div style="color:var(--mut);font-size:13px;margin:4px 0 8px">'+esc(a.date||'')+'</div>'
+      +'<div>'+esc(c)+'</div>';
+    BOX.style.display='block';
+  }
+  var RAW='https://raw.githubusercontent.com/ETQWFD/KCL2/main/website/announcement-mobile.json';
+  var CDN='https://cdn.jsdelivr.net/gh/ETQWFD/KCL2@main/website/announcement-mobile.json';
+  fetch(RAW+'?t='+Date.now(),{cache:'no-store'})
+    .then(function(r){if(!r.ok)throw new Error('raw HTTP '+r.status);return r.json()})
+    .catch(function(){return fetch(CDN).then(function(r){if(!r.ok)throw new Error('cdn HTTP '+r.status);return r.json()})})
+    .then(function(j){render(best(j))})
+    .catch(function(e){console.log('[announce] not shown:',e&&e.message)})
+})();
+</script>
 </body>
 </html>
