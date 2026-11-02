@@ -1,5 +1,5 @@
 {
-  "id": 202611011048,
+  "id": 202611021200,
   "significant": false,
   "outdated": false,
   "minVersion": -1,
@@ -11,22 +11,22 @@
   "title": [
     {
       "lang": "zh",
-      "text": "KCL Mobile 1.3.1-kcl.5 v5 修复已发布"
+      "text": "KCL Mobile 1.3.1-kcl.6 v6 下载提速版已发布"
     },
     {
       "lang": "en",
-      "text": "KCL Mobile 1.3.1-kcl.5 v5 fixes released"
+      "text": "KCL Mobile 1.3.1-kcl.6 v6 speed-up release is out"
     }
   ],
-  "date": "2026-11-01",
+  "date": "2026-11-02",
   "content": [
     {
       "lang": "zh",
-      "text": "KCL Mobile v5（构建号 200055）修复：① 修复 Krypton Wrapper 渲染器在 PowerVR/Imagination GPU 上着色器编译失败崩溃（自动改用 Pure GL4ES，并记忆自动切换）；② 修复 JNA 在 Android 上 libc.so.6 加载失败（内存信息/朗读）；③ 修复本地账号 msa 类型导致的 authlib 401 报错；④ 低内存设备流畅度优化；⑤ 关于页新增原仓库作者条目。请前往官网 https://etc.os.kg/ 或 GitHub Releases 下载更新。"
+      "text": "KCL Mobile v6（构建号 200056）核心更新：① 下载引擎分片并发提速——大文件（≥4MB）自动探测 Accept-Ranges，按 2MB 切片、2-6 路 Range 连接并行下载再合并校验，client.jar / LWJGL / 整合包下载明显更快；低端机按内存自动降并发，OOM 自动回退单连接，不支持 Range 的源无缝回落，断点续传不受影响；② 崩溃兜底持续加固，杜绝静默闪退；③ 保留 v5 全部修复（PowerVR 渲染器自动切换 / JNA / authlib 401 / 正版登录 / 崩溃日志复制 / 流畅度优化）。请前往官网 https://etc.os.kg/ 或 GitHub Releases 下载更新。"
     },
     {
       "lang": "en",
-      "text": "KCL Mobile v5 (build 200055) fixes: renderer auto-switch on PowerVR/Imagination GPUs to prevent shader-compile crashes; JNA libc.so.6 loading fix; local-account auth 401 fix; smoothness tuning for low-memory devices; original-repo author added to the About page. Download at https://etc.os.kg/."
+      "text": "KCL Mobile v6 (build 200056): ① sharded concurrent download engine — files ≥4MB probe Accept-Ranges and are fetched via 2-6 parallel Range connections (2MB slices) then merged and verified; noticeably faster client.jar / LWJGL / modpack downloads; heap-aware concurrency on low-end devices, OOM falls back to single connection, servers without Range support transparently fall back, resume untouched; ② crash handler hardened, no more silent exits; ③ all v5 fixes kept (PowerVR renderer auto-switch / JNA / authlib 401 / premium login / crash-log copy / smoothness). Download at https://etc.os.kg/ or GitHub Releases."
     }
   ]
 }
