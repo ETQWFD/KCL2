@@ -258,19 +258,19 @@ RetryCacheCheck:
         ' VB 不允许同一方法混用 On Error 与 Try），二次异常静默吞掉。
         Try
         If IsProgramEnding Then
-            Logger.Error(Ex, Source, LogBehavior.None)
+            Try : Logger.Error(Ex, Source, LogBehavior.None) : Catch
             Exit Sub
         End If
         '防重入：已有线程在处理崩溃时，其余线程只写日志直接返回，避免弹窗风暴与递归
         If Not Monitor.TryEnter(CrashDialogLock, 0) Then
-            Logger.Error(Ex, Source & "（崩溃处理重入，仅记录）", LogBehavior.None)
+            Try : Logger.Error(Ex, Source & "（崩溃处理重入，仅记录）", LogBehavior.None) : Catch
             Exit Sub
         End If
         Try
-            '1. 先抢救日志与崩溃报告
-            Logger.Error(Ex, Source, LogBehavior.None)
-            FeedbackInfo()
-            PclLogger.SaveCrashReport(Ex, Source, "")
+            '1. 先抢救日志与崩溃报告（Logger 可能尚未初始化，每个调用单独吞异常）
+            Try : Logger.Error(Ex, Source, LogBehavior.None) : Catch
+            Try : FeedbackInfo() : Catch
+            Try : PclLogger.SaveCrashReport(Ex, Source, "") : Catch
             '2. 显卡/渲染不兼容：走兼容模式流程
             If IsRenderCrash(Ex) Then
                 HandleRenderCrash(Ex)
@@ -393,9 +393,24 @@ RetryCacheCheck:
         End Function
         '挂载全局崩溃兜底（方法体内全程 Try 保护，此处不加载任何库）：
         '1. 非 UI/后台线程未处理异常 → 进程静默终止的根源；
-        '2. 未观察 Task 异常 → 后台任务崩溃却无日志无提示。
+        '2. 未观察 Task 异常 → 后台任务崩溃却无日志无提示；
+        '3. WinForms 互操作线程异常（Ookii 对话框等偶发走 WinForms 消息循环）。
         AddHandler AppDomain.CurrentDomain.UnhandledException, AddressOf OnAppDomainUnhandledException
         AddHandler Threading.Tasks.TaskScheduler.UnobservedTaskException, AddressOf OnTaskUnobservedException
+        Try
+            System.Windows.Forms.Application.SetUnhandledExceptionMode(System.Windows.Forms.UnhandledExceptionMode.CatchException)
+            AddHandler System.Windows.Forms.Application.ThreadException, AddressOf OnWinFormsThreadException
+        Catch
+        End Try
+    End Sub
+
+    ''' <summary>
+    ''' WinForms 互操作线程异常兜底。正常 WPF 程序走不到这里，但 Ookii 文件夹对话框、
+    ''' 部分 Shell COM 互操作可能在 WinForms 消息循环里抛异常；统一路由到崩溃报告。
+    ''' </summary>
+    Private Shared Sub OnWinFormsThreadException(sender As Object, e As System.Threading.ThreadExceptionEventArgs)
+        On Error Resume Next
+        ReportFatalCrash(e.Exception, "WinForms 线程未处理异常")
     End Sub
     Private Shared Sub ExtractLibwebp() '这个方法会调用 ModBase，进而调用 MeloongCore，所以不能放在 New 里
         SetDllDirectory(PathUtils.RemoveSlashSuffix(PathPure.Value))

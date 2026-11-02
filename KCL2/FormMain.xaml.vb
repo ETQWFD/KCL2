@@ -790,8 +790,21 @@ Public Class FormMain
                 End Try
         End Select
         FrmSetupUI?.CardLogo.TriggerForceResize()
-        '标题栏文本
-        LabTitleLogo.Text = Settings.Get(Of String)("UiLogoText")
+        '标题栏文本（KCL：兜底过滤旧版 PCL 残留配置，强制显示 KCL；并回写迁移）
+        Dim logoText As String = Settings.Get(Of String)("UiLogoText")
+        If String.IsNullOrWhiteSpace(logoText) OrElse
+           logoText.Trim().Equals("PCL", StringComparison.OrdinalIgnoreCase) OrElse
+           logoText.Trim().Equals("Plain Craft Launcher", StringComparison.OrdinalIgnoreCase) Then
+            logoText = "KCL"
+            Try
+                If Settings.Get(Of String)("UiLogoText") <> "KCL" Then
+                    Settings.Set("UiLogoText", "KCL")
+                End If
+            Catch
+                '忽略写回失败，不影响主流程
+            End Try
+        End If
+        LabTitleLogo.Text = logoText
         '标题栏文本是否居左
         PanTitleMain.ColumnDefinitions(0).Width = New GridLength(If(Settings.Get(Of Boolean)("UiLogoLeft") AndAlso Settings.Get(Of Integer)("UiLogoType") = 0, 0, 1), GridUnitType.Star)
     End Sub
