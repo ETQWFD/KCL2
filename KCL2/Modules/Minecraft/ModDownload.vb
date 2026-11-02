@@ -1253,7 +1253,11 @@ Public Module ModDownload
             {Original.
                 Replace("https://piston-data.mojang.com", "https://bmclapi2.bangbang93.com/assets").
                 Replace("https://piston-meta.mojang.com", "https://bmclapi2.bangbang93.com/assets").
-                Replace("https://resources.download.minecraft.net", "https://bmclapi2.bangbang93.com/assets")
+                Replace("https://resources.download.minecraft.net", "https://bmclapi2.bangbang93.com/assets"),
+             Original.
+                Replace("https://piston-data.mojang.com", "https://bmclapi.bangbang93.com/assets").
+                Replace("https://piston-meta.mojang.com", "https://bmclapi.bangbang93.com/assets").
+                Replace("https://resources.download.minecraft.net", "https://bmclapi.bangbang93.com/assets")
             })
     End Function
     ''' <summary>
@@ -1269,7 +1273,15 @@ Public Module ModDownload
                 Original.
                     Replace("https://piston-data.mojang.com", "https://bmclapi2.bangbang93.com/libraries").
                     Replace("https://piston-meta.mojang.com", "https://bmclapi2.bangbang93.com/libraries").
-                    Replace("https://libraries.minecraft.net", "https://bmclapi2.bangbang93.com/libraries")
+                    Replace("https://libraries.minecraft.net", "https://bmclapi2.bangbang93.com/libraries"),
+                Original.
+                    Replace("https://piston-data.mojang.com", "https://bmclapi.bangbang93.com/maven").
+                    Replace("https://piston-meta.mojang.com", "https://bmclapi.bangbang93.com/maven").
+                    Replace("https://libraries.minecraft.net", "https://bmclapi.bangbang93.com/maven"),
+                Original.
+                    Replace("https://piston-data.mojang.com", "https://bmclapi.bangbang93.com/libraries").
+                    Replace("https://piston-meta.mojang.com", "https://bmclapi.bangbang93.com/libraries").
+                    Replace("https://libraries.minecraft.net", "https://bmclapi.bangbang93.com/libraries")
             }
         Else
             Return DlSourceOrder(
@@ -1281,7 +1293,15 @@ Public Module ModDownload
                  Original.
                     Replace("https://piston-data.mojang.com", "https://bmclapi2.bangbang93.com/libraries").
                     Replace("https://piston-meta.mojang.com", "https://bmclapi2.bangbang93.com/libraries").
-                    Replace("https://libraries.minecraft.net", "https://bmclapi2.bangbang93.com/libraries")
+                    Replace("https://libraries.minecraft.net", "https://bmclapi2.bangbang93.com/libraries"),
+                 Original.
+                    Replace("https://piston-data.mojang.com", "https://bmclapi.bangbang93.com/maven").
+                    Replace("https://piston-meta.mojang.com", "https://bmclapi.bangbang93.com/maven").
+                    Replace("https://libraries.minecraft.net", "https://bmclapi.bangbang93.com/maven"),
+                 Original.
+                    Replace("https://piston-data.mojang.com", "https://bmclapi.bangbang93.com/libraries").
+                    Replace("https://piston-meta.mojang.com", "https://bmclapi.bangbang93.com/libraries").
+                    Replace("https://libraries.minecraft.net", "https://bmclapi.bangbang93.com/libraries")
                 })
         End If
     End Function
@@ -1297,7 +1317,12 @@ Public Module ModDownload
                 Replace("https://piston-data.mojang.com", "https://bmclapi2.bangbang93.com").
                 Replace("https://piston-meta.mojang.com", "https://bmclapi2.bangbang93.com").
                 Replace("https://launcher.mojang.com", "https://bmclapi2.bangbang93.com").
-                Replace("https://launchermeta.mojang.com", "https://bmclapi2.bangbang93.com")
+                Replace("https://launchermeta.mojang.com", "https://bmclapi2.bangbang93.com"),
+             Original.
+                Replace("https://piston-data.mojang.com", "https://bmclapi.bangbang93.com").
+                Replace("https://piston-meta.mojang.com", "https://bmclapi.bangbang93.com").
+                Replace("https://launcher.mojang.com", "https://bmclapi.bangbang93.com").
+                Replace("https://launchermeta.mojang.com", "https://bmclapi.bangbang93.com")
             })
     End Function
 

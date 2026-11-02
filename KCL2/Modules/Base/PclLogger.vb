@@ -51,4 +51,24 @@ Public Class PclLogger
         If Behavior >= LogBehavior.Toast Then Telemetry("错误日志", "Exception", DetailText)
     End Sub
 
+    ''' <summary>
+    ''' 崩溃兜底：将崩溃信息独立、同步地追加到 KCL\CrashReports.txt。
+    ''' 不依赖日志后台线程（线程已死时仍可写盘），自身绝不抛出任何异常。
+    ''' </summary>
+    Public Shared Sub SaveCrashReport(Ex As Exception, Source As String, Extra As String)
+        Try
+            Dim Folder As String = Paths.Base & "KCL\"
+            DirectoryUtils.Create(Folder)
+            Dim Builder As New Text.StringBuilder()
+            Builder.AppendLine("===== KCL2 崩溃报告 " & Date.Now.ToString("yyyy-MM-dd HH:mm:ss") & " =====")
+            Builder.AppendLine("来源：" & If(Source, ""))
+            Builder.AppendLine("异常：" & If(Ex Is Nothing, "（无）", Ex.GetDisplay(True)))
+            If Not String.IsNullOrEmpty(Extra) Then Builder.AppendLine("附加信息：" & Extra)
+            Builder.AppendLine()
+            File.AppendAllText(Folder & "CrashReports.txt", Builder.ToString())
+        Catch
+            '写日志本身失败时静默放弃，绝不能让崩溃处理器二次崩溃
+        End Try
+    End Sub
+
 End Class

@@ -1,4 +1,5 @@
 Imports System.Reflection
+Imports System.Windows.Interop
 Imports System.Windows.Threading
 
 Public Class Application
@@ -13,6 +14,14 @@ Public Class Application
                 WaitingMutex(e)
                 Logger.Instance = New PclLogger With {.logFolder = Paths.BaseThenName, .MinLevel = If(ModeDebug, LogLevel.Trace, LogLevel.Info)}
             End If
+            '兼容渲染模式：显卡驱动异常时自动使用软件渲染（必须在创建任何 WPF 窗口前设置才会生效）
+            Try
+                If Settings.Get(Of Boolean)("SystemSoftRender") Then
+                    RenderOptions.ProcessRenderMode = RenderMode.SoftwareOnly
+                    Logger.Warn("已启用兼容渲染模式（软件渲染）")
+                End If
+            Catch
+            End Try
             '提升主线程优先级
             Thread.CurrentThread.Priority = ThreadPriority.Highest
             '执行开发版测试
@@ -201,6 +210,11 @@ RetryCacheCheck:
         e.Handled = True
         If IsProgramEnding Then Return
         FeedbackInfo()
+        '显卡/渲染不兼容导致的崩溃：切换软件渲染兼容模式
+        If IsRenderCrash(e.Exception) Then
+            HandleRenderCrash(e.Exception)
+            Return
+        End If
         Dim Detail As String = e.Exception.GetDisplay(True)
         If Detail.Contains("System.Windows.Threading.Dispatcher.Invoke") OrElse Detail.Contains("MS.Internal.AppModel.ITaskbarList.HrInit") OrElse Detail.Contains("未能加载文件或程序集") OrElse
            Detail.Contains(".NET Framework") Then ' “自动错误判断” 的结果分析
@@ -209,6 +223,124 @@ RetryCacheCheck:
             Logger.Error(e.Exception, "程序出现未知错误", LogBehavior.AlertThenCrash)
         End If
     End Sub
+
+    '==================== 全局崩溃兜底 ====================
+    '防重入锁：保证任意时刻只有一个线程在处理崩溃弹窗
+    Private Shared CrashDialogLock As New Object
+
+    ''' <summary>
+    ''' 非 UI 线程（下载线程、定时器线程、网络线程等）未处理异常的兜底。
+    ''' 此事件触发后进程即将终止，这里只做日志抢救与用户提示，不尝试恢复。
+    ''' </summary>
+    Private Shared Sub OnAppDomainUnhandledException(sender As Object, e As UnhandledExceptionEventArgs)
+        On Error Resume Next
+        ReportFatalCrash(TryCast(e.ExceptionObject, Exception), "后台线程发生未处理异常")
+    End Sub
+
+    ''' <summary>
+    ''' 未观察的 Task 异常兜底。此类异常默认不会终止进程，记录即可。
+    ''' </summary>
+    Private Shared Sub OnTaskUnobservedException(sender As Object, e As UnobservedTaskExceptionEventArgs)
+        On Error Resume Next
+        e.SetObserved() '防止进程因未观察任务异常而终止
+        If IsProgramEnding Then Return
+        Logger.Error(e.Exception, "后台任务发生未观察异常", LogBehavior.None)
+        PclLogger.SaveCrashReport(e.Exception, "UnobservedTaskException", "")
+    End Sub
+
+    ''' <summary>
+    ''' 致命崩溃处理：自身绝不允许抛出任何异常。
+    ''' 全程 On Error Resume Next + Try/Finally 保证锁一定释放；
+    ''' 使用原生 MsgBox 而非 WPF 弹窗，避免 UI 线程已死时无法交互。
+    ''' </summary>
+    Private Shared Sub ReportFatalCrash(Ex As Exception, Source As String)
+        On Error Resume Next
+        If IsProgramEnding Then
+            Logger.Error(Ex, Source, LogBehavior.None)
+            Exit Sub
+        End If
+        '防重入：已有线程在处理崩溃时，其余线程只写日志直接返回，避免弹窗风暴与递归
+        If Not Monitor.TryEnter(CrashDialogLock, 0) Then
+            Logger.Error(Ex, Source & "（崩溃处理重入，仅记录）", LogBehavior.None)
+            Exit Sub
+        End If
+        Try
+            '1. 先抢救日志与崩溃报告
+            Logger.Error(Ex, Source, LogBehavior.None)
+            FeedbackInfo()
+            PclLogger.SaveCrashReport(Ex, Source, "")
+            '2. 显卡/渲染不兼容：走兼容模式流程
+            If IsRenderCrash(Ex) Then
+                HandleRenderCrash(Ex)
+                Return
+            End If
+            '3. 原生弹窗提示（不依赖 WPF UI 线程，线程亲和安全）
+            Dim BriefEx As String = "（无法获取异常信息）"
+            If Ex IsNot Nothing Then BriefEx = Brief(Ex.GetDisplay(True))
+            Dim Message As String =
+                "KCL2 遇到了意外问题并需要关闭。" & vbCrLf & vbCrLf &
+                "错误摘要：" & BriefEx & vbCrLf & vbCrLf &
+                "详细日志已保存到：" & Paths.Base & "KCL\Log1.txt" & vbCrLf &
+                "如果问题反复出现，请将 Log1.txt 发送至崩溃邮箱 2416444244@qq.com 反馈。" & vbCrLf &
+                "—— 龙腾OS"
+            MsgBox(Message, MsgBoxStyle.Critical, "KCL2 已崩溃")
+            '4. 打开日志文件夹，方便用户取证
+            OpenExplorer(Paths.Base & "KCL\")
+        Finally
+            Monitor.Exit(CrashDialogLock)
+        End Try
+        '5. 走既定崩溃退出流程（保存配置、刷新日志、打开日志文件）
+        FormMain.EndProgramForce(ProcessReturnValues.Exception)
+    End Sub
+
+    ''' <summary>
+    ''' 判断异常是否由显卡/渲染环境不兼容引起（Milcore / D3D / DXGI / WGL 等特征）。
+    ''' </summary>
+    Private Shared Function IsRenderCrash(Ex As Exception) As Boolean
+        On Error Resume Next
+        If Ex Is Nothing Then Return False
+        Dim Text As String = Ex.ToString().ToUpper()
+        If Ex.InnerException IsNot Nothing Then Text &= Ex.InnerException.ToString().ToUpper()
+        Return Text.Contains("MILCORE") OrElse Text.Contains("D3D") OrElse Text.Contains("DXGI") OrElse
+               Text.Contains("WGL") OrElse Text.Contains("DIRECT3D") OrElse Text.Contains("硬件加速") OrElse
+               Text.Contains("HARDWARE ACCELERATION")
+    End Function
+
+    ''' <summary>
+    ''' 处理显卡/渲染不兼容崩溃：持久化兼容设置、切换软件渲染、提示用户重启。
+    ''' </summary>
+    Private Shared Sub HandleRenderCrash(Ex As Exception)
+        On Error Resume Next
+        '1. 记录崩溃现场
+        Logger.Error(Ex, "检测到显卡/渲染环境不兼容", LogBehavior.None)
+        FeedbackInfo()
+        PclLogger.SaveCrashReport(Ex, "RenderCrash", "")
+        '2. 持久化兼容设置（下次启动在创建窗口前启用软件渲染）
+        Settings.Set("SystemSoftRender", True)
+        '3. 尝试立即切换软件渲染（当前进程通常需重启后才完全生效）
+        RenderOptions.ProcessRenderMode = RenderMode.SoftwareOnly
+        '4. 原生弹窗提示
+        MsgBox("检测到你的显卡驱动或渲染环境存在兼容性问题，KCL2 已自动切换为兼容模式（软件渲染）。" & vbCrLf & vbCrLf &
+               "请重启 KCL2 使兼容模式生效。若此后仍频繁崩溃，请将日志发送至 2416444244@qq.com 反馈。" & vbCrLf &
+               "日志位置：" & Paths.Base & "KCL\Log1.txt" & vbCrLf &
+               "—— 龙腾OS",
+               MsgBoxStyle.Information, "KCL2 兼容模式")
+        OpenExplorer(Paths.Base & "KCL\")
+        '5. 优雅退出，等待用户重启
+        FormMain.EndProgramForce(ProcessReturnValues.Exception)
+    End Sub
+
+    ''' <summary>
+    ''' 截断异常文本，避免把超长堆栈塞进弹窗标题与正文。
+    ''' </summary>
+    Private Shared Function Brief(Text As String, Optional MaxLength As Integer = 600) As String
+        On Error Resume Next
+        If String.IsNullOrEmpty(Text) Then Return "（无详细信息）"
+        Text = Text.ReplaceLineEndings(" ", mergeMultiple:=True)
+        If Text.Length <= MaxLength Then Return Text
+        Return Text.Substring(0, MaxLength) & " ……（过长，详见日志文件）"
+    End Function
+
     Private Shared Function EnsureLicenseAgreement() As Boolean
         If Settings.Get(Of Boolean)("KCL2LicenseAccepted") Then Return True
         Dim Agreement As String =
@@ -254,6 +386,11 @@ RetryCacheCheck:
             End Function, LazyThreadSafetyMode.ExecutionAndPublication))
             Return LazyAssembly.Value
         End Function
+        '挂载全局崩溃兜底（方法体内全程 Try 保护，此处不加载任何库）：
+        '1. 非 UI/后台线程未处理异常 → 进程静默终止的根源；
+        '2. 未观察 Task 异常 → 后台任务崩溃却无日志无提示。
+        AddHandler AppDomain.CurrentDomain.UnhandledException, AddressOf OnAppDomainUnhandledException
+        AddHandler Threading.Tasks.TaskScheduler.UnobservedTaskException, AddressOf OnTaskUnobservedException
     End Sub
     Private Shared Sub ExtractLibwebp() '这个方法会调用 ModBase，进而调用 MeloongCore，所以不能放在 New 里
         SetDllDirectory(PathUtils.RemoveSlashSuffix(PathPure.Value))

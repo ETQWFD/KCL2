@@ -235,7 +235,8 @@ EndHint:
         Dim Converter As New MyMsgBoxConverter With {.Type = MyMsgBoxType.Text, .Button1 = Button1, .Button2 = Button2, .Button3 = Button3, .Text = Caption, .IsWarn = IsWarn, .Title = Title, .HighLight = HighLight, .ForceWait = True, .Button1Action = Button1Action, .Button2Action = Button2Action, .Button3Action = Button3Action}
         If Button2.Length > 0 OrElse ForceWait Then
             '若有多个按钮则开始等待
-            If FrmMain Is Nothing OrElse FrmMain.PanMsg Is Nothing AndAlso RunInUi() Then
+            '后台线程（如下载线程报错）调用时，回退到原生弹窗：在错误线程推送 WPF 消息循环会直接崩溃
+            If FrmMain Is Nothing OrElse Not RunInUi() OrElse FrmMain.PanMsg Is Nothing Then
                 '主窗体尚未加载，用老土的弹窗来替代
                 If Button2.Length > 0 Then
                     Dim RawResult As MsgBoxResult =

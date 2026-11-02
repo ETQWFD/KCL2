@@ -394,7 +394,8 @@ Public Class FormMain
         IsSizeSaveable = True
         ShowWindowToTop()
         Dim HwndSource As Interop.HwndSource = PresentationSource.FromVisual(Me)
-        HwndSource.AddHook(New Interop.HwndSourceHook(AddressOf WndProc))
+        '极端情况下 FromVisual 可能返回 Nothing（视觉树尚未挂接完成），空引用会直接导致启动闪退
+        If HwndSource IsNot Nothing Then HwndSource.AddHook(New Interop.HwndSourceHook(AddressOf WndProc))
         AniStart({
             AaCode(Sub() AniControlEnabled -= 1, 50),
             AaOpacity(Me, Settings.Get(Of Integer)("UiLauncherTransparent") / 1000 + 0.4, 250, 100),

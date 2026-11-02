@@ -318,6 +318,15 @@ Retry:
     ''' </summary>
     Public NetTaskSpeedLimitLow As Long = 256 * 1024L '256K/s
     ''' <summary>
+    ''' 期望达到的总下载速度目标。只要当前全局速度低于该值，下载管理器就会持续为仍在进行的文件追加分块线程，
+    ''' 直到达到目标或到达最大线程数。该值在 RefreshStat 中根据进行中的文件数动态提升。
+    ''' </summary>
+    Public NetTaskSpeedTarget As Long = 2 * 1024 * 1024L '默认目标 2 MiB/s
+    ''' <summary>
+    ''' BMCLAPI 镜像源每个文件允许的最大并行分块线程数（其余官方/GitHub 源仍按原逻辑禁止分块）。
+    ''' </summary>
+    Public Const NetTaskBmclapiSplitLimit As Integer = 4
+    ''' <summary>
     ''' 速度上限。若无限制则为 -1。
     ''' </summary>
     Public ReadOnly Property NetTaskSpeedLimitHigh As Long
@@ -850,8 +859,20 @@ StartSingleThreadDownload:
                     Dim Source As NetSource = GetSource()
                     If Source Is Nothing Then Return Nothing
                     Dim TargetUrl As String = Source.Url
-                    If TargetUrl.Contains("pcl2-server") OrElse TargetUrl.Contains("meloong.com") OrElse TargetUrl.Contains("bmclapi") OrElse TargetUrl.Contains("github.com") OrElse
+                    Dim IsBmclapiSplit As Boolean = TargetUrl.Contains("bmclapi")
+                    If TargetUrl.Contains("pcl2-server") OrElse TargetUrl.Contains("meloong.com") OrElse TargetUrl.Contains("github.com") OrElse
                        TargetUrl.Contains("optifine.net") OrElse TargetUrl.Contains("momot.rs") Then Return Nothing
+                    'BMCLAPI 镜像源允许分块下载（此前被硬性禁止，导致大文件只能单连接、速度卡在几百 KiB/s），
+                    '但限制每个文件的并行分块数，配合 StartManager 中的 100ms 间隔，避免触发其 429/403 风控。
+                    If IsBmclapiSplit Then
+                        Dim RunningThreadCount As Integer = 0
+                        If Threads IsNot Nothing Then
+                            For Each ExistingThread As NetThread In Threads
+                                If ExistingThread.State <> NetState.Canceled Then RunningThreadCount += 1
+                            Next
+                        End If
+                        If RunningThreadCount >= NetTaskBmclapiSplitLimit Then Return Nothing
+                    End If
                     '寻找最大碎片
                     'FUTURE: 下载引擎重做，计算下载源平均链接时间和线程下载速度，按最高时间节省来开启多线程
                     Dim FilePieceMax As NetThread = Threads
@@ -988,8 +1009,8 @@ NotSupportRange:
                 CancelToken.Dispose() : CancelToken = New CancellationTokenSource() '重置超时，不再让 CancellationToken 在固定时间后触发（#8488）
                 ResponseStream = Response.Content.ReadAsStreamAsync().GetAwaiter().GetResult()
                 If Settings.Get(Of Boolean)("SystemDebugDelay") Then Threading.Thread.Sleep(RandomInteger(50, 3000))
-                Dim ResponseBytes As Byte() = New Byte(16384) {}
-                HttpDataCount = ResponseStream.ReadAsync(ResponseBytes, 0, 16384, CancelToken.Token).GetResultWithTimeout(CancelToken, Timeout)
+                Dim ResponseBytes As Byte() = New Byte(65536) {} '64KB 读缓冲，减少高频小读的系统调用开销
+                HttpDataCount = ResponseStream.ReadAsync(ResponseBytes, 0, 65536, CancelToken.Token).GetResultWithTimeout(CancelToken, Timeout)
                 While (IsUnknownSize OrElse Th.DownloadUndone > 0) AndAlso '判断是否下载完成
                             HttpDataCount > 0 AndAlso Not IsProgramEnding AndAlso State < NetState.Merging AndAlso (Not Th.Source.IsFailed OrElse Th.Source.SingleThread = Th)
                     '限速
@@ -1031,7 +1052,7 @@ NotSupportRange:
                         '无数据，且已超时
                         Throw New TimeoutException("操作超时，无数据。")
                     End If
-                    HttpDataCount = ResponseStream.ReadAsync(ResponseBytes, 0, 16384, CancelToken.Token).GetResultWithTimeout(CancelToken, Timeout)
+                    HttpDataCount = ResponseStream.ReadAsync(ResponseBytes, 0, 65536, CancelToken.Token).GetResultWithTimeout(CancelToken, Timeout)
                 End While
 SourceBreak:
                 If State = NetState.Canceled OrElse (Th.Source.IsFailed AndAlso Th.Source.SingleThread <> Th) OrElse (Th.DownloadUndone > 0 AndAlso Not IsUnknownSize) Then
@@ -1701,6 +1722,16 @@ FinishExCatch:
                     NetTaskSpeedLimitLow = Limit
                     Logger.Info($"速度下限已提升到 {StringUtils.FormatByteSize(Limit)}")
                 End If
+                '根据进行中的文件数动态提升速度目标：每个活跃文件至少争取 512 KiB/s，全局保底 2 MiB/s。
+                '此前管理器在速度刚超过 256KiB/s 就停止开线程，导致速度长期卡在几百 KiB/s；
+                '现在只要全局速度低于该目标，StartManager 就会继续为慢文件追加并行分块。
+                Dim OngoingFileCount As Integer = 0
+                For Each StatFile As NetFile In AllFiles.Values
+                    If StatFile.State >= NetState.WaitingToDownload AndAlso StatFile.State < NetState.Merging Then OngoingFileCount += 1
+                Next
+                If OngoingFileCount > 0 Then
+                    NetTaskSpeedTarget = Math.Max(2L * 1024 * 1024, OngoingFileCount * 512L * 1024)
+                End If
 #End Region
 #Region "刷新下载任务属性"
                 For Each Task In Tasks
@@ -1744,7 +1775,7 @@ FinishExCatch:
                             If NewThread IsNot Nothing AndAlso NewThread.Source.Url.Contains("bmclapi") Then Thread.Sleep(100) '减少 BMCLAPI 请求频率
                         Next
                         '为进行中的文件追加线程
-                        If Speed >= NetTaskSpeedLimitLow Then Continue While '下载速度足够，无需新增
+                        If Speed >= NetTaskSpeedTarget Then Continue While '已达到期望速度目标，无需新增线程
                         For Each File As NetFile In OngoingFiles
                             If NetTaskThreadCount >= NetTaskThreadLimit Then Continue While '最大线程数检查
                             '线程种类计数
