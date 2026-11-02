@@ -258,19 +258,34 @@ RetryCacheCheck:
         ' VB 不允许同一方法混用 On Error 与 Try），二次异常静默吞掉。
         Try
         If IsProgramEnding Then
-            Try : Logger.Error(Ex, Source, LogBehavior.None) : Catch
+            Try
+                Logger.Error(Ex, Source, LogBehavior.None)
+            Catch
+            End Try
             Exit Sub
         End If
         '防重入：已有线程在处理崩溃时，其余线程只写日志直接返回，避免弹窗风暴与递归
         If Not Monitor.TryEnter(CrashDialogLock, 0) Then
-            Try : Logger.Error(Ex, Source & "（崩溃处理重入，仅记录）", LogBehavior.None) : Catch
+            Try
+                Logger.Error(Ex, Source & "（崩溃处理重入，仅记录）", LogBehavior.None)
+            Catch
+            End Try
             Exit Sub
         End If
         Try
             '1. 先抢救日志与崩溃报告（Logger 可能尚未初始化，每个调用单独吞异常）
-            Try : Logger.Error(Ex, Source, LogBehavior.None) : Catch
-            Try : FeedbackInfo() : Catch
-            Try : PclLogger.SaveCrashReport(Ex, Source, "") : Catch
+            Try
+                Logger.Error(Ex, Source, LogBehavior.None)
+            Catch
+            End Try
+            Try
+                FeedbackInfo()
+            Catch
+            End Try
+            Try
+                PclLogger.SaveCrashReport(Ex, Source, "")
+            Catch
+            End Try
             '2. 显卡/渲染不兼容：走兼容模式流程
             If IsRenderCrash(Ex) Then
                 HandleRenderCrash(Ex)
