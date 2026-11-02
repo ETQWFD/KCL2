@@ -254,7 +254,9 @@ RetryCacheCheck:
     ''' 使用原生 MsgBox 而非 WPF 弹窗，避免 UI 线程已死时无法交互。
     ''' </summary>
     Private Shared Sub ReportFatalCrash(Ex As Exception, Source As String)
-        On Error Resume Next
+        ' 外层 Try/Catch：崩溃处理自身绝不能再抛任何异常（替代 On Error Resume Next，
+        ' VB 不允许同一方法混用 On Error 与 Try），二次异常静默吞掉。
+        Try
         If IsProgramEnding Then
             Logger.Error(Ex, Source, LogBehavior.None)
             Exit Sub
@@ -291,6 +293,9 @@ RetryCacheCheck:
         End Try
         '5. 走既定崩溃退出流程（保存配置、刷新日志、打开日志文件）
         FormMain.EndProgramForce(ProcessReturnValues.Exception)
+        Catch
+            '崩溃处理自身再异常时静默吞掉，绝不让二次崩溃掩盖原始崩溃
+        End Try
     End Sub
 
     ''' <summary>
