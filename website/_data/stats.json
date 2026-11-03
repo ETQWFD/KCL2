@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-03T02:33:29.861890+00:00",
+  "generated_at": "2026-11-03T10:34:01.925128+00:00",
   "repos": {
     "kcl2": {
       "repo": "ETQWFD/KCL2",
@@ -8,8 +8,8 @@
       "prerelease": false,
       "published_at": "2026-11-02T12:42:10Z",
       "html_url": "https://github.com/ETQWFD/KCL2/releases/tag/continuous",
-      "latest_downloads": 9,
-      "total_downloads": 9,
+      "latest_downloads": 12,
+      "total_downloads": 12,
       "assets": [
         {
           "name": "KCL2-portable.zip",
@@ -19,7 +19,7 @@
         },
         {
           "name": "KCL2.exe",
-          "download_count": 5,
+          "download_count": 8,
           "size": 5624320,
           "updated_at": "2026-11-02T12:42:09Z"
         },
