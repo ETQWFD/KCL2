@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-09T20:58:12.274153+00:00",
+  "generated_at": "2026-11-10T03:24:30.101121+00:00",
   "repos": {
     "kcl2": {
       "repo": "ETQWFD/KCL2",
@@ -75,7 +75,7 @@
       "published_at": "2026-10-21T14:18:30Z",
       "html_url": "https://github.com/ETQWFD/KCL-Mobile/releases/tag/continuous",
       "latest_downloads": 5,
-      "total_downloads": 72,
+      "total_downloads": 73,
       "assets": [
         {
           "name": "KCL-Mobile.apk",
