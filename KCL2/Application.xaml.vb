@@ -470,7 +470,7 @@ RetryCacheCheck:
             "KCL2 是基于 Plain Craft Launcher 2（PCL2）的独立第三方修改版。" & vbCrLf &
             "原作：Plain Craft Launcher，作者为 龙腾猫跃（LTCat），贡献者名单见关于页面。" & vbCrLf &
             "本仓库中保留了原 PCL 的分发许可与版权声明。" & vbCrLf & vbCrLf &
-            "KCL2 的修改部分由 ETC 团队维护，按“现状”提供，不提供任何形式的担保。" &
+            "KCL2 的修改部分由 ETC 团队维护，按现状提供，不提供任何形式的担保。" &
             "原 PCL 作者不运营、不背书、也不为本第三方版本提供支持。" & vbCrLf &
             "Minecraft 账号、购买、服务器、充值及联机等纠纷，请通过 Mojang/Microsoft、" &
             "支付方、服务器运营方或相应的官方渠道处理。" & vbCrLf & vbCrLf &
