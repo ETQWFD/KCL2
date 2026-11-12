@@ -1,5 +1,8 @@
 Public Class PageSpeedLeft
     Private Const WatcherInterval As Integer = 300
+    '下载进度/速度文本最小刷新间隔：≥150ms 一次，避免高频刷新阻塞 UI 线程
+    Private Const LabelMinIntervalMs As Long = 150
+    Private LastLabelTick As Long = 0
 
     '初始化
     Private IsLoad As Boolean = False
@@ -36,21 +39,25 @@ Public Class PageSpeedLeft
         Try
 
 #Region "更新左边栏"
-            If Not LoaderTaskbar.Any() Then
-                '无任务
-                LabProgress.Text = "100 %"
-                LabSpeed.Text = "0 B/s"
-                LabFile.Text = "0"
-                LabThread.Text = "0 / " & NetTaskThreadLimit
-            Else
-                '有任务，输出基本信息
-                Dim Tasks = LoaderTaskbar.Where(Function(l) l.Show).ToList() '筛选掉启动 MC 的任务（#6270）
-                Dim RawPercent As Double = If(Tasks.Any, Tasks.Select(Function(l) l.Progress).Average().Clamp(0, 1), 1)
-                Dim PredictText As String = Math.Floor(RawPercent * 100) & "." & Math.Floor((RawPercent * 100 - Math.Floor(RawPercent * 100)) * 100).ToString.EnsureLength("0", 2) & " %"
-                LabProgress.Text = If(RawPercent > 0.999999, "100 %", PredictText)
-                LabSpeed.Text = StringUtils.FormatByteSize(NetManager.Speed) & "/s"
-                LabFile.Text = If(NetManager.FileRemain < 0, "0*", NetManager.FileRemain)
-                LabThread.Text = NetTaskThreadCount & " / " & NetTaskThreadLimit
+            Dim NowTick As Long = GetTimeMs()
+            If NowTick - LastLabelTick >= LabelMinIntervalMs Then
+                LastLabelTick = NowTick
+                If Not LoaderTaskbar.Any() Then
+                    '无任务
+                    LabProgress.Text = "100 %"
+                    LabSpeed.Text = "0 B/s"
+                    LabFile.Text = "0"
+                    LabThread.Text = "0 / " & NetTaskThreadLimit
+                Else
+                    '有任务，输出基本信息
+                    Dim Tasks = LoaderTaskbar.Where(Function(l) l.Show).ToList() '筛选掉启动 MC 的任务（#6270）
+                    Dim RawPercent As Double = If(Tasks.Any, Tasks.Select(Function(l) l.Progress).Average().Clamp(0, 1), 1)
+                    Dim PredictText As String = Math.Floor(RawPercent * 100) & "." & Math.Floor((RawPercent * 100 - Math.Floor(RawPercent * 100)) * 100).ToString.EnsureLength("0", 2) & " %"
+                    LabProgress.Text = If(RawPercent > 0.999999, "100 %", PredictText)
+                    LabSpeed.Text = StringUtils.FormatByteSize(NetManager.Speed) & "/s"
+                    LabFile.Text = If(NetManager.FileRemain < 0, "0*", NetManager.FileRemain)
+                    LabThread.Text = NetTaskThreadCount & " / " & NetTaskThreadLimit
+                End If
             End If
 #End Region
 

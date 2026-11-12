@@ -69,18 +69,61 @@ Public Module ModLaunch
         Return True
     End Function
 
+    '启动日志面板：批量缓冲刷新，≥100ms 或满 200 行再一次性写入 UI，避免逐行 AppendText 阻塞 UI 线程
+    Private LaunchLogBuffer As New ConcurrentQueue(Of String)
+    Private LaunchLogBufferCount As Integer = 0
+    Private LaunchLogFlushTimer As Threading.DispatcherTimer = Nothing
+    Private Const LaunchLogFlushIntervalMs As Integer = 100
+    Private Const LaunchLogFlushMaxLines As Integer = 200
+
     ''' <summary>
     ''' 记录启动日志。
     ''' </summary>
     Public Sub McLaunchLog(Text As String, Optional Level As LogLevel = LogLevel.Info)
         Text = FilterUserName(FilterAccessToken(Text, "*"), "*")
-        If ModeDebug Then
-            RunInUi(
-            Sub()
-                FrmLaunchRight.LabLog.AppendText($"[{Date.Now:HH':'mm':'ss'.'fff}] {Text}{vbCrLf}")
-            End Sub)
-        End If
         Logger.Log(Text, Level)
+        If Not ModeDebug Then Return
+        Dim Line As String = $"[{Date.Now:HH':'mm':'ss'.'fff}] {Text}{vbCrLf}"
+        LaunchLogBuffer.Enqueue(Line)
+        Interlocked.Increment(LaunchLogBufferCount)
+        EnsureLaunchLogTimer()
+        If LaunchLogBufferCount >= LaunchLogFlushMaxLines Then FlushLaunchLog()
+    End Sub
+
+    ''' <summary>
+    ''' 惰性启动 100ms 节流刷新定时器（在 UI 线程创建 DispatcherTimer）。
+    ''' </summary>
+    Private Sub EnsureLaunchLogTimer()
+        If LaunchLogFlushTimer IsNot Nothing Then Return
+        RunInUi(
+        Sub()
+            If LaunchLogFlushTimer IsNot Nothing Then Return
+            LaunchLogFlushTimer = New Threading.DispatcherTimer With {.Interval = New TimeSpan(0, 0, 0, 0, LaunchLogFlushIntervalMs)}
+            AddHandler LaunchLogFlushTimer.Tick, Sub() FlushLaunchLog()
+            LaunchLogFlushTimer.Start()
+        End Sub)
+    End Sub
+
+    ''' <summary>
+    ''' 将缓冲区内累积的日志批量追加到启动日志面板。
+    ''' </summary>
+    Private Sub FlushLaunchLog()
+        If LaunchLogBufferCount = 0 Then Return
+        Dim Batch As New Text.StringBuilder()
+        Dim Taken As Integer = 0
+        Dim Item As String = Nothing
+        While LaunchLogBuffer.TryDequeue(Item)
+            Batch.Append(Item)
+            Taken += 1
+            If Taken >= LaunchLogFlushMaxLines Then Exit While
+        End While
+        Interlocked.Add(LaunchLogBufferCount, -Taken)
+        RunInUi(
+        Sub()
+            If FrmLaunchRight IsNot Nothing AndAlso FrmLaunchRight.LabLog IsNot Nothing Then
+                FrmLaunchRight.LabLog.AppendText(Batch.ToString())
+            End If
+        End Sub)
     End Sub
 
     '启动状态切换
@@ -94,6 +137,10 @@ Public Module ModLaunch
                 FrmLaunchLeft.PageChangeToLogin()
             Case LoadState.Loading
                 '在预检测结束后再触发动画
+                Dim Drained As String = Nothing
+                While LaunchLogBuffer.TryDequeue(Drained)
+                End While
+                Interlocked.Exchange(LaunchLogBufferCount, 0)
                 FrmLaunchRight.LabLog.Text = ""
         End Select
     End Sub

@@ -14,11 +14,19 @@ Public Class Application
                 WaitingMutex(e)
                 Logger.Instance = New PclLogger With {.logFolder = Paths.BaseThenName, .MinLevel = If(ModeDebug, LogLevel.Trace, LogLevel.Info)}
             End If
+            '安全模式（-safe）：崩溃自愈重启时携带，强制软件渲染并跳过可能引发渲染崩溃的加载项
+            Dim IsSafeMode As Boolean = e.Args.Contains("-safe") OrElse e.Args.Contains("--safe")
+            If IsSafeMode Then
+                Try
+                    Settings.Set("SystemSoftRender", True)
+                Catch
+                End Try
+            End If
             '兼容渲染模式：显卡驱动异常时自动使用软件渲染（必须在创建任何 WPF 窗口前设置才会生效）
             Try
-                If Settings.Get(Of Boolean)("SystemSoftRender") Then
+                If Settings.Get(Of Boolean)("SystemSoftRender") OrElse Settings.Get(Of Boolean)("CrashSafeMode") Then
                     RenderOptions.ProcessRenderMode = RenderMode.SoftwareOnly
-                    Logger.Warn("已启用兼容渲染模式（软件渲染）")
+                    Logger.Warn(If(IsSafeMode, "已在安全模式启动：启用软件渲染，跳过渲染加速", "已启用兼容渲染模式（软件渲染）"))
                 End If
             Catch
             End Try
@@ -146,6 +154,12 @@ RetryCacheCheck:
             '计时
             Logger.Info($"第一阶段加载用时：{GetTimeMs() - ApplicationStartTick} ms")
             ApplicationStartTick = GetTimeMs()
+            '启动成功：清零上一轮崩溃计数（连续崩溃判定以新一轮启动为界）
+            Try
+                Settings.Set("CrashCount", 0)
+                Settings.Set("CrashLastTime", 0L)
+            Catch
+            End Try
             AniControlEnabled += 1
         Catch ex As Exception
             Dim FilePath As String = Nothing
@@ -256,6 +270,7 @@ RetryCacheCheck:
     Private Shared Sub ReportFatalCrash(Ex As Exception, Source As String)
         ' 外层 Try/Catch：崩溃处理自身绝不能再抛任何异常（替代 On Error Resume Next，
         ' VB 不允许同一方法混用 On Error 与 Try），二次异常静默吞掉。
+        Dim RestartSafe As Boolean = False
         Try
         If IsProgramEnding Then
             Try
@@ -291,22 +306,29 @@ RetryCacheCheck:
                 HandleRenderCrash(Ex)
                 Return
             End If
-            '3. 原生弹窗提示（不依赖 WPF UI 线程，线程亲和安全）
+            '3. 记录崩溃次数；3 分钟内崩溃 ≥2 次则强制软件渲染，避免崩溃死循环
+            Dim CrashCount As Integer = RecordCrash()
+            Dim ForcedSafe As Boolean = CrashCount >= 2
+            '4. 原生中文弹窗提示（不依赖 WPF UI 线程，线程亲和安全）
             Dim BriefEx As String = "（无法获取异常信息）"
             If Ex IsNot Nothing Then BriefEx = Brief(Ex.GetDisplay(True))
             Dim Message As String =
                 "KCL2 遇到了意外问题并需要关闭。" & vbCrLf & vbCrLf &
                 "错误摘要：" & BriefEx & vbCrLf & vbCrLf &
+                "本次为近 3 分钟内第 " & CrashCount & " 次崩溃" & If(ForcedSafe, "，已自动切换到兼容（软件渲染）模式。", "。") & vbCrLf &
                 "详细日志已保存到：" & Paths.Base & "KCL\Log1.txt" & vbCrLf &
                 "如果问题反复出现，请将 Log1.txt 发送至崩溃邮箱 2416444244@qq.com 反馈。" & vbCrLf &
                 "—— 龙腾OS"
-            MsgBox(Message, MsgBoxStyle.Critical, "KCL2 已崩溃")
-            '4. 打开日志文件夹，方便用户取证
+            RestartSafe = ShowCrashDialog(Message, ForcedSafe)
+            '5. 打开日志文件夹，方便用户取证
             OpenExplorer(Paths.Base & "KCL\")
         Finally
             Monitor.Exit(CrashDialogLock)
         End Try
-        '5. 走既定崩溃退出流程（保存配置、刷新日志、打开日志文件）
+        '6. 选择安全模式重启则带 -safe 参数拉起新进程，否则走既定崩溃退出流程
+        If RestartSafe Then
+            RestartWithSafeMode()
+        End If
         FormMain.EndProgramForce(ProcessReturnValues.Exception)
         Catch
             '崩溃处理自身再异常时静默吞掉，绝不让二次崩溃掩盖原始崩溃
@@ -335,18 +357,22 @@ RetryCacheCheck:
         Logger.Error(Ex, "检测到显卡/渲染环境不兼容", LogBehavior.None)
         FeedbackInfo()
         PclLogger.SaveCrashReport(Ex, "RenderCrash", "")
-        '2. 持久化兼容设置（下次启动在创建窗口前启用软件渲染）
+        '2. 记录崩溃次数；3 分钟内 ≥2 次则强制安全模式
+        Dim CrashCount As Integer = RecordCrash()
+        '3. 持久化兼容设置（下次启动在创建窗口前启用软件渲染），并立即切换当前进程
         Settings.Set("SystemSoftRender", True)
-        '3. 尝试立即切换软件渲染（当前进程通常需重启后才完全生效）
+        Settings.Set("CrashSafeMode", True)
         RenderOptions.ProcessRenderMode = RenderMode.SoftwareOnly
-        '4. 原生弹窗提示
+        '4. 中文提示并自动以安全模式重启（-safe），而非仅弹窗等待用户手动重启
         MsgBox("检测到你的显卡驱动或渲染环境存在兼容性问题，KCL2 已自动切换为兼容模式（软件渲染）。" & vbCrLf & vbCrLf &
-               "请重启 KCL2 使兼容模式生效。若此后仍频繁崩溃，请将日志发送至 2416444244@qq.com 反馈。" & vbCrLf &
+               "程序即将在安全模式下自动重启。若此后仍频繁崩溃，请将日志发送至 2416444244@qq.com 反馈。" & vbCrLf &
+               "本次为近 3 分钟内第 " & CrashCount & " 次崩溃。" & vbCrLf &
                "日志位置：" & Paths.Base & "KCL\Log1.txt" & vbCrLf &
                "—— 龙腾OS",
                MsgBoxStyle.Information, "KCL2 兼容模式")
         OpenExplorer(Paths.Base & "KCL\")
-        '5. 优雅退出，等待用户重启
+        '5. 带 -safe 参数自动重启后，再退出当前崩溃进程
+        RestartWithSafeMode()
         FormMain.EndProgramForce(ProcessReturnValues.Exception)
     End Sub
 
@@ -361,19 +387,95 @@ RetryCacheCheck:
         Return Text.Substring(0, MaxLength) & " ……（过长，详见日志文件）"
     End Function
 
+    ''' <summary>
+    ''' 崩溃统计时间窗：3 分钟内重复崩溃才计入连续崩溃。
+    ''' </summary>
+    Private Const CrashWindowMs As Long = 180000
+
+    ''' <summary>
+    ''' 记录一次崩溃。若距上次崩溃在 3 分钟内，则累计次数；否则重新计为 1 次。
+    ''' 同一会话 3 分钟内崩溃 ≥2 次：持久化开启软件渲染并进入强制安全模式，避免崩溃死循环。
+    ''' </summary>
+    Private Shared Function RecordCrash() As Integer
+        On Error Resume Next
+        Dim NowMs As Long = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()
+        Dim LastMs As Long = Settings.Get(Of Long)("CrashLastTime")
+        Dim Count As Integer = Settings.Get(Of Integer)("CrashCount")
+        If NowMs - LastMs > CrashWindowMs Then Count = 1 Else Count += 1
+        Settings.Set("CrashCount", Count)
+        Settings.Set("CrashLastTime", NowMs)
+        If Count >= 2 Then
+            Settings.Set("SystemSoftRender", True)
+            Settings.Set("CrashSafeMode", True)
+        End If
+        Return Count
+    End Function
+
+    ''' <summary>
+    ''' 以安全模式（-safe 参数）重新拉起启动器进程；新进程在创建窗口前强制软件渲染。
+    ''' </summary>
+    Private Shared Sub RestartWithSafeMode()
+        On Error Resume Next
+        Dim StartInfo As New ProcessStartInfo With {
+            .FileName = PathExe,
+            .Arguments = "-safe",
+            .WorkingDirectory = If(Path.GetDirectoryName(PathExe), Path.GetTempPath())
+        }
+        Process.Start(StartInfo)
+    End Sub
+
+    ''' <summary>
+    ''' 弹出中文崩溃对话框，提供「重启启动器（安全模式）」与「退出程序」两个按钮。
+    ''' 使用原生 WinForms 窗体，避免 WPF UI 线程已死亡时无法交互。
+    ''' </summary>
+    Private Shared Function ShowCrashDialog(Message As String, ForcedSafe As Boolean) As Boolean
+        On Error Resume Next
+        Dim Result As Boolean = False
+        Using Form As New System.Windows.Forms.Form()
+            Form.Text = "KCL2 已崩溃"
+            Form.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
+            Form.Width = 480
+            Form.Height = 320
+            Form.TopMost = True
+            Form.MaximizeBox = False
+            Form.MinimizeBox = False
+            Dim Label As New System.Windows.Forms.Label With {
+                .Left = 20, .Top = 18, .Width = 430, .Height = 190,
+                .Text = Message, .AutoSize = False, .Font = New System.Drawing.Font("Microsoft YaHei UI", 9.0F)
+            }
+            Dim BtnExit As New System.Windows.Forms.Button With {
+                .Text = "退出程序", .Left = 20, .Top = 222, .Width = 150, .Height = 36,
+                .DialogResult = System.Windows.Forms.DialogResult.No,
+                .Font = New System.Drawing.Font("Microsoft YaHei UI", 9.0F)
+            }
+            Dim BtnSafe As New System.Windows.Forms.Button With {
+                .Text = "重启启动器（安全模式）", .Left = 190, .Top = 222, .Width = 260, .Height = 36,
+                .DialogResult = System.Windows.Forms.DialogResult.Yes,
+                .Font = New System.Drawing.Font("Microsoft YaHei UI", 9.0F)
+            }
+            Form.Controls.Add(Label)
+            Form.Controls.Add(BtnExit)
+            Form.Controls.Add(BtnSafe)
+            Form.AcceptButton = BtnSafe
+            Form.CancelButton = BtnExit
+            If Form.ShowDialog() = System.Windows.Forms.DialogResult.Yes Then Result = True
+        End Using
+        Return Result
+    End Function
+
     Private Shared Function EnsureLicenseAgreement() As Boolean
         If Settings.Get(Of Boolean)("KCL2LicenseAccepted") Then Return True
         Dim Agreement As String =
-            "KCL2 License and First-Run Notice" & vbCrLf & vbCrLf &
-            "KCL2 is an independent third-party modification based on Plain Craft Launcher 2 (PCL2)." & vbCrLf &
-            "Original work: Plain Craft Launcher, created by 龙腾猫跃 (LTCat), with contributors credited in the About page." & vbCrLf &
-            "The original PCL distribution license and copyright notices remain included in this repository." & vbCrLf & vbCrLf &
-            "KCL2 modifications are maintained by the ETC Team and are provided AS IS, without warranty of any kind. " &
-            "The original PCL authors do not operate, endorse, or provide support for this third-party build." & vbCrLf &
-            "Minecraft account, purchase, server, recharge, and multiplayer disputes should be handled through Mojang/Microsoft, " &
-            "the payment provider, the server operator, or the appropriate official dispute channel." & vbCrLf & vbCrLf &
-            "By continuing, you confirm that you understand and accept these terms."
-        Dim Result As Integer = MyMsgBox(Agreement, "KCL2 User Agreement", "I agree and continue", "Exit", IsWarn:=False, ForceWait:=True)
+            "KCL2 用户协议与首次使用说明" & vbCrLf & vbCrLf &
+            "KCL2 是基于 Plain Craft Launcher 2（PCL2）的独立第三方修改版。" & vbCrLf &
+            "原作：Plain Craft Launcher，作者为 龙腾猫跃（LTCat），贡献者名单见关于页面。" & vbCrLf &
+            "本仓库中保留了原 PCL 的分发许可与版权声明。" & vbCrLf & vbCrLf &
+            "KCL2 的修改部分由 ETC 团队维护，按“现状”提供，不提供任何形式的担保。" &
+            "原 PCL 作者不运营、不背书、也不为本第三方版本提供支持。" & vbCrLf &
+            "Minecraft 账号、购买、服务器、充值及联机等纠纷，请通过 Mojang/Microsoft、" &
+            "支付方、服务器运营方或相应的官方渠道处理。" & vbCrLf & vbCrLf &
+            "继续使用即表示你已理解并接受上述条款。"
+        Dim Result As Integer = MyMsgBox(Agreement, "KCL2 用户协议", "同意并继续", "退出", IsWarn:=False, ForceWait:=True)
         If Result = 1 Then
             Settings.Set("KCL2LicenseAccepted", True)
             Return True

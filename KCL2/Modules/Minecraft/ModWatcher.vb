@@ -190,7 +190,8 @@ Public Module ModWatcher
             '加入预存储
             LatestLog.Enqueue(Text)
             If LatestLog.Count >= 501 Then LatestLog.TryDequeue(Nothing)
-            Logger.Trace(Text)
+            '游戏原始输出保留原文，仅加中文标签前缀，便于与启动器自有日志区分
+            Logger.Trace("[游戏输出] " & Text)
             '进度处理
             If LogProgress < 1 Then
                 WatcherLog("日志 1/5：已出现日志输出")
