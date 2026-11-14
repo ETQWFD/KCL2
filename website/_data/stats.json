@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-14T15:57:42.659570+00:00",
+  "generated_at": "2026-11-14T20:35:42.217814+00:00",
   "repos": {
     "kcl2": {
       "repo": "ETQWFD/KCL2",
@@ -8,12 +8,12 @@
       "prerelease": false,
       "published_at": "2026-11-12T11:33:58Z",
       "html_url": "https://github.com/ETQWFD/KCL2/releases/tag/continuous",
-      "latest_downloads": 48,
-      "total_downloads": 48,
+      "latest_downloads": 51,
+      "total_downloads": 51,
       "assets": [
         {
           "name": "KCL2-portable.zip",
-          "download_count": 14,
+          "download_count": 16,
           "size": 2565466,
           "updated_at": "2026-11-12T11:33:57Z"
         },
@@ -25,7 +25,7 @@
         },
         {
           "name": "KCL2DependencySetup.exe",
-          "download_count": 1,
+          "download_count": 2,
           "size": 145408,
           "updated_at": "2026-11-12T11:33:57Z"
         }
@@ -38,12 +38,12 @@
       "prerelease": false,
       "published_at": "2026-10-27T10:07:30Z",
       "html_url": "https://github.com/ETQWFD/KCL-CE/releases/tag/v2.15.11-kcl.1",
-      "latest_downloads": 105,
-      "total_downloads": 142,
+      "latest_downloads": 106,
+      "total_downloads": 143,
       "assets": [
         {
           "name": "KCL-CE-2.15.11-kcl.1-arm64.exe",
-          "download_count": 14,
+          "download_count": 15,
           "size": 81805867,
           "updated_at": "2026-10-27T10:07:28Z"
         },
@@ -75,7 +75,7 @@
       "published_at": "2026-10-21T14:18:30Z",
       "html_url": "https://github.com/ETQWFD/KCL-Mobile/releases/tag/continuous",
       "latest_downloads": 5,
-      "total_downloads": 78,
+      "total_downloads": 79,
       "assets": [
         {
           "name": "KCL-Mobile.apk",
