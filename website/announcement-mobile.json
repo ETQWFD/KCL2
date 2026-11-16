@@ -1,5 +1,5 @@
 {
-  "id": 202611021200,
+  "id": 202611161400,
   "significant": false,
   "outdated": false,
   "minVersion": -1,
@@ -11,22 +11,22 @@
   "title": [
     {
       "lang": "zh",
-      "text": "KCL Mobile 1.3.1-kcl.6 v6 下载提速版已发布"
+      "text": "KCL Mobile 1.3.1-kcl.8 v8 模组兼容检测+低配渲染器已发布"
     },
     {
       "lang": "en",
-      "text": "KCL Mobile 1.3.1-kcl.6 v6 speed-up release is out"
+      "text": "KCL Mobile 1.3.1-kcl.8 v8: mod guard + low-end renderers"
     }
   ],
-  "date": "2026-11-02",
+  "date": "2026-11-16",
   "content": [
     {
       "lang": "zh",
-      "text": "KCL Mobile v6（构建号 200056）核心更新：① 下载引擎分片并发提速——大文件（≥4MB）自动探测 Accept-Ranges，按 2MB 切片、2-6 路 Range 连接并行下载再合并校验，client.jar / LWJGL / 整合包下载明显更快；低端机按内存自动降并发，OOM 自动回退单连接，不支持 Range 的源无缝回落，断点续传不受影响；② 崩溃兜底持续加固，杜绝静默闪退；③ 保留 v5 全部修复（PowerVR 渲染器自动切换 / JNA / authlib 401 / 正版登录 / 崩溃日志复制 / 流畅度优化）。请前往官网 https://etc.os.kg/ 或 GitHub Releases 下载更新。"
+      "text": "KCL Mobile v8（构建号 200058）已发布，两项重点：① 模组版本不兼容前置检测——装了版本对不上的模组（例如「盗墓笔记」1.47.0 要 1.20.x，却在 1.21.x 启动）时，Fabric 会直接抛异常退出，玩家看到的就是「点启动闪一下回桌面」。现在启动前会自动读取每个模组的 fabric.mod.json / quilt.mod.json，比对 depends.minecraft 版本范围，不兼容的模组自动改名为 .jar.disabled，并弹出中文提示逐条写明「模组 + 要求版本 + 当前版本」，游戏继续正常启动。② 新增低配性能版渲染器——GL4ES 低配性能版（GLES2 后端、关闭逐帧错误检查）与 Krypton 低配性能版（按 GLES2 能力档翻译），低配设备（低内存 / PowerVR·Imagination / Mali-4xx 老架构 / 堆 ≤512MB）自动选型，PowerVR 设备仍优先 GL4ES 家族防止着色器崩溃；首次启动还会把过高的画质「只降不升」地压到低配档（渲染距离 ≤6、模拟距离 ≤4、粒子最小、关实体阴影、关平滑光照、mipmap 0、帧率上限 60）。另外修复了游戏画面四周白边（游戏界面独立深色主题 + 渲染层黑色兜底），状态栏区、自定义分辨率黑边、切屏瞬间、输入法弹起都不再露白。下载：GitHub Release v1.3.1-kcl.8；蓝奏云（密码 KCL2）https://etc322.lanzouc.com/igOIc4e8xe8h 。作者：龙腾OS / ETC Team 第一 · 开源作者第二；赞助：https://b23.tv/o42pOXH"
     },
     {
       "lang": "en",
-      "text": "KCL Mobile v6 (build 200056): ① sharded concurrent download engine — files ≥4MB probe Accept-Ranges and are fetched via 2-6 parallel Range connections (2MB slices) then merged and verified; noticeably faster client.jar / LWJGL / modpack downloads; heap-aware concurrency on low-end devices, OOM falls back to single connection, servers without Range support transparently fall back, resume untouched; ② crash handler hardened, no more silent exits; ③ all v5 fixes kept (PowerVR renderer auto-switch / JNA / authlib 401 / premium login / crash-log copy / smoothness). Download at https://etc.os.kg/ or GitHub Releases."
+      "text": "KCL Mobile v8 (build 200058) is out. Two highlights: 1) Pre-launch mod compatibility guard — when a mod declares a different Minecraft range (e.g. Daomu Biji 1.47.0 needs 1.20.x but you launch 1.21.x), Fabric used to throw and exit (code 1), which looked like the launcher flashing and closing. The launcher now reads each mod's fabric.mod.json / quilt.mod.json, compares depends.minecraft with the selected version, renames incompatible mods to .jar.disabled and shows a clear message listing mod, required range and current version, then keeps launching. 2) New low-end performance renderers — GL4ES low-end (GLES2 backend, no per-frame glGetError) and Krypton low-end (GLES2 capability level); low-end devices (low RAM / PowerVR / Mali-4xx / heap ≤512MB) are auto-selected, PowerVR stays on GL4ES. On first launch, overly high graphics settings are lowered (render distance ≤6, simulation ≤4, minimal particles, no entity shadows, smooth lighting off, mipmap 0, FPS cap 60) without ever overriding settings you lowered yourself. The white border around the game view is also fixed. Download: GitHub Release v1.3.1-kcl.8; Lanzou cloud (password KCL2) https://etc322.lanzouc.com/igOIc4e8xe8h . Author: LongTengOS / ETC Team · upstream author. Sponsor: https://b23.tv/o42pOXH"
     }
   ]
 }
