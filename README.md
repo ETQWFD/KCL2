@@ -15,6 +15,21 @@ KCL2 可以直接下载并启动 Minecraft：版本清单、客户端、依赖�
 
 当前工程是 Windows WPF / .NET Framework 4.8 应用，Windows EXE 由 GitHub Actions 的 Windows runner 构建。现有代码不能直接编译成 Java JAR 或原生 Linux ELF；Linux/JAR 需要单独进行跨平台界面移植，不能把 WPF 程序改名后伪装成跨平台产物。
 
+## 基岩版 / 教育版
+
+下载页（`website/download.html#bedrock`）与启动器（下载 → 「基岩版 / 教育版」）都提供三类真实版本，数据取自 MCAPPX 版本库（mcappx.com）：基岩版（GDK 安装包 / UWP Appx）、教育版 UWP、教育版 Win32。每条都标了版本号、Build、安装包类型、大小、日期与 MD5，并提供两条下载通道：
+
+- MCAPPX 版本页：可看更新内容、校验信息与多节点，页面内点「立即下载」即可（该站有 Cloudflare 防护，直链必须从页面点）。
+- 123 网盘备用：`1817430.share.123pan.cn` 的分享页，不经 Cloudflare。
+
+安装位置统一在当前 Minecraft 根目录下（默认 `.minecraft\bedrock\<条目 id>\`），和 Java 版共用一个根目录：
+
+- GDK / Win32：用安装器的 `/VERYSILENT /DIR="... bedrock\<id>" /NORESTART /LOG` 静默装进 bedrock 子目录，不经过 Microsoft Store；卸载优先调目录里的 `unins*.exe`。
+- UWP Appx：走 `Add-AppxPackage` 本地包注册，系统会把包登记到 `WindowsApps`（UWP 的机制决定，无法改路径），安装包本体仍保存在 bedrock 目录，卸载走 `Remove-AppxPackage`。
+- 启动：Appx 用 `explorer.exe shell:AppsFolder\<AUMID>`；GDK / Win32 直接拉起目录里的 `Minecraft.Windows.exe`（找不到时递归找，再退到默认安装目录）。
+
+授权边界：基岩版是付费游戏，需要玩家自己的微软账号（已购 Java 版可在官方渠道领取基岩版）；教育版需要教育账号。KCL 只做下载索引、安装与启动，不提供账号、授权或破解。运行基岩版 / GDK 版需要系统已装 Xbox Gaming Services，否则会闪退。
+
 ## 为什么会有 KCL2
 
 当常见启动器因为网络、维护或外部压力暂时不可用时，玩家仍需要一个可以进入本地游戏的备选入口。KCL2 的目标是在这种情况下延续版本下载、正版登录和本地实例管理能力。
