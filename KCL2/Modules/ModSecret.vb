@@ -189,6 +189,35 @@ Friend Module ModSecret
     ''' </summary>
     Public ServerConfig As JObject
 
+    ''' <summary>
+    ''' KCL2 内置的联机配置（开源版没有官方 ServerConfig，这里改用本地配置文件，联机随包可用）。
+    ''' EasyTier 走官方公网中继，无需登录原作者服务器。
+    ''' </summary>
+    Private ReadOnly LocalLinkConfigJson As String =
+        "{""Link"":{" &
+        """EasyTierVersion"":264," &
+        """Downloads"":[""https://github.com/EasyTier/EasyTier/releases/download/v2.6.4/easytier-windows-{arch}-v2.6.4.zip""]," &
+        """Argument"":""""," &
+        """DiscoverPeer"":""tcp://public.easytier.cn:11010""," &
+        """DiscoverPeerId"":0," &
+        """RandomPeer"":2," &
+        """Peers"":[""tcp://public.easytier.cn:11010"",""udp://public.easytier.cn:11010"",""tcp://public2.easytier.cn:11010""]," &
+        """PeersBlackList"":[]," &
+        """MandatoryPeers"":[]}}"
+
+    ''' <summary>
+    ''' 确保 ServerConfig 可用；官方配置缺失时使用内置联机配置。
+    ''' </summary>
+    Public Sub EnsureLocalServerConfig()
+        If ServerConfig IsNot Nothing AndAlso CType(ServerConfig, JObject).ContainsKey("Link") Then Return
+        Try
+            ServerConfig = LocalLinkConfigJson.DeserializeJson()
+            Logger.Info("已载入 KCL2 内置联机配置（本地 EasyTier 公网中继）")
+        Catch ex As Exception
+            Logger.Error(ex, "载入内置联机配置失败")
+        End Try
+    End Sub
+
     Public ServerLoader As New LoaderTask(Of Integer, Integer)("KCL2 配置更新", Sub() Logger.Info("该版本中不包含更新通知功能……"), Priority:=ThreadPriority.BelowNormal) With
         {.ReloadTimeout = 1000 * 60 * 60} '超时 1 小时
 

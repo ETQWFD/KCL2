@@ -425,12 +425,10 @@ Public Class PageLinkMain
 
     '1. 获取服务器配置
     Private Sub InitConfig(Task As LoaderTask(Of Integer, Integer))
-        UpdateLoadingPage("正在联网获取配置……", "联网获取配置")
-        If VersionBranchMain <> "Official" Then
-            Throw New Exception($"$开源版无法联网获取配置。{vbCrLf}你可以在 KCL2 官方版的缓存文件夹下查看 ServerConfig 的当前内容， 并在代码中进行相应修改。")
-        End If
-        ServerLoader.WaitForExit(LoaderToSyncProgress:=Task)
-        If ServerConfig Is Nothing Then Throw New Exception("无法从服务器获取配置")
+        UpdateLoadingPage("正在准备联机配置……", "准备联机配置")
+        'KCL2 开源版不再依赖原作者服务器：直接使用内置的联机配置
+        EnsureLocalServerConfig()
+        If ServerConfig Is Nothing Then Throw New Exception("无法载入联机配置")
         '检查是否已禁用联机功能
         Dim DisableReason = ServerConfig("Link")?("DisableReason2")?.ToString
         If Not String.IsNullOrEmpty(DisableReason) Then Throw New Exception("$" & DisableReason) 'TODO: 可能不会显示错误原因？
@@ -504,10 +502,16 @@ Public Class PageLinkMain
         Dim CustomPeers As String = Settings.Get(Of String)("LinkCustomPeer")
         If String.IsNullOrWhiteSpace(CustomPeers) Then
             If DiscoverNodeID = -2 AndAlso Not IsServerSide Then
-                Panic("未填写自定义节点设置", $"$你必须在 {vbLQ}自定义节点{vbRQ} 设置中填写与房主相同的内容，{vbCrLf}才能进入该房间！")
-                Return
+                '社区版邀请码不带发现节点 ID：直接走配置里的公网中继，不再要求房主填自定义节点
+                Logger.Info("邀请码未携带发现节点，改用内置公网中继节点")
+                RawPeers = ServerConfig("Link")("Peers").Select(Function(p) p.ToString()).ToList()
+                If RawPeers.Count = 0 Then
+                    Panic("未填写自定义节点设置", $"$你必须在 {vbLQ}自定义节点{vbRQ} 设置中填写与房主相同的内容，{vbCrLf}才能进入该房间！")
+                    Return
+                End If
+            Else
+                RawPeers = GetTargetPeers()
             End If
-            RawPeers = GetTargetPeers()
         Else
             If DiscoverNodeID <> -2 AndAlso Not IsServerSide Then Hint("房主可能没有使用自定义节点设置，请确认你们的自定义节点设置是否一致！")
             RawPeers = CustomPeers.Split("，,".ToCharArray).Select(Function(p) p.Trim).Where(Function(p) Not String.IsNullOrEmpty(p)).ToList()
