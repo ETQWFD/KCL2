@@ -119,7 +119,7 @@ footer a:hover{color:var(--green)}
 .binfo b{font-size:15.5px}
 .bmeta{font-family:var(--mono);font-size:12.5px;color:var(--mut);word-break:break-all}
 .bhash{font-family:var(--mono);font-size:11.5px;color:#8aa296;word-break:break-all}
-.bbtn{flex:0 0 auto}
+.bbtn{display:flex;gap:8px;flex-wrap:wrap;flex:0 0 auto}
 .bbtn .btn{padding:9px 16px;font-size:14px}
 @media (max-width:640px){
   .brow{flex-direction:column;align-items:stretch;gap:8px}

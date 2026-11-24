@@ -21,7 +21,8 @@
           "page": "https://www.mcappx.com/bedrock/26.60/26.65/",
           "direct": "https://dl.mcappx.com/be-1-26-6501-x64-jp",
           "arch": "x64",
-          "featured": true
+          "featured": true,
+          "mirror": "https://1817430.share.123pan.cn/123pan/gZD9-0Te7v"
         },
         {
           "name": "基岩版 1.21.114（UWP Appx）",
@@ -34,7 +35,8 @@
           "md5": "b181ac1d6608e5cf6049518cd9701a7e",
           "page": "https://www.mcappx.com/bedrock/1.21/1.21.114/",
           "direct": "https://dl.mcappx.com/be-1-21-11401-x64-jp",
-          "arch": "x64"
+          "arch": "x64",
+          "mirror": "https://1817430.share.123pan.cn/123pan/gZD9-G73lv"
         },
         {
           "name": "基岩版 1.21.114（UWP Appx / 32 位）",
@@ -47,7 +49,8 @@
           "md5": "75664f682c4dceda7f498d1827ac9249",
           "page": "https://www.mcappx.com/bedrock/1.21/1.21.114/",
           "direct": "https://dl.mcappx.com/be-1-21-11401-x86-jp",
-          "arch": "x86"
+          "arch": "x86",
+          "mirror": "https://1817430.share.123pan.cn/123pan/gZD9-aJ3Sv"
         },
         {
           "name": "基岩版 26.63",
@@ -81,7 +84,8 @@
           "page": "https://www.mcappx.com/education-uwp/26.30/26.33/",
           "direct": "https://dl.mcappx.com/uwpee-1-26-3300-x64-jp",
           "arch": "x64",
-          "featured": true
+          "featured": true,
+          "mirror": "https://1817430.share.123pan.cn/123pan/gZD9-IZ67v"
         },
         {
           "name": "教育版 26.32（UWP Appx）",
@@ -115,7 +119,8 @@
           "page": "https://www.mcappx.com/education-win32/26.30/26.33/",
           "direct": "https://dl.mcappx.com/win32ee-1-26-3300-x64-jp",
           "arch": "x64",
-          "featured": true
+          "featured": true,
+          "mirror": "https://1817430.share.123pan.cn/123pan/gZD9-8gN7v"
         },
         {
           "name": "教育版 26.32（Win32 安装包）",
