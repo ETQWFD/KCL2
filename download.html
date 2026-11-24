@@ -18,6 +18,7 @@
   <a class="nl" href="#kcl2">KCL2</a>
   <a class="nl" href="#ce">KCL CE</a>
   <a class="nl" href="#mobile">手机版</a>
+  <a class="nl" href="#bedrock">基岩版</a>
   <a class="nl" href="manual.html">手册</a>
 </div></header>
 
@@ -84,6 +85,35 @@
     <p class="alt">更新源：<code>latest_version_md.json</code>（code 200059）。<span id="cnt-mobile"></span></p>
   </div>
 
+  <div class="dcard" id="bedrock">
+    <h2>基岩版 / 教育版 <span class="pill" id="v-bedrock">Bedrock 26.65 · Edu 26.33</span></h2>
+    <p class="sub2">基岩版、教育版（UWP）、教育版（Win32）三个分类。安装包索引来自 <a href="https://www.mcappx.com/editions/" target="_blank" rel="noopener">MCAPPX 版本库</a>；点进版本页后可选中国 / 日本 / 美国节点或 123 云盘。下载完成后可在 KCL2 的「基岩版」页一键安装并启动。</p>
+
+    <div class="notice" style="margin:14px 0">
+      <b>授权说明：</b>基岩版是付费游戏，完整游玩与联机需要拥有该游戏的微软账号（Java 正版用户可在官方启动器内免费领取基岩版）。教育版需要学校 / 机构的教育账号。KCL 只做「下载后的安装与启动」，不提供账号、不绕过授权。
+    </div>
+
+    <div class="bgroup" id="grp-bedrock">
+      <h3>基岩版 Minecraft: Bedrock Edition</h3>
+      <p class="alt" style="margin:0 0 8px">26.x 为 GDK 安装包（安装时可指定目录）；1.21.x 为 UWP Appx（系统级安装）。</p>
+      <div class="btable" data-group="bedrock"></div>
+    </div>
+
+    <div class="bgroup" id="grp-edu-uwp">
+      <h3>教育版 Minecraft Education（UWP）</h3>
+      <p class="alt" style="margin:0 0 8px">系统级 Appx 安装，需要教育账号登录后使用完整功能。</p>
+      <div class="btable" data-group="edu-uwp"></div>
+    </div>
+
+    <div class="bgroup" id="grp-edu-win32">
+      <h3>教育版 Minecraft Education（Win32）</h3>
+      <p class="alt" style="margin:0 0 8px">传统桌面安装包，适合非 UWP 环境或需要自定义安装目录。</p>
+      <div class="btable" data-group="edu-win32"></div>
+    </div>
+
+    <p class="alt" style="margin-top:12px">运行基岩版前请先装 <a href="https://www.mcappx.com/download/xbox-gaming-services/" target="_blank" rel="noopener">Xbox Gaming Services</a>；GDK 版另可加装 <a href="https://www.mcappx.com/download/gdk-launcher/" target="_blank" rel="noopener">GDK 功能修补应用</a>（934 KB）。</p>
+  </div>
+
   <p><a class="btn paper" href="index.html">← 返回首页</a></p>
 </div></section>
 
@@ -92,6 +122,26 @@
   <div><a href="https://b23.tv/o42pOXH">赞助</a> · <a href="manual.html">手册</a></div>
 </div></footer>
 
+<script>
+(function(){
+  function fmt(n){return n?String(n):'';}
+  fetch('bedrock.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.json()}).then(function(d){
+    (d.groups||[]).forEach(function(g){
+      var box=document.querySelector('.btable[data-group="'+g.id+'"]');
+      if(!box) return;
+      (g.items||[]).forEach(function(it){
+        var row=document.createElement('div');
+        row.className='brow';
+        var meta=[it.ver,it.kind,it.build?('Build '+it.build):'',it.size,it.date,it.minos,it.arch].filter(Boolean).join(' · ');
+        var hash=it.md5?('<span class="bhash">MD5 '+it.md5+'</span>'):'';
+        row.innerHTML='<div class="binfo"><b>'+it.name+'</b><span class="bmeta">'+meta+'</span>'+hash+'</div>'+
+          '<div class="bbtn"><a class="btn primary" target="_blank" rel="noopener" href="'+it.page+'">前往下载</a></div>';
+        box.appendChild(row);
+      });
+    });
+  }).catch(function(){});
+})();
+</script>
 <script>
 (function(){
   function fmt(n){return n?String(n):'';}
