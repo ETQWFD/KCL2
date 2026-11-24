@@ -174,7 +174,7 @@ Public Module ModBedrock
             End Using
         Catch Ex As Exception
             Return "Appx 安装失败：" & Ex.Message
-        End Catch
+        End Try
     End Function
 
     ''' <summary>执行安装器的静默安装，把游戏装到 bedrock 子目录。</summary>
@@ -193,7 +193,7 @@ Public Module ModBedrock
             End Using
         Catch Ex As Exception
             Return "安装失败：" & Ex.Message
-        End Catch
+        End Try
     End Function
 
     ''' <summary>按扩展名分派安装。</summary>
