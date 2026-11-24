@@ -48,5 +48,18 @@ jobs:
       - uses: actions/upload-pages-artifact@v5
         with:
           path: ./_site
+      # 产物上传后 GitHub 侧登记有延迟，deploy 当场可能查不到，先轮询到可见
+      - name: Wait for pages artifact
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          for i in $(seq 1 12); do
+            n=$(gh api "repos/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}/artifacts" \
+              -q '[.artifacts[] | select(.name=="github-pages")] | length' 2>/dev/null || echo 0)
+            if [ "${n:-0}" -ge 1 ]; then echo "pages artifact ready"; exit 0; fi
+            sleep 5
+          done
+          echo "pages artifact not visible after 60s"; exit 1
+
       - id: deployment
         uses: actions/deploy-pages@v5
