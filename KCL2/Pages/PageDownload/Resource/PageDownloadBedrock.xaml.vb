@@ -43,22 +43,41 @@ Public Class PageDownloadBedrock
         End Select
     End Function
 
+    Private RefreshBusy As Boolean = False
+
+    ''' <summary>
+    ''' 状态检测要起 PowerShell 查 UWP 包，放到后台线程做，界面先显示“检测中”，避免切页卡顿。
+    ''' </summary>
     Private Sub RefreshStatus()
+        If RefreshBusy Then Return
+        RefreshBusy = True
         For Each E As ModBedrock.BedrockEntry In EntryMap.Values
             Dim Block As TextBlock = StatusBlock(E.Id)
-            If Block Is Nothing Then Continue For
-            Dim Installed As Boolean = ModBedrock.IsInstalled(E)
-            Dim Pkg As String = ModBedrock.FindPackage(E)
-            Dim Text As String
-            If E.PackageType = "appx" Then
-                Dim Ver As String = ModBedrock.GetUwpVersion(E.PackageFamilyName)
-                Text = If(Ver <> "", "状态：已安装（系统包版本 " & Ver & "）", "状态：未安装")
-            Else
-                Text = If(Installed, "状态：已安装（" & ModBedrock.FindGameExe(E) & "）", "状态：未安装")
-            End If
-            Text &= If(Pkg Is Nothing, "；本地没有安装包", "；安装包：" & Path.GetFileName(Pkg) & "（" & Math.Round(New FileInfo(Pkg).Length / 1024.0 / 1024.0, 1) & " MB）")
-            Block.Text = Text
+            If Block IsNot Nothing Then Block.Text = "状态：检测中……"
         Next
+        RunInThread(Sub()
+                        Dim Texts As New Dictionary(Of String, String)
+                        For Each E As ModBedrock.BedrockEntry In ModBedrock.Entries()
+                            Dim Text As String
+                            If E.PackageType = "appx" Then
+                                Dim Ver As String = ModBedrock.GetUwpVersionCached(E.PackageFamilyName)
+                                Text = If(Ver <> "", "状态：已安装（系统包版本 " & Ver & "）", "状态：未安装")
+                            Else
+                                Dim ExePath As String = ModBedrock.FindGameExe(E)
+                                Text = If(ExePath <> "", "状态：已安装（" & ExePath & "）", "状态：未安装")
+                            End If
+                            Dim Pkg As String = ModBedrock.FindPackage(E)
+                            Text &= If(Pkg = "", "；本地没有安装包", "；安装包：" & Path.GetFileName(Pkg) & "（" & Math.Round(New FileInfo(Pkg).Length / 1024.0 / 1024.0, 1) & " MB）")
+                            Texts(E.Id) = Text
+                        Next
+                        RunInUi(Sub()
+                                    For Each Pair As KeyValuePair(Of String, String) In Texts
+                                        Dim Block As TextBlock = StatusBlock(Pair.Key)
+                                        If Block IsNot Nothing Then Block.Text = Pair.Value
+                                    Next
+                                    RefreshBusy = False
+                                End Sub)
+                    End Sub)
     End Sub
 
     Private Function EntryFromSender(Sender As Object) As ModBedrock.BedrockEntry
@@ -139,7 +158,7 @@ Public Class PageDownloadBedrock
             If Dlg.ShowDialog() <> System.Windows.Forms.DialogResult.OK Then Return
             Dim Src As String = Dlg.FileName
             Dim Folder As String = ModBedrock.EntryFolder(E)
-            Dim Dst As String = Folder & Path.GetFileName(Src)
+            Dim Dst As String = Path.Combine(Folder, Path.GetFileName(Src))
             Hint("开始安装 " & E.Name & "，大包可能需要几分钟……", HintType.Blue)
             RunInThread(Sub()
                            Try

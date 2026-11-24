@@ -1,4 +1,5 @@
 Imports System.IO
+Imports System.Linq
 Imports System.Diagnostics
 Imports System.Text
 
@@ -114,6 +115,10 @@ Public Module ModBedrock
         Try
             Dim Pattern As String = If(Entry.PackageType = "appx", "*.appx", "*.exe")
             Dim Files = Directory.GetFiles(Folder, Pattern)
+            If Entry.PackageType <> "appx" Then
+                ' 装完之后目录里会多出 unins000.exe 之类，别把卸载器当安装包
+                Files = Files.Where(Function(F) Not Path.GetFileName(F).ToLowerInvariant().StartsWith("unins") AndAlso New FileInfo(F).Length > 10 * 1024 * 1024).ToArray()
+            End If
             If Files.Length = 0 AndAlso Entry.PackageType = "appx" Then Files = Directory.GetFiles(Folder, "*.msix")
             If Files.Length = 0 Then Return Nothing
             Array.Sort(Files, Function(A, B) File.GetLastWriteTimeUtc(B).CompareTo(File.GetLastWriteTimeUtc(A)))
@@ -130,18 +135,39 @@ Public Module ModBedrock
         Dim Preferred As String = Folder & Entry.ExpectedExe
         If Entry.ExpectedExe <> "" AndAlso File.Exists(Preferred) Then Return Preferred
         Try
-            Dim Files = Directory.GetFiles(Folder, "*.exe")
-            For Each F As String In Files
+            For Each F As String In Directory.GetFiles(Folder, "*.exe", SearchOption.AllDirectories)
                 Dim N As String = Path.GetFileName(F).ToLowerInvariant()
-                If N.StartsWith("unins") OrElse N.Contains("installer") OrElse N.Contains("setup") OrElse N.Contains("vcredist") Then Continue For
+                If N.StartsWith("unins") OrElse N.Contains("installer") OrElse N.Contains("setup") OrElse N.Contains("vcredist") OrElse N.Contains("gameinput") Then Continue For
                 If N.Contains("minecraft") Then Return F
             Next
         Catch
         End Try
+        ' 兜底：安装器没按 /DIR 落地时，去系统默认位置找一次
+        For Each Root As String In {Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles),
+                                    Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86),
+                                    Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) & "\Programs"}
+            Try
+                If Not Directory.Exists(Root) Then Continue For
+                For Each D As String In Directory.GetDirectories(Root)
+                    If Not Path.GetFileName(D).ToLowerInvariant().Contains("minecraft") Then Continue For
+                    Dim F As String = Path.Combine(D, "Minecraft.Windows.exe")
+                    If File.Exists(F) Then Return F
+                Next
+            Catch
+            End Try
+        Next
         Return Nothing
     End Function
 
     ''' <summary>查询 UWP 包是否已安装，返回版本号；未安装返回空字符串。</summary>
+    Public Function GetUwpVersionCached(PackageFamilyName As String) As String
+        If PackageFamilyName = "" Then Return ""
+        If UwpVersionCache.ContainsKey(PackageFamilyName) Then Return UwpVersionCache(PackageFamilyName)
+        Dim V As String = GetUwpVersion(PackageFamilyName)
+        UwpVersionCache(PackageFamilyName) = V
+        Return V
+    End Function
+
     Public Function GetUwpVersion(PackageFamilyName As String) As String
         If String.IsNullOrWhiteSpace(PackageFamilyName) Then Return ""
         Try
@@ -160,8 +186,15 @@ Public Module ModBedrock
         End Try
     End Function
 
+    Private ReadOnly UwpVersionCache As New Dictionary(Of String, String)
+
+    ''' <summary>安装 / 卸载后清空缓存，让下一次检测拿到真实状态。</summary>
+    Public Sub InvalidateCache()
+        UwpVersionCache.Clear()
+    End Sub
+
     Public Function IsInstalled(Entry As BedrockEntry) As Boolean
-        If Entry.PackageType = "appx" Then Return GetUwpVersion(Entry.PackageFamilyName) <> ""
+        If Entry.PackageType = "appx" Then Return GetUwpVersionCached(Entry.PackageFamilyName) <> ""
         Return FindGameExe(Entry) IsNot Nothing
     End Function
 
@@ -206,12 +239,17 @@ Public Module ModBedrock
     ''' <summary>按扩展名分派安装。</summary>
     Public Function InstallPackage(Entry As BedrockEntry, PackagePath As String) As String
         If Not File.Exists(PackagePath) Then Return "文件不存在：" & PackagePath
+        InvalidateCache()
         Dim Ext As String = Path.GetExtension(PackagePath).ToLowerInvariant()
         Select Case Ext
             Case ".appx", ".appxbundle", ".msix", ".msixbundle"
                 Return InstallAppx(PackagePath)
             Case ".exe"
-                Return InstallExe(Entry, PackagePath)
+                Dim Err As String = InstallExe(Entry, PackagePath)
+                If Err = "" AndAlso FindGameExe(Entry) = "" Then
+                    Hint("安装器已完成，但 bedrock 目录里没找到游戏主程序，可能装进了系统默认位置；点「启动」会让 KCL 再找一次。", HintType.Blue)
+                End If
+                Return Err
             Case ".msixvc"
                 Return "msixvc 不能直接安装：请使用 mcappx 的 GDK 安装器（下载页里带 exe 的那个包）。"
             Case Else
@@ -248,11 +286,27 @@ Public Module ModBedrock
                 Using P As Process = Process.Start(Psi)
                     Dim ErrText As String = P.StandardError.ReadToEnd()
                     P.WaitForExit()
+                    InvalidateCache()
                     If P.ExitCode = 0 Then Return ""
                     Return "卸载失败：" & ErrText.Trim()
                 End Using
             End If
-            Return "exe 版没有注册表项，直接删除 " & EntryFolder(Entry) & " 即可。"
+            ' exe 版（GDK / Win32）是用 Inno Setup 装进 bedrock 的，目录里有 unins*.exe 就走它自带的卸载
+            Dim Folder As String = EntryFolder(Entry)
+            Dim Unins As String = ""
+            If Directory.Exists(Folder) Then
+                Dim Found As String() = Directory.GetFiles(Folder, "unins*.exe")
+                If Found.Length > 0 Then Unins = Found(0)
+            End If
+            If Unins <> "" Then
+                Dim P As Process = Process.Start(New ProcessStartInfo(Unins, "/VERYSILENT /NORESTART") With {
+                    .UseShellExecute = False, .WorkingDirectory = Folder})
+                P.WaitForExit(60000)
+            Else
+                Return "没有找到卸载程序，直接删除 " & Folder & " 即可。"
+            End If
+            InvalidateCache()
+            Return ""
         Catch Ex As Exception
             Return "卸载失败：" & Ex.Message
         End Try
