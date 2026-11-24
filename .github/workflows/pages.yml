@@ -39,3 +39,9 @@ jobs:
           path: ./_site
       - id: deployment
         uses: actions/deploy-pages@v5
+        continue-on-error: true
+
+      # GitHub 偶发 artifact metadata 抓取失败，重试一次
+      - name: Retry Pages deploy
+        if: steps.deployment.outcome == 'failure'
+        uses: actions/deploy-pages@v5
