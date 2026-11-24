@@ -10,6 +10,7 @@ on:
 
 permissions:
   contents: read
+  actions: write
   pages: write
   id-token: write
 
@@ -34,14 +35,18 @@ jobs:
           cp website/.nojekyll _site/.nojekyll
           if [ -d website/assets ]; then cp -r website/assets _site/; fi
           if [ -d website/_data ]; then cp -r website/_data _site/; fi
+      # 重跑时上一次的 github-pages 产物还挂在同一次运行上，会与本次重名冲突，先清掉
+      - name: Purge stale pages artifacts
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api "repos/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}/artifacts" --paginate \
+            -q '.artifacts[] | select(.name=="github-pages") | .id' | while read -r id; do
+              [ -n "$id" ] && gh api -X DELETE "repos/${GITHUB_REPOSITORY}/actions/artifacts/${id}" || true
+            done
+
       - uses: actions/upload-pages-artifact@v5
         with:
           path: ./_site
       - id: deployment
-        uses: actions/deploy-pages@v5
-        continue-on-error: true
-
-      # GitHub 偶发 artifact metadata 抓取失败，重试一次
-      - name: Retry Pages deploy
-        if: steps.deployment.outcome == 'failure'
         uses: actions/deploy-pages@v5
