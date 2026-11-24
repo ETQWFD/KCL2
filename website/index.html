@@ -3,196 +3,151 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>KCL2 · Minecraft 启动器</title>
-<meta name="description" content="KCL2 是基于 Plain Craft Launcher 2 的第三方开源启动器，保留版本下载、加载器安装、整合包与微软正版登录，默认走官方与 BMCLAPI 双下载源。">
+<title>KCL · Minecraft 启动器家族</title>
+<meta name="description" content="KCL 是三端 Minecraft 启动器：Windows 的 KCL2 与 KCL CE、Android 的 KCL Mobile。基于 PCL2 与 FCL 改造，自带下载加速、正版登录、联机大厅与低配渲染优化。">
 <link rel="icon" type="image/x-icon" href="favicon.ico">
 <link rel="apple-touch-icon" href="assets/logo.png">
-<style>
-:root{--green:#0b7a46;--green-d:#075c35;--ink:#16241c;--mut:#5b6c61;--line:#e2ece5;--bg:#f7faf8}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;line-height:1.7}
-a{color:var(--green);text-decoration:none}
-.wrap{max-width:1000px;margin:0 auto;padding:0 22px}
-header.nav{position:sticky;top:0;background:rgba(247,250,248,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);z-index:10}
-.nav .wrap{display:flex;align-items:center;gap:18px;height:60px}
-.brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:19px;color:var(--green-d)}
-.brand img{width:30px;height:30px;border-radius:7px;display:block}
-.nav .sp{flex:1}
-.nav a.navlink{color:var(--mut);font-size:15px}
-.nav a.navlink:hover{color:var(--green)}
-.hero{padding:64px 0 40px;border-bottom:1px solid var(--line)}
-.hero h1{font-size:40px;line-height:1.2;margin:0 0 14px;letter-spacing:-.02em}
-.hero p.lead{font-size:17px;color:var(--mut);max-width:680px;margin:0 0 26px}
-.dl{display:flex;gap:12px;flex-wrap:wrap}
-.btn{display:inline-block;padding:12px 22px;border-radius:9px;font-weight:700;font-size:16px}
-.btn.primary{background:var(--green);color:#fff}
-.btn.primary:hover{background:var(--green-d)}
-.btn.sec{background:#fff;color:var(--green-d);border:1px solid #bcd8c8}
-.btn.sec:hover{border-color:var(--green)}
-.hero small{display:block;margin-top:16px;color:var(--mut);font-size:13px}
-.shots{padding:48px 0 8px}
-.shot{margin:0 0 40px}
-.shot img{width:100%;display:block;border:1px solid var(--line);border-radius:12px;background:#fff}
-.shot h3{font-size:19px;margin:0 0 6px}
-.shot p{color:var(--mut);margin:0 0 14px;font-size:15px}
-.feat{padding:30px 0}
-.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-.f{background:#fff;border:1px solid var(--line);border-radius:12px;padding:20px}
-.f b{display:block;margin-bottom:6px;font-size:16px}
-.f span{color:var(--mut);font-size:14px}
-.editions{padding:24px 0 8px}
-.egrid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-.e{background:#fff;border:1px solid var(--line);border-radius:12px;padding:24px}
-.e h3{margin:0 0 8px;font-size:20px}
-.e p{color:var(--mut);font-size:14px;margin:0 0 18px}
-.e .btn{width:100%;text-align:center}
-.notice{margin:34px 0;background:#eef7f1;border:1px solid #cde7d8;border-radius:12px;padding:20px 22px;color:#27513b;font-size:14.5px}
-.notice b{color:var(--green-d)}
-.links{padding:10px 0 40px;display:flex;gap:22px;flex-wrap:wrap;font-size:15px}
-footer{border-top:1px solid var(--line);padding:26px 0;color:var(--mut);font-size:13px}
-@media(max-width:760px){.grid,.egrid{grid-template-columns:1fr}.hero h1{font-size:30px}}
-</style>
+<link rel="stylesheet" href="assets/site.css">
 </head>
 <body>
+
 <header class="nav"><div class="wrap">
-  <div class="brand">
-    <img src="assets/logo.png" alt="KCL2 图标">
-    KCL2
-  </div>
+  <a class="brand" href="index.html"><img src="assets/logo.png" alt="KCL">KCL</a>
   <div class="sp"></div>
-  <a class="navlink" href="#shots">截图</a>
-  <a class="navlink" href="download.html">下载</a>
-  <a class="navlink" href="manual.html">使用手册</a>
-  <a class="navlink" href="https://github.com/ETQWFD/KCL2">源码</a>
+  <a class="nl" href="#products">三端</a>
+  <a class="nl" href="#matrix">能力对比</a>
+  <a class="nl" href="#logs">更新</a>
+  <a class="nl" href="download.html">下载</a>
+  <a class="nl" href="manual.html">手册</a>
+  <span class="ver" id="ver-top">v2.15.14-kcl.2</span>
 </div></header>
 
 <section class="hero"><div class="wrap">
-  <h1>当常见启动器暂时不可用时，<br>仍要有一个能进入游戏的入口。</h1>
-  <p class="lead">KCL2 基于 Plain Craft Launcher 2 二次开发，保留版本下载、加载器安装、整合包管理、版本隔离与微软正版登录。版本文件默认同时走 Mojang 官方源与 BMCLAPI 镜像源，任一源失败会自动切换，支持多线程与断点续传。</p>
-  <div id="announce" class="notice" style="display:none"></div>
-  <div class="dl">
-    <a class="btn primary" href="download.html">选择版本下载</a>
-    <a class="btn sec" href="download.html#dotnet">.NET 依赖补丁（仅启动报错时需要）</a>
+  <p class="eyebrow">PLAIN CRAFT LAUNCHER · 第三方改造 · MIT</p>
+  <h1>一个账号，三台设备，<br>同一个 <em>KCL</em>。</h1>
+  <p class="lead">Windows 用 KCL2 或 KCL CE，Android 用 KCL Mobile。版本下载、加载器安装、整合包、微软正版登录、局域网联机与低配渲染优化，三端同源同更新源。</p>
+  <div class="cta">
+    <a class="btn primary" href="download.html#kcl2">下载 KCL2（Windows）</a>
+    <a class="btn ghost" href="download.html#mobile">下载 KCL（Android）</a>
+    <a class="btn ghost" href="download.html#ce">KCL CE 社区版</a>
   </div>
-  <small>解压后只有一个 KCL2.exe，首次运行在同目录生成 KCL 与 .minecraft 两个文件夹。要求 Windows 7 及以上 64 位、已安装 .NET Framework 4.8。</small>
-</div></section>
-
-<section class="shots wrap" id="shots">
-  <div class="shot">
-    <h3>启动页</h3>
-    <p>离线与正版登录、游戏用户名、版本入口，沿用 PCL2 的界面布局，默认绿色主题。</p>
-    <img src="assets/shot-home.png" alt="KCL2 启动主界面" loading="lazy">
-  </div>
-  <div class="shot">
-    <h3>下载页</h3>
-    <p>直接拉取 Mojang 官方版本清单，正式版、预览版、远古版分组展示，可下载并安装原版与各类加载器。</p>
-    <img src="assets/shot-download.png" alt="KCL2 版本下载页面" loading="lazy">
-  </div>
-  <div class="shot">
-    <h3>关于与更新</h3>
-    <p>保留原作者与上游的英文署名；每次启动自动检查本仓库更新，可选择立即更新、以后再说或忽略该版本。</p>
-    <img src="assets/shot-about.png" alt="KCL2 关于与鸣谢页面" loading="lazy">
-  </div>
-</section>
-
-<section class="shots wrap" id="shots-ce">
-  <h2 class="block-title">KCL CE（社区版）实拍</h2>
-  <div class="shot">
-    <h3>启动页</h3>
-    <p>社区版与 KCL2 同一套代码与界面，绿色主题、正版 / 离线入口一致，单文件启动。</p>
-    <img src="assets/ce-home.png" alt="KCL CE 启动主界面" loading="lazy">
-  </div>
-  <div class="shot">
-    <h3>下载页</h3>
-    <p>真实拉取版本清单并下载，社区版走独立的更新通道与公告，不与主力版互相干扰。</p>
-    <img src="assets/ce-download.png" alt="KCL CE 版本下载页面" loading="lazy">
-  </div>
-  <div class="shot">
-    <h3>关于与鸣谢</h3>
-    <p>同样保留龙腾猫跃 / LTCat 与 PCL 上游的英文署名，改动由 ETC Team 维护。</p>
-    <img src="assets/ce-about.png" alt="KCL CE 关于与鸣谢页面" loading="lazy">
-  </div>
-</section>
-
-<section class="feat wrap"><div class="grid">
-  <div class="f"><b>真实可用的版本下载</b><span>官方 + BMCLAPI 双源、多线程、断点续传与失败重试，解决下载慢和更新中断。</span></div>
-  <div class="f"><b>微软正版登录</b><span>支持正版账号授权登录；登录授权名称显示为 KCL2。</span></div>
-  <div class="f"><b>单文件分发</b><span>全部程序集内嵌进一个 EXE，不释放多余 DLL，配置统一写入 KCL 文件夹。</span></div>
-  <div class="f"><b>启动前公平性检查</b><span>识别常见作弊客户端 / 作弊 Mod 与 JVM 注入参数，命中则不启动并写入日志。</span></div>
-  <div class="f"><b>整合包兼容</b><span>保留版本隔离与整合包元数据读写，整合包安装目录与原版习惯一致。</span></div>
-  <div class="f"><b>软件内自动更新</b><span>比对本仓库最新提交，更新包在软件内下载并自动替换重启。</span></div>
-</div></section>
-
-<section class="editions wrap" id="editions"><div class="egrid">
-  <div class="e">
-    <h3>KCL2</h3>
-    <p>主力版本。单文件 EXE，面向普通玩家，持续维护与修复。</p>
-    <a class="btn primary" href="download.html#kcl2">前往下载 KCL2</a>
-  </div>
-  <div class="e">
-    <h3>KCL CE（社区版）</h3>
-    <p>与 KCL2 同一套代码与修复，单文件 EXE；使用独立的更新通道与公告，在同一官网分发，供偏好社区渠道的用户下载。</p>
-    <a class="btn sec" href="download.html#ce">前往下载 KCL CE</a>
-  </div>
-  <div class="e">
-    <h3><img src="assets/kcl-mobile.png" alt="KCL 手机版图标" style="width:40px;height:40px;border-radius:10px;vertical-align:middle;margin-right:8px">KCL（Android 手机版）</h3>
-    <p>基于 FCL（Fold Craft Launcher）的第三方再发行，在手机上运行 Minecraft Java 版；保留附魔台标志、绿色主题，更新与公告走本团队渠道，保留 FCL 上游署名，遵循 GPL-v3。全架构通用 APK，正式版可直接安装。</p>
-    <a class="btn sec" href="download.html#mobile">前往下载手机版 APK</a>
-    <a class="btn sec" href="https://github.com/ETQWFD/KCL-Mobile/releases/latest/download/KCLMobile-1.3.1-kcl.5-armeabi-v7a.apk" style="margin-top:10px">GitHub 最新版直链 APK</a>
+  <div class="meta">
+    <span>Windows 单文件 <b id="m-kcl2">5.4 MB</b></span>
+    <span>Android 32 位 <b id="m-mobile">84 MB</b></span>
+    <span>联机 <b>EasyTier 公网中继</b></span>
+    <span>更新源 <b>GitHub + 蓝奏云</b></span>
   </div>
 </div></section>
 
-<div class="wrap"><div class="notice">
-  <b>关于责任与运营：</b>KCL 系列不运营 Minecraft，也不运营任何多人服务器。未成年人充值、服务器封禁、道具纠纷、支付退款或服务器管理规则，请联系对应服主、服务器管理组、支付渠道或 Microsoft / Mojang 官方支持，这些不属于启动器可处理范围。桌面版 KCL2 / KCL CE 基于 Plain Craft Launcher 2 修改、遵循 MIT，原作者龙腾猫跃 / LTCat 及 PCL 上游保留署名；Android 版 KCL 基于 FCL（Fold Craft Launcher）再发行、遵循 GPL-v3，FCL-Team 上游署名保留。所有改动由 ETC Team（龙腾OS）维护，按“现状”提供、不附带担保。
-</div></div>
+<section class="blk tight"><div class="wrap">
+  <div class="notice">
+    <b>本次重点（电脑版）：</b>原本被上游隐藏的「联机」正式解锁——顶部联机页、设置里的联机项、邀请码房间全部可用，联机内核 EasyTier 走公网中继，不再依赖原作者服务器；同时修复了社区版邀请码 000 无法加入的老问题。
+  </div>
+</div></section>
 
-<section class="wrap links">
-  <a href="manual.html">使用手册</a>
-  <a href="https://github.com/ETQWFD/KCL2/issues">问题反馈（Issues）</a>
-  <a href="mailto:2416444244@qq.com">邮件反馈</a>
-  <a href="http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=b31JnHKqph3vMmCIhk2htihvcREH2F1t&authKey=U8JJu2GFgtaIvRnov%2FhH7%2Bcq08hv8JM6q5GBdGBzF1yZXYTSGSbQP9O%2FIh%2BVqby9&noverify=0&group_code=1121514619">加入 QQ 群</a>
-</section>
+<section class="blk" id="products"><div class="wrap">
+  <p class="kicker">Three builds</p>
+  <h2 class="sec">挑一个开始玩</h2>
+  <p class="sub">同一个 KCL 品牌，三种形态。下面按钮直达最新构建，不用再翻 Release 列表。</p>
+  <div class="grid3">
+    <div class="p">
+      <div class="tag">WINDOWS · 主力</div>
+      <h3>KCL2</h3>
+      <p class="desc">基于 PCL2 的单文件启动器。版本下载、Forge/NeoForge/Fabric/OptiFine、整合包、正版登录、联机房间都在里面，解压即用。</p>
+      <div class="row">
+        <a class="btn primary" href="https://github.com/ETQWFD/KCL2/releases/latest/download/KCL2.exe">下载 EXE</a>
+        <a class="btn paper" href="https://github.com/ETQWFD/KCL2/releases/latest/download/KCL2-portable.zip">便携包</a>
+      </div>
+      <div class="meta" id="v-kcl2">2.15.14-kcl.2 · 单文件</div>
+    </div>
+    <div class="p">
+      <div class="tag">WINDOWS · 社区</div>
+      <h3>KCL CE</h3>
+      <p class="desc">Community Edition，走社区渠道分发。适合想用独立构建、单独更新通道的玩家，功能与 KCL2 对齐。</p>
+      <div class="row">
+        <a class="btn primary" href="https://github.com/ETQWFD/KCL-CE/releases/download/continuous/KCLCE.exe">下载 EXE</a>
+        <a class="btn paper" href="download.html#ce">选择架构</a>
+      </div>
+      <div class="meta" id="v-ce">2.15.11 · 单文件 5.9 MB</div>
+    </div>
+    <div class="p">
+      <div class="tag">ANDROID · 手机</div>
+      <h3>KCL Mobile</h3>
+      <p class="desc">基于 FCL 的手机启动器。低配机专属渲染调度层、模组版本拦截、白边修复，PowerVR 老机型也能进游戏。</p>
+      <div class="row">
+        <a class="btn primary" href="download.html#mobile">APK 下载</a>
+        <a class="btn paper" href="https://github.com/ETQWFD/KCL-Mobile/releases/latest">Release</a>
+      </div>
+      <div class="meta" id="v-mobile">1.3.1-kcl.9 · 200059</div>
+    </div>
+  </div>
+</div></section>
+
+<section class="blk" id="matrix"><div class="wrap">
+  <p class="kicker">Capability matrix</p>
+  <h2 class="sec">三端到底差在哪</h2>
+  <p class="sub">不写“全面领先”这种空话，能做什么、做不到什么，直接摊开。</p>
+  <table class="matrix">
+    <thead><tr><th>能力</th><th>KCL2（Windows）</th><th>KCL CE（Windows）</th><th>KCL Mobile（Android）</th></tr></thead>
+    <tbody>
+      <tr><td>版本下载</td><td class="yes">官方源 + BMCLAPI</td><td class="yes">官方源 + BMCLAPI</td><td class="yes">官方源 + BMCLAPI</td></tr>
+      <tr><td>加载器</td><td>Forge / NeoForge / Fabric / OptiFine / Quilt</td><td>同 KCL2</td><td>Fabric / Quilt / Forge（按版本）</td></tr>
+      <tr><td>微软正版登录</td><td class="yes">支持</td><td class="yes">支持</td><td class="yes">支持</td></tr>
+      <tr><td>联机</td><td class="yes">EasyTier 房间 + 邀请码</td><td>走社区大厅</td><td class="yes">陶瓦 / 社区大厅</td></tr>
+      <tr><td>低配渲染</td><td>软件渲染回退 + 崩溃自愈</td><td>同 KCL2</td><td class="yes">KCL Engine 档位调度</td></tr>
+      <tr><td>更新源</td><td><code>continuous</code></td><td><code>continuous</code></td><td><code>latest_version_md.json</code></td></tr>
+      <tr><td>形态</td><td>单文件 EXE</td><td>EXE / 解压包</td><td>APK（armeabi-v7a 起）</td></tr>
+    </tbody>
+  </table>
+</div></section>
+
+<section class="blk" id="logs"><div class="wrap">
+  <p class="kicker">Changelog</p>
+  <h2 class="sec">最近更新</h2>
+  <p class="sub">公告同时会被启动器拉取，软件内看到的和这里一致。</p>
+  <div class="logs" id="logs-list"><p class="logs-empty">正在读取公告…</p></div>
+</div></section>
+
+<section class="blk"><div class="wrap">
+  <p class="kicker">Screens</p>
+  <h2 class="sec">跑起来的样子</h2>
+  <p class="sub">截图来自实际构建，不是设计稿。</p>
+  <div class="shots">
+    <figure><img src="assets/shot-home.png" alt="KCL2 主界面" loading="lazy"><figcaption>KCL2 · 启动页与版本列表</figcaption></figure>
+    <figure><img src="assets/shot-download.png" alt="KCL2 下载页" loading="lazy"><figcaption>KCL2 · 版本下载与加载器安装</figcaption></figure>
+    <figure><img src="assets/ce-home.png" alt="KCL CE 主界面" loading="lazy"><figcaption>KCL CE · 社区版启动页</figcaption></figure>
+    <figure><img src="assets/kcl-mobile.png" alt="KCL Mobile" loading="lazy"><figcaption>KCL Mobile · 手机端</figcaption></figure>
+  </div>
+</div></section>
 
 <footer><div class="wrap">
-  KCL2 · ETC Team · 基于 Plain Craft Launcher 2 的第三方修改，遵循 MIT 许可。Minecraft 及相关标识归 Microsoft / Mojang 所有。
+  <div>KCL · 龙腾OS / ETC Team 维护 · 基于 PCL2 与 FCL 改造 · MIT</div>
+  <div>
+    <a href="https://github.com/ETQWFD/KCL2">源码</a> ·
+    <a href="https://github.com/ETQWFD/KCL2/issues">反馈</a> ·
+    <a href="https://b23.tv/o42pOXH">赞助</a> ·
+    <a href="manual.html">手册</a>
+  </div>
 </div></footer>
+
 <script>
-// KCL Mobile 公告渲染：后台 dan.html 发布的 announcement-mobile.json（FCL Announcement v2）在官网即时展示
 (function(){
-  var BOX=document.getElementById('announce');
-  if(!BOX)return;
-  function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
-  function pick(arr){
-    if(!arr||!arr.length)return '';
-    var z=arr.filter(function(c){return (c.lang||'').toLowerCase().indexOf('zh')===0})[0]
-        ||arr.filter(function(c){return (c.lang||'').toLowerCase().indexOf('en')===0})[0]
-        ||arr[0];
-    return z?z.text:'';
-  }
-  function best(j){
-    var list=Array.isArray(j)?j:[j];
-    if(!list.length||!list[0])return null;
-    var m=list[0];
-    list.forEach(function(a){if(a&&Number(a.id)>Number(m.id))m=a});
-    return m;
-  }
-  function render(a){
-    if(!a)return;
-    if(a.outdated){console.log('[announce] skipped, outdated id='+a.id);return}
-    var t=pick(a.title),c=pick(a.content);
-    if(!t&&!c){console.log('[announce] empty text, id='+a.id);return}
-    BOX.innerHTML='<b>最新公告 · '+esc(t)+'</b>'
-      +'<div style="color:var(--mut);font-size:13px;margin:4px 0 8px">'+esc(a.date||'')+'</div>'
-      +'<div>'+esc(c)+'</div>';
-    BOX.style.display='block';
-  }
-  var RAW='https://raw.githubusercontent.com/ETQWFD/KCL2/main/website/announcement-mobile.json';
-  var CDN='https://cdn.jsdelivr.net/gh/ETQWFD/KCL2@main/website/announcement-mobile.json';
-  fetch(RAW+'?t='+Date.now(),{cache:'no-store'})
-    .then(function(r){if(!r.ok)throw new Error('raw HTTP '+r.status);return r.json()})
-    .catch(function(){return fetch(CDN).then(function(r){if(!r.ok)throw new Error('cdn HTTP '+r.status);return r.json()})})
-    .then(function(j){render(best(j))})
-    .catch(function(e){console.log('[announce] not shown:',e&&e.message)})
+  function fmt(bytes){if(!bytes)return'';var mb=bytes/1048576;return (mb>=100?mb.toFixed(0):mb.toFixed(1))+' MB';}
+  fetch('_data/stats.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.json()}).then(function(d){
+    var R=d.repos||{};
+    if(R.kcl2){var a=(R.kcl2.assets||[]).filter(function(x){return /KCL2\.exe$/.test(x.name)})[0];
+      if(a){document.getElementById('m-kcl2').textContent=fmt(a.size);}
+      var vt=document.getElementById('ver-top');if(vt&&R.kcl2.tag==='continuous')vt.textContent='v2.15.14-kcl.2';}
+    if(R.mobile){var b=(R.mobile.assets||[]).filter(function(x){return /\.apk$/.test(x.name)})[0];
+      if(b){document.getElementById('m-mobile').textContent=fmt(b.size);}}
+  }).catch(function(){});
+
+  fetch('announce.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.json()}).then(function(a){
+    if(!a||!a.enabled||!a.title)return;
+    var list=document.getElementById('logs-list');
+    list.innerHTML='<article class="log"><h3>'+esc(a.title)+'</h3><p>'+esc(a.content||'')+'</p></article>';
+  }).catch(function(){});
+  function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
 })();
 </script>
 </body>

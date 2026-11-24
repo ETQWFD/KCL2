@@ -4,203 +4,113 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>下载 · KCL 系列启动器</title>
-<meta name="description" content="下载 KCL2、KCL CE 社区版与 KCL Android 手机版 Minecraft 启动器，支持 Windows x64/ARM64 与安卓。">
+<meta name="description" content="KCL2、KCL CE、KCL Mobile 三端下载。Windows 单文件与便携包、Android APK 全架构，含蓝奏云与 GitHub 直链。">
 <link rel="icon" type="image/x-icon" href="favicon.ico">
 <link rel="apple-touch-icon" href="assets/logo.png">
-<style>
-:root{--green:#0b7a46;--green-d:#075c35;--ink:#16241c;--mut:#5b6c61;--line:#e2ece5;--bg:#f7faf8}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;line-height:1.7}
-a{color:var(--green);text-decoration:none}
-.wrap{max-width:1000px;margin:0 auto;padding:0 22px}
-header.nav{position:sticky;top:0;background:rgba(247,250,248,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);z-index:10}
-.nav .wrap{display:flex;align-items:center;gap:18px;height:60px}
-.brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:19px;color:var(--green-d)}
-.brand img{width:30px;height:30px;border-radius:7px;display:block}
-.nav .sp{flex:1}
-.nav a.navlink{color:var(--mut);font-size:15px}
-.nav a.navlink:hover{color:var(--green)}
-.hero{padding:44px 0 20px}
-.hero h1{font-size:34px;margin:0 0 10px;letter-spacing:-.02em}
-.hero p{color:var(--mut);margin:0;max-width:720px}
-.cards{padding:26px 0 10px;display:grid;grid-template-columns:1fr;gap:18px}
-.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:26px;display:grid;grid-template-columns:84px 1fr;gap:22px}
-.card .ic{width:84px;height:84px;border-radius:18px;object-fit:contain;background:#fff;border:1px solid var(--line)}
-.card h2{margin:2px 0 4px;font-size:23px}
-.card .sub{color:var(--mut);font-size:14.5px;margin:0 0 16px}
-.meta{font-size:13.5px;color:var(--mut);margin:0 0 16px}
-.meta code{background:#eef4f0;padding:1px 6px;border-radius:5px}
-.dlrow{display:flex;gap:10px;flex-wrap:wrap}
-.btn{display:inline-block;padding:11px 20px;border-radius:9px;font-weight:700;font-size:15px}
-.btn.primary{background:var(--green);color:#fff}
-.btn.primary:hover{background:var(--green-d)}
-.btn.sec{background:#fff;color:var(--green-d);border:1px solid #bcd8c8}
-.btn.sec:hover{border-color:var(--green)}
-.btn.mini{padding:8px 14px;font-size:13.5px;font-weight:600}
-.tag{display:inline-block;font-size:12px;font-weight:700;color:var(--green-d);background:#e6f3ec;border:1px solid #cfe7da;border-radius:20px;padding:2px 11px;margin-left:8px;vertical-align:middle}
-.notice{margin:26px 0 10px;background:#eef7f1;border:1px solid #cde7d8;border-radius:12px;padding:18px 20px;color:#27513b;font-size:14px}
-.notice b{color:var(--green-d)}
-.back{display:inline-block;margin:18px 0 0;font-size:14.5px}
-footer{border-top:1px solid var(--line);padding:24px 0 40px;color:var(--mut);font-size:13px;margin-top:20px}
-@media(max-width:680px){.card{grid-template-columns:1fr}.card .ic{width:64px;height:64px}.hero h1{font-size:27px}}
-</style>
+<link rel="stylesheet" href="assets/site.css">
 </head>
 <body>
+
 <header class="nav"><div class="wrap">
-  <div class="brand"><img src="assets/logo.png" alt="KCL">KCL</div>
+  <a class="brand" href="index.html"><img src="assets/logo.png" alt="KCL">KCL</a>
   <div class="sp"></div>
-  <a class="navlink" href="index.html">首页</a>
-  <a class="navlink" href="manual.html">使用手册</a>
-  <a class="navlink" href="https://github.com/ETQWFD/KCL2">源码</a>
+  <a class="nl" href="index.html">首页</a>
+  <a class="nl" href="#kcl2">KCL2</a>
+  <a class="nl" href="#ce">KCL CE</a>
+  <a class="nl" href="#mobile">手机版</a>
+  <a class="nl" href="manual.html">手册</a>
 </div></header>
 
-<section class="hero wrap">
-  <h1>选择版本下载</h1>
-  <p>三个版本共用同一官网与后台。Windows 主力用 KCL2；偏好社区渠道用 KCL CE；安卓手机用 KCL。全部支持微软正版登录与 BMCLAPI 加速下载。</p>
-  <p class="notice" style="margin:6px 0 0;padding:10px 14px"><b>蓝奏云下载提示：</b>电脑版（KCL2 / KCL CE）与手机版所有蓝奏云下载，密码统一为 <code>KCL2</code>（大写，不含空格）。</p>
-</section>
-
-<div id="announce" class="notice" style="display:none"></div>
-
-<div class="wrap cards">
-
-  <div class="card" id="kcl2">
-    <img class="ic" src="assets/logo.png" alt="KCL2 图标">
-    <div>
-      <h2>KCL2<span class="tag">Windows · 主力</span><span class="tag" id="v-kcl2">最新构建</span></h2>
-      <p class="sub">基于 Plain Craft Launcher 2 的单文件启动器。解压即用，首次运行在同目录生成 KCL 与 .minecraft 两个文件夹。</p>
-      <p class="meta">系统：Windows 7 及以上 64 位，需 <code>.NET Framework 4.8</code>。单文件 EXE，无多余 DLL。</p>
-      <p class="meta" id="cnt-kcl2"></p>
-      <div class="dlrow">
-        <a class="btn primary" href="https://github.com/ETQWFD/KCL2/releases/download/continuous/KCL2-portable.zip">下载 KCL2（ZIP）</a>
-        <a class="btn sec" href="https://github.com/ETQWFD/KCL2/releases/download/continuous/KCL2.exe">单独下载 KCL2.exe</a>
-        <a class="btn sec" href="https://etc322.lanzouc.com/b01gifnxoh" target="_blank" rel="noopener">蓝奏云网盘（密码 KCL2，含 CE）</a>
-        <a class="btn sec mini" href="#dotnet">启动报错？下 .NET 补丁</a>
-      </div>
-    </div>
+<section class="hero"><div class="wrap">
+  <p class="eyebrow">DOWNLOAD · 三端</p>
+  <h1>下载 KCL</h1>
+  <p class="lead">Windows 与 Android 都在这一页。每个版本都标了当前构建号，蓝奏云与 GitHub 双通道，挑能打开的那个用。</p>
+  <div class="cta">
+    <a class="btn primary" href="https://github.com/ETQWFD/KCL2/releases/latest/download/KCL2.exe">KCL2 直接下载</a>
+    <a class="btn ghost" href="#mobile">跳到手机版</a>
   </div>
+</div></section>
 
-  <div class="card" id="ce">
-    <img class="ic" src="favicon.ico" alt="KCL CE 图标">
-    <div>
-      <h2>KCL CE<span class="tag">Windows · 社区版</span><span class="tag" id="v-ce">最新版本</span></h2>
-      <p class="sub">基于 PCL Community 官方社区版（现代 C# / .NET）改造，界面与 KCL2 一致，走独立更新通道与公告。</p>
-      <p class="meta">系统：Windows 10 / 11 64 位（.NET 运行时已内置，免安装）。不确定电脑架构就下 <code>x64</code>。</p>
-      <p class="meta" id="cnt-ce"></p>
-      <div class="dlrow">
-        <a class="btn primary" href="https://github.com/ETQWFD/KCL-CE/releases/latest">下载 KCL CE（版本页，含 x64 / ARM64）</a>
-        <a class="btn sec" id="ce-zip" href="https://github.com/ETQWFD/KCL-CE/releases/latest">KCL CE x64 ZIP（直链）</a>
-        <a class="btn sec" href="https://etc322.lanzouc.com/b01gifnxoh" target="_blank" rel="noopener">蓝奏云网盘（密码 KCL2）</a>
-      </div>
-    </div>
-  </div>
+<section class="blk"><div class="wrap">
 
-  <div class="card" id="mobile">
-    <img class="ic" src="assets/kcl-mobile.png" alt="KCL 手机版图标">
-    <div>
-      <h2>KCL<span class="tag">Android · 手机版</span><span class="tag" id="v-mobile">最新构建</span></h2>
-      <p class="sub">基于 Zalith-Launcher 移植，内置陶瓦（Terracotta）联机与 KCL 社区联机大厅，支持模组加载与全版本。</p>
-      <p class="meta">系统：Android 6.0 及以上（armeabi-v7a / arm64，适配低内存老手机）。正式版，安装前请卸载旧版本。</p>
-      <p class="meta" id="cnt-mobile"></p>
-      <div class="dlrow">
-        <a class="btn primary" href="https://github.com/ETQWFD/KCL-Mobile/releases/latest">下载 KCL 手机版 APK</a>
-        <a class="btn sec" href="https://etc322.lanzouc.com/ilPxb4g8305c" target="_blank" rel="noopener">蓝奏云直链（kcl.8，免密码）</a>
-        <a class="btn sec" href="https://etc322.lanzouc.com/b01gifmk5e" target="_blank" rel="noopener">蓝奏云版本合集（密码 KCL2）</a>
-        <a class="btn sec" href="https://github.com/ETQWFD/KCL-Mobile/releases/latest/download/KCLMobile-1.3.1-kcl.8-armeabi-v7a.apk">GitHub 最新版直链（kcl.8）</a>
-      </div>
-    </div>
-  </div>
-
-  <div class="card" id="dotnet">
-    <img class="ic" src="assets/logo.png" alt="依赖补丁">
-    <div>
-      <h2>.NET Framework 4.8 依赖补丁<span class="tag">仅 KCL2 需要</span></h2>
-      <p class="sub">仅当双击 KCL2.exe 提示缺少 .NET Framework 时才需要。运行后自动下载安装依赖，完成后会提示并退出。KCL CE 与手机版无需此补丁。</p>
-      <div class="dlrow">
-        <a class="btn sec" href="https://github.com/ETQWFD/KCL2/releases/download/continuous/KCL2DependencySetup.exe">下载 KCL2DependencySetup.exe</a>
-      </div>
-    </div>
-  </div>
-
-</div>
-
-<div class="wrap">
   <div class="notice">
-    <b>责任与运营：</b>KCL 系列不运营 Minecraft，也不运营任何多人服务器。未成年人充值、服务器封禁、道具纠纷、支付退款或服务器管理规则，请联系对应服主、服务器管理组、支付渠道或 Microsoft / Mojang 官方支持。桌面版基于 Plain Craft Launcher 2（含社区版）修改、遵循 MIT，原作者龙腾猫跃 / LTCat 及 PCL Community 保留署名；Android 版基于 FCL 再发行、遵循 GPL-v3。所有改动由 ETC Team（龙腾OS）按“现状”提供。
+    <b>蓝奏云：</b>电脑版与手机版合集密码统一为 <code>KCL2</code>（大写、无空格）。GitHub 直链在国内可能间歇性打不开，打不开就换蓝奏云。
   </div>
-  <a class="back" href="index.html">← 返回首页</a>
-</div>
+
+  <div class="dcard" id="kcl2">
+    <h2>KCL2 <span class="pill" id="v-kcl2">2.15.14-kcl.2</span></h2>
+    <p class="sub2">Windows 主力版，单文件 EXE，解压即用；首次运行会在同目录生成 <code>KCL</code> 与 <code>.minecraft</code>。</p>
+    <div class="dlrow">
+      <a class="btn primary" href="https://github.com/ETQWFD/KCL2/releases/latest/download/KCL2.exe">下载 KCL2.exe</a>
+      <a class="btn paper" href="https://github.com/ETQWFD/KCL2/releases/latest/download/KCL2-portable.zip">便携包 ZIP</a>
+      <a class="btn paper" href="https://github.com/ETQWFD/KCL2/releases/tag/continuous">历史构建</a>
+    </div>
+    <p class="alt">本版：解锁隐藏联机（EasyTier 公网中继）、社区版邀请码 000 回退修复、卡顿消除与崩溃自愈保留。<span id="cnt-kcl2"></span></p>
+  </div>
+
+  <div class="dcard" id="dotnet">
+    <h2>Windows 依赖（首次使用先装）</h2>
+    <p class="sub2">KCL2 / KCL CE 需要 .NET Framework 4.8。系统已装可跳过，不确定就运行下面的引导程序。</p>
+    <div class="dlrow">
+      <a class="btn primary" href="https://github.com/ETQWFD/KCL2/releases/latest/download/KCL2DependencySetup.exe">依赖引导安装器</a>
+      <a class="btn paper" href="https://dotnet.microsoft.com/zh-cn/download/dotnet-framework/thank-you/net48-offline-installer">微软官方 4.8 离线包</a>
+    </div>
+  </div>
+
+  <div class="dcard" id="ce">
+    <h2>KCL CE（社区版）<span class="pill" id="v-ce">2.15.11 单文件</span></h2>
+    <p class="sub2">独立的社区构建，双架构。功能与 KCL2 对齐，适合走社区更新通道。</p>
+    <div class="dlrow">
+      <a class="btn primary" href="https://github.com/ETQWFD/KCL-CE/releases/download/continuous/KCLCE.exe">KCLCE.exe（5.9 MB 单文件）</a>
+      <a class="btn paper" href="https://github.com/ETQWFD/KCL-CE/releases/download/continuous/KCLCE-portable.zip">便携包（2.7 MB）</a>
+      <a class="btn paper" href="https://github.com/ETQWFD/KCL-CE/releases/tag/continuous">历史构建</a>
+    </div>
+    <p class="alt" style="margin-top:10px">旧的 x64 / arm64 安装包（约 80 MB）是自包含 .NET 的构建；现在统一用单文件版，体积降到约 6 MB，功能一致，只是首次运行需要系统已装 .NET Framework 4.8。</p>
+    <p class="alt"><span id="cnt-ce"></span></p>
+  </div>
+
+  <div class="dcard" id="mobile">
+    <h2>KCL Mobile（Android）<span class="pill" id="v-mobile">1.3.1-kcl.9 · 200059</span></h2>
+    <p class="sub2">基于 FCL。低配机专属 KCL Engine 渲染调度、模组版本前置拦截、白边修复；PowerVR / 4 核老机型可直接用。</p>
+    <div class="dlrow">
+      <a class="btn primary" href="https://github.com/ETQWFD/KCL-Mobile/releases/download/v1.3.1-kcl.9/KCLMobile-1.3.1-kcl.9-armeabi-v7a.apk">32 位 APK（armeabi-v7a）</a>
+      <a class="btn paper" href="https://github.com/ETQWFD/KCL-Mobile/releases/download/v1.3.1-kcl.9/KCLMobile-1.3.1-kcl.9-arm64-v8a.apk">64 位 APK（arm64-v8a）</a>
+      <a class="btn paper" href="https://github.com/ETQWFD/KCL-Mobile/releases/tag/v1.3.1-kcl.9">Release 页面</a>
+    </div>
+    <div class="dlrow" style="margin-top:10px">
+      <a class="btn paper" href="https://etc322.lanzouc.com/b01gifmk5e" target="_blank" rel="noopener">蓝奏云版本合集（密码 KCL2）</a>
+      <a class="btn paper" href="https://etc322.lanzouc.com/ilPxb4g8305c" target="_blank" rel="noopener">kcl.8 直链（免密码，旧版）</a>
+    </div>
+    <p class="alt">更新源：<code>latest_version_md.json</code>（code 200059）。<span id="cnt-mobile"></span></p>
+  </div>
+
+  <p><a class="btn paper" href="index.html">← 返回首页</a></p>
+</div></section>
 
 <footer><div class="wrap">
-  KCL · ETC Team。Minecraft 及相关标识归 Microsoft / Mojang 所有。
+  <div>KCL · 龙腾OS / ETC Team 维护 · 基于 PCL2 与 FCL 改造 · MIT</div>
+  <div><a href="https://b23.tv/o42pOXH">赞助</a> · <a href="manual.html">手册</a></div>
 </div></footer>
+
 <script>
-// 版本号、发布日期与真实下载量从定时快照 _data/stats.json 读取，保证官网始终展示真实最新版
 (function(){
-  function fmtDate(iso){try{return new Date(iso).toLocaleDateString('zh-CN')}catch(e){return ''}}
-  function num(v){return new Intl.NumberFormat('zh-CN').format(v||0)}
-  fetch('_data/stats.json?t='+Date.now(),{cache:'no-store'})
-    .then(r=>r.json())
-    .then(j=>{
-      var rs=j.repos||{};
-      function fill(key,tagId,cntId,isCE){
-        var d=rs[key];if(!d)return;
-        var tag=document.getElementById(tagId),cnt=document.getElementById(cntId);
-        if(tag){
-          if(key==='ce'){tag.textContent='v'+String(d.tag||'').replace(/^v/,'').split('-')[0];}
-          else{tag.textContent='最新构建 '+(fmtDate(d.published_at)||'');}
-        }
-        if(cnt){cnt.textContent='最新版下载 '+num(d.latest_downloads)+' 次 · 近期版本累计 '+num(d.total_downloads)+' 次（GitHub 实时统计，每30分钟刷新）';}
-      }
-      fill('kcl2','v-kcl2','cnt-kcl2');
-      fill('ce','v-ce','cnt-ce');
-      fill('mobile','v-mobile','cnt-mobile');
-      var ce=rs.ce;
-      if(ce){var zip=(ce.assets||[]).find(a=>/x64\.zip$/i.test(a.name));
-        if(zip){var a=document.getElementById('ce-zip');if(a)a.href=ce.html_url.replace(/\/tag\/.*/,'/download/'+encodeURIComponent(zip.name));}}
-    })
-    .catch(()=>{/* 快照暂不可用时保留页面默认文案 */});
-})();
-</script>
-<script>
-// KCL Mobile 公告渲染：后台 dan.html 发布的 announcement-mobile.json（FCL Announcement v2）在官网即时展示
-(function(){
-  var BOX=document.getElementById('announce');
-  if(!BOX)return;
-  function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
-  function pick(arr){
-    if(!arr||!arr.length)return '';
-    var z=arr.filter(function(c){return (c.lang||'').toLowerCase().indexOf('zh')===0})[0]
-        ||arr.filter(function(c){return (c.lang||'').toLowerCase().indexOf('en')===0})[0]
-        ||arr[0];
-    return z?z.text:'';
-  }
-  function best(j){
-    var list=Array.isArray(j)?j:[j];
-    if(!list.length||!list[0])return null;
-    var m=list[0];
-    list.forEach(function(a){if(a&&Number(a.id)>Number(m.id))m=a});
-    return m;
-  }
-  function render(a){
-    if(!a)return;
-    if(a.outdated){console.log('[announce] skipped, outdated id='+a.id);return}
-    var t=pick(a.title),c=pick(a.content);
-    if(!t&&!c){console.log('[announce] empty text, id='+a.id);return}
-    BOX.innerHTML='<b>最新公告 · '+esc(t)+'</b>'
-      +'<div style="color:var(--mut);font-size:13px;margin:4px 0 8px">'+esc(a.date||'')+'</div>'
-      +'<div>'+esc(c)+'</div>';
-    BOX.style.display='block';
-  }
-  var RAW='https://raw.githubusercontent.com/ETQWFD/KCL2/main/website/announcement-mobile.json';
-  var CDN='https://cdn.jsdelivr.net/gh/ETQWFD/KCL2@main/website/announcement-mobile.json';
-  fetch(RAW+'?t='+Date.now(),{cache:'no-store'})
-    .then(function(r){if(!r.ok)throw new Error('raw HTTP '+r.status);return r.json()})
-    .catch(function(){return fetch(CDN).then(function(r){if(!r.ok)throw new Error('cdn HTTP '+r.status);return r.json()})})
-    .then(function(j){render(best(j))})
-    .catch(function(e){console.log('[announce] not shown:',e&&e.message)})
+  function fmt(n){return n?String(n):'';}
+  fetch('_data/stats.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.json()}).then(function(d){
+    var R=d.repos||{};
+    if(R.kcl2){
+      var el=document.getElementById('v-kcl2');if(el&&R.kcl2.tag==='continuous')el.textContent='2.15.14-kcl.2';
+      document.getElementById('cnt-kcl2').textContent=' 累计下载 '+(R.kcl2.total_downloads||0)+' 次。';
+    }
+    if(R.ce){
+      var c=document.getElementById('cnt-ce');
+      if(c)c.textContent='累计下载 '+(R.ce.total_downloads||0)+' 次。';
+    }
+    if(R.mobile){
+      var m=document.getElementById('cnt-mobile');
+      if(m)m.textContent=' 累计下载 '+(R.mobile.total_downloads||0)+' 次。';
+    }
+  }).catch(function(){});
 })();
 </script>
 </body>
 </html>
-
