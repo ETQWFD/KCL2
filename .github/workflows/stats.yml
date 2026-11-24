@@ -1,7 +1,8 @@
 name: Refresh Stats And Deploy
 
 # 用仓库自带 GITHUB_TOKEN（已鉴权，不受匿名 60 次/小时限流）定时汇总三仓真实下载量，
-# 生成 website/_data/stats.json，提交后直接部署 Pages（GITHUB_TOKEN 的提交不会触发 push 型工作流，故本工作流自行部署）。
+# 生成 website/_data/stats.json 并提交；GITHUB_TOKEN 的提交不会触发 push 型工作流，
+# 因此提交后显式触发 pages.yml 部署（不在此工作流里重复上传 Pages 产物）。
 on:
   schedule:
     - cron: '*/30 * * * *'
@@ -12,8 +13,8 @@ permissions:
   actions: write
 
 concurrency:
-  group: pages
-  cancel-in-progress: true
+  group: stats
+  cancel-in-progress: false
 
 jobs:
   stats:
