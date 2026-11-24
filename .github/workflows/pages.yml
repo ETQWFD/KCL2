@@ -34,8 +34,8 @@ jobs:
           cp website/.nojekyll _site/.nojekyll
           if [ -d website/assets ]; then cp -r website/assets _site/; fi
           if [ -d website/_data ]; then cp -r website/_data _site/; fi
-      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-pages-artifact@v5
         with:
           path: ./_site
       - id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
