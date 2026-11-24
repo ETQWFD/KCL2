@@ -23,6 +23,8 @@ Public Module ModBedrock
         Public Md5 As String = ""
         Public PageUrl As String = ""
         Public DirectUrl As String = ""
+        ''' <summary>123 云盘镜像（不经过 Cloudflare，可当备用通道）。</summary>
+        Public MirrorUrl As String = ""
         ''' <summary>UWP 的包族名，例如 Microsoft.MinecraftUWP_8wekyb3d8bbwe。</summary>
         Public PackageFamilyName As String = ""
         ''' <summary>UWP 的 AUMID，例如 Microsoft.MinecraftUWP_8wekyb3d8bbwe!App。</summary>
@@ -43,6 +45,7 @@ Public Module ModBedrock
             .BuildType = "GDK", .PackageType = "exe", .SizeText = "875.71 MB", .DateText = "2026-11-16",
             .Arch = "x64", .Md5 = "252fa99c2e9795728da32bdc1ffe7780",
             .PageUrl = "https://www.mcappx.com/bedrock/26.60/26.65/",
+            .MirrorUrl = "https://1817430.share.123pan.cn/123pan/gZD9-0Te7v",
             .DirectUrl = "https://dl.mcappx.com/be-1-26-6501-x64-jp",
             .ExpectedExe = "Minecraft.Windows.exe",
             .Note = "安装时可指定目录，装完直接点启动；需要 Xbox Gaming Services。"})
@@ -52,6 +55,7 @@ Public Module ModBedrock
             .BuildType = "UWP", .PackageType = "appx", .SizeText = "886.76 MB", .DateText = "2025-10-16",
             .Arch = "x64", .Md5 = "b181ac1d6608e5cf6049518cd9701a7e",
             .PageUrl = "https://www.mcappx.com/bedrock/1.21/1.21.114/",
+            .MirrorUrl = "https://1817430.share.123pan.cn/123pan/gZD9-G73lv",
             .DirectUrl = "https://dl.mcappx.com/be-1-21-11401-x64-jp",
             .PackageFamilyName = "Microsoft.MinecraftUWP_8wekyb3d8bbwe",
             .AppUserModelId = "Microsoft.MinecraftUWP_8wekyb3d8bbwe!App",
@@ -62,6 +66,7 @@ Public Module ModBedrock
             .BuildType = "UWP", .PackageType = "appx", .SizeText = "859.82 MB", .DateText = "2025-10-16",
             .Arch = "x86", .Md5 = "75664f682c4dceda7f498d1827ac9249",
             .PageUrl = "https://www.mcappx.com/bedrock/1.21/1.21.114/",
+            .MirrorUrl = "https://1817430.share.123pan.cn/123pan/gZD9-aJ3Sv",
             .DirectUrl = "https://dl.mcappx.com/be-1-21-11401-x86-jp",
             .PackageFamilyName = "Microsoft.MinecraftUWP_8wekyb3d8bbwe",
             .AppUserModelId = "Microsoft.MinecraftUWP_8wekyb3d8bbwe!App",
@@ -72,6 +77,7 @@ Public Module ModBedrock
             .BuildType = "UWP", .PackageType = "appx", .SizeText = "1.18 GB", .DateText = "2026-10-28",
             .Arch = "x64", .Md5 = "",
             .PageUrl = "https://www.mcappx.com/education-uwp/26.30/26.33/",
+            .MirrorUrl = "https://1817430.share.123pan.cn/123pan/gZD9-IZ67v",
             .DirectUrl = "https://dl.mcappx.com/uwpee-1-26-3300-x64-jp",
             .PackageFamilyName = "Microsoft.MinecraftEducationEdition_8wekyb3d8bbwe",
             .AppUserModelId = "Microsoft.MinecraftEducationEdition_8wekyb3d8bbwe!App",
@@ -82,6 +88,7 @@ Public Module ModBedrock
             .BuildType = "Win32", .PackageType = "exe", .SizeText = "1.16 GB", .DateText = "2026-10-28",
             .Arch = "x64", .Md5 = "",
             .PageUrl = "https://www.mcappx.com/education-win32/26.30/26.33/",
+            .MirrorUrl = "https://1817430.share.123pan.cn/123pan/gZD9-8gN7v",
             .DirectUrl = "https://dl.mcappx.com/win32ee-1-26-3300-x64-jp",
             .ExpectedExe = "MinecraftEducationEdition.exe",
             .Note = "桌面安装包，可装到 bedrock 子目录；需要教育账号。"})

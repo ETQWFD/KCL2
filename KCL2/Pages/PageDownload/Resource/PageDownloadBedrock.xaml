@@ -11,7 +11,7 @@
             <local:MyCard Margin="0,10" Title="基岩版 / 教育版">
                 <StackPanel Margin="21,42,21,18">
                     <TextBlock TextWrapping="Wrap" Opacity="0.75"
-                               Text="下载安装包后在这里安装并启动，安装包与游戏文件都放在 Minecraft 根目录的 bedrock 下，和 Java 版本共用同一个目录。Appx（UWP）走本地包注册，GDK / Win32 走安装器静默安装，不经过 Microsoft Store。" />
+                               Text="下载安装包后在这里安装并启动，安装包与游戏文件都放在 Minecraft 根目录的 bedrock 下，和 Java 版本共用同一个目录。Appx（UWP）走本地包注册（系统会把它登记在 WindowsApps，安装包本体仍留在 bedrock 目录），GDK / Win32 用 /DIR 静默安装，游戏文件直接落在 bedrock 子目录，全程不经过 Microsoft Store。" />
                     <TextBlock x:Name="TextRoot" Margin="0,10,0,0" FontFamily="Consolas" FontSize="12.5" Opacity="0.7" TextWrapping="Wrap" />
                     <StackPanel Orientation="Horizontal" Margin="0,14,0,0">
                         <local:MyButton x:Name="BtnOpenRoot" Height="32" Width="120" Text="打开 bedrock 目录" Margin="0,0,10,0" />
@@ -28,6 +28,7 @@
                     <TextBlock x:Name="Status1" Margin="0,6,0,0" Opacity="0.85" TextWrapping="Wrap" />
                     <WrapPanel Margin="0,12,0,0">
                         <local:MyButton Tag="bedrock-2665-gdk" Height="30" MinWidth="96" Text="下载页" Margin="0,0,8,8" Click="BtnOpenPage_Click" />
+                        <local:MyButton Tag="bedrock-2665-gdk" Height="30" MinWidth="96" Text="网盘备用" Margin="0,0,8,8" Click="BtnOpenMirror_Click" />
                         <local:MyButton Tag="bedrock-2665-gdk" Height="30" MinWidth="110" Text="导入安装包" Margin="0,0,8,8" Click="BtnImport_Click" />
                         <local:MyButton Tag="bedrock-2665-gdk" Height="30" MinWidth="96" Text="重新安装" Margin="0,0,8,8" Click="BtnInstallAgain_Click" />
                         <local:MyButton Tag="bedrock-2665-gdk" Height="30" MinWidth="80" Text="启动" ColorType="Highlight" Margin="0,0,8,8" Click="BtnLaunch_Click" />
@@ -42,6 +43,7 @@
                     <TextBlock x:Name="Status2" Margin="0,6,0,0" Opacity="0.85" TextWrapping="Wrap" />
                     <WrapPanel Margin="0,12,0,0">
                         <local:MyButton Tag="bedrock-121114-x64" Height="30" MinWidth="96" Text="下载页" Margin="0,0,8,8" Click="BtnOpenPage_Click" />
+                        <local:MyButton Tag="bedrock-121114-x64" Height="30" MinWidth="96" Text="网盘备用" Margin="0,0,8,8" Click="BtnOpenMirror_Click" />
                         <local:MyButton Tag="bedrock-121114-x64" Height="30" MinWidth="110" Text="导入安装包" Margin="0,0,8,8" Click="BtnImport_Click" />
                         <local:MyButton Tag="bedrock-121114-x64" Height="30" MinWidth="80" Text="启动" ColorType="Highlight" Margin="0,0,8,8" Click="BtnLaunch_Click" />
                         <local:MyButton Tag="bedrock-121114-x64" Height="30" MinWidth="80" Text="卸载" Margin="0,0,8,8" Click="BtnUninstall_Click" />
@@ -55,6 +57,7 @@
                     <TextBlock x:Name="Status3" Margin="0,6,0,0" Opacity="0.85" TextWrapping="Wrap" />
                     <WrapPanel Margin="0,12,0,0">
                         <local:MyButton Tag="bedrock-121114-x86" Height="30" MinWidth="96" Text="下载页" Margin="0,0,8,8" Click="BtnOpenPage_Click" />
+                        <local:MyButton Tag="bedrock-121114-x86" Height="30" MinWidth="96" Text="网盘备用" Margin="0,0,8,8" Click="BtnOpenMirror_Click" />
                         <local:MyButton Tag="bedrock-121114-x86" Height="30" MinWidth="110" Text="导入安装包" Margin="0,0,8,8" Click="BtnImport_Click" />
                         <local:MyButton Tag="bedrock-121114-x86" Height="30" MinWidth="80" Text="启动" ColorType="Highlight" Margin="0,0,8,8" Click="BtnLaunch_Click" />
                     </WrapPanel>
@@ -67,6 +70,7 @@
                     <TextBlock x:Name="Status4" Margin="0,6,0,0" Opacity="0.85" TextWrapping="Wrap" />
                     <WrapPanel Margin="0,12,0,0">
                         <local:MyButton Tag="edu-2633-uwp" Height="30" MinWidth="96" Text="下载页" Margin="0,0,8,8" Click="BtnOpenPage_Click" />
+                        <local:MyButton Tag="edu-2633-uwp" Height="30" MinWidth="96" Text="网盘备用" Margin="0,0,8,8" Click="BtnOpenMirror_Click" />
                         <local:MyButton Tag="edu-2633-uwp" Height="30" MinWidth="110" Text="导入安装包" Margin="0,0,8,8" Click="BtnImport_Click" />
                         <local:MyButton Tag="edu-2633-uwp" Height="30" MinWidth="80" Text="启动" ColorType="Highlight" Margin="0,0,8,8" Click="BtnLaunch_Click" />
                         <local:MyButton Tag="edu-2633-uwp" Height="30" MinWidth="80" Text="卸载" Margin="0,0,8,8" Click="BtnUninstall_Click" />
@@ -80,6 +84,7 @@
                     <TextBlock x:Name="Status5" Margin="0,6,0,0" Opacity="0.85" TextWrapping="Wrap" />
                     <WrapPanel Margin="0,12,0,0">
                         <local:MyButton Tag="edu-2633-win32" Height="30" MinWidth="96" Text="下载页" Margin="0,0,8,8" Click="BtnOpenPage_Click" />
+                        <local:MyButton Tag="edu-2633-win32" Height="30" MinWidth="96" Text="网盘备用" Margin="0,0,8,8" Click="BtnOpenMirror_Click" />
                         <local:MyButton Tag="edu-2633-win32" Height="30" MinWidth="110" Text="导入安装包" Margin="0,0,8,8" Click="BtnImport_Click" />
                         <local:MyButton Tag="edu-2633-win32" Height="30" MinWidth="96" Text="重新安装" Margin="0,0,8,8" Click="BtnInstallAgain_Click" />
                         <local:MyButton Tag="edu-2633-win32" Height="30" MinWidth="80" Text="启动" ColorType="Highlight" Margin="0,0,8,8" Click="BtnLaunch_Click" />

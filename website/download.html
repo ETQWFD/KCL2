@@ -39,14 +39,14 @@
   </div>
 
   <div class="dcard" id="kcl2">
-    <h2>KCL2 <span class="pill" id="v-kcl2">2.15.14-kcl.2</span></h2>
+    <h2>KCL2 <span class="pill" id="v-kcl2">2.15.15-kcl.3</span></h2>
     <p class="sub2">Windows 主力版，单文件 EXE，解压即用；首次运行会在同目录生成 <code>KCL</code> 与 <code>.minecraft</code>。</p>
     <div class="dlrow">
       <a class="btn primary" href="https://github.com/ETQWFD/KCL2/releases/latest/download/KCL2.exe">下载 KCL2.exe</a>
       <a class="btn paper" href="https://github.com/ETQWFD/KCL2/releases/latest/download/KCL2-portable.zip">便携包 ZIP</a>
       <a class="btn paper" href="https://github.com/ETQWFD/KCL2/releases/tag/continuous">历史构建</a>
     </div>
-    <p class="alt">本版：解锁隐藏联机（EasyTier 公网中继）、社区版邀请码 000 回退修复、卡顿消除与崩溃自愈保留。<span id="cnt-kcl2"></span></p>
+    <p class="alt">本版：新增「基岩版 / 教育版」页（导入安装包 / 静默安装到 .minecraft\\bedrock / 一键启动 / 卸载），联机解锁与卡顿消除保留。<span id="cnt-kcl2"></span></p>
   </div>
 
   <div class="dcard" id="dotnet">
@@ -135,7 +135,8 @@
         var meta=[it.ver,it.kind,it.build?('Build '+it.build):'',it.size,it.date,it.minos,it.arch].filter(Boolean).join(' · ');
         var hash=it.md5?('<span class="bhash">MD5 '+it.md5+'</span>'):'';
         row.innerHTML='<div class="binfo"><b>'+it.name+'</b><span class="bmeta">'+meta+'</span>'+hash+'</div>'+
-          '<div class="bbtn"><a class="btn primary" target="_blank" rel="noopener" href="'+it.page+'">前往下载</a></div>';
+          '<div class="bbtn"><a class="btn primary" target="_blank" rel="noopener" href="'+it.page+'">前往下载</a>'+
+          (it.mirror?('<a class="btn" target="_blank" rel="noopener" href="'+it.mirror+'">网盘备用</a>'):'')+'</div>';
         box.appendChild(row);
       });
     });
@@ -148,7 +149,7 @@
   fetch('_data/stats.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.json()}).then(function(d){
     var R=d.repos||{};
     if(R.kcl2){
-      var el=document.getElementById('v-kcl2');if(el&&R.kcl2.tag==='continuous')el.textContent='2.15.14-kcl.2';
+      var el=document.getElementById('v-kcl2');if(el&&R.kcl2.tag==='continuous')el.textContent='2.15.15-kcl.3';
       document.getElementById('cnt-kcl2').textContent=' 累计下载 '+(R.kcl2.total_downloads||0)+' 次。';
     }
     if(R.ce){

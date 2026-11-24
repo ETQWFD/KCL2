@@ -93,6 +93,20 @@ Public Class PageDownloadBedrock
         End Try
     End Sub
 
+    Private Sub BtnOpenMirror_Click(Sender As Object, Args As RoutedEventArgs)
+        Dim E As ModBedrock.BedrockEntry = EntryFromSender(Sender)
+        If E Is Nothing Then Return
+        If E.MirrorUrl = "" Then
+            Hint("这一版没有备用网盘链接，请用下载页。", HintType.Red)
+            Return
+        End If
+        Try
+            OpenWebsite(E.MirrorUrl)
+        Catch Ex As Exception
+            Hint("无法打开网盘链接：" & Ex.Message, HintType.Red)
+        End Try
+    End Sub
+
     Private Sub BtnFolder_Click(Sender As Object, Args As RoutedEventArgs)
         Dim E As ModBedrock.BedrockEntry = EntryFromSender(Sender)
         If E Is Nothing Then Return
