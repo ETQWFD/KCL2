@@ -83,7 +83,7 @@ Public Class PageDownloadBedrock
         End Try
     End Sub
 
-    Private Sub BtnOpenPage_Click(Sender As Object, E As RoutedEventArgs)
+    Private Sub BtnOpenPage_Click(Sender As Object, Args As RoutedEventArgs)
         Dim E As ModBedrock.BedrockEntry = EntryFromSender(Sender)
         If E Is Nothing Then Return
         Try
@@ -93,13 +93,13 @@ Public Class PageDownloadBedrock
         End Try
     End Sub
 
-    Private Sub BtnFolder_Click(Sender As Object, E As RoutedEventArgs)
+    Private Sub BtnFolder_Click(Sender As Object, Args As RoutedEventArgs)
         Dim E As ModBedrock.BedrockEntry = EntryFromSender(Sender)
         If E Is Nothing Then Return
         ModBedrock.OpenFolder(E)
     End Sub
 
-    Private Sub BtnLaunch_Click(Sender As Object, E As RoutedEventArgs)
+    Private Sub BtnLaunch_Click(Sender As Object, Args As RoutedEventArgs)
         Dim E As ModBedrock.BedrockEntry = EntryFromSender(Sender)
         If E Is Nothing Then Return
         Dim Err As String = ModBedrock.Launch(E)
@@ -107,7 +107,7 @@ Public Class PageDownloadBedrock
         RefreshStatus()
     End Sub
 
-    Private Sub BtnUninstall_Click(Sender As Object, E As RoutedEventArgs)
+    Private Sub BtnUninstall_Click(Sender As Object, Args As RoutedEventArgs)
         Dim E As ModBedrock.BedrockEntry = EntryFromSender(Sender)
         If E Is Nothing Then Return
         If MyMsgBox("确定要卸载 " & E.Name & " 吗？", "卸载确认", "卸载", "取消") <> 1 Then Return
@@ -116,7 +116,7 @@ Public Class PageDownloadBedrock
         RefreshStatus()
     End Sub
 
-    Private Sub BtnImport_Click(Sender As Object, E As RoutedEventArgs)
+    Private Sub BtnImport_Click(Sender As Object, Args As RoutedEventArgs)
         Dim E As ModBedrock.BedrockEntry = EntryFromSender(Sender)
         If E Is Nothing Then Return
         Using Dlg As New System.Windows.Forms.OpenFileDialog
@@ -149,7 +149,7 @@ Public Class PageDownloadBedrock
         End Using
     End Sub
 
-    Private Sub BtnInstallAgain_Click(Sender As Object, E As RoutedEventArgs)
+    Private Sub BtnInstallAgain_Click(Sender As Object, Args As RoutedEventArgs)
         Dim E As ModBedrock.BedrockEntry = EntryFromSender(Sender)
         If E Is Nothing Then Return
         Dim Pkg As String = ModBedrock.FindPackage(E)
