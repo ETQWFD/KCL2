@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-23T12:14:13.126749+00:00",
+  "generated_at": "2026-11-24T00:13:13.665762+00:00",
   "repos": {
     "kcl2": {
       "repo": "ETQWFD/KCL2",
@@ -8,12 +8,12 @@
       "prerelease": false,
       "published_at": "2026-11-12T11:33:58Z",
       "html_url": "https://github.com/ETQWFD/KCL2/releases/tag/continuous",
-      "latest_downloads": 150,
-      "total_downloads": 150,
+      "latest_downloads": 151,
+      "total_downloads": 151,
       "assets": [
         {
           "name": "KCL2-portable.zip",
-          "download_count": 65,
+          "download_count": 66,
           "size": 2565466,
           "updated_at": "2026-11-12T11:33:57Z"
         },
@@ -75,7 +75,7 @@
       "published_at": "2026-10-21T14:18:30Z",
       "html_url": "https://github.com/ETQWFD/KCL-Mobile/releases/tag/continuous",
       "latest_downloads": 5,
-      "total_downloads": 96,
+      "total_downloads": 103,
       "assets": [
         {
           "name": "KCL-Mobile.apk",
