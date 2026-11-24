@@ -9,57 +9,28 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
-  actions: write
-  pages: write
-  id-token: write
+  contents: write
 
 concurrency:
   group: pages
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/configure-pages@v5
-      - name: Stage site
-        run: |
-          mkdir -p _site
-          cp website/index.html website/manual.html website/dan.html website/download.html website/announce.json website/announce-ce.json website/announcement-mobile.json website/favicon.ico _site/
-          cp website/CNAME _site/CNAME
-          cp website/.nojekyll _site/.nojekyll
-          if [ -d website/assets ]; then cp -r website/assets _site/; fi
-          if [ -d website/_data ]; then cp -r website/_data _site/; fi
-      # 重跑时上一次的 github-pages 产物还挂在同一次运行上，会与本次重名冲突，先清掉
-      - name: Purge stale pages artifacts
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          gh api "repos/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}/artifacts" --paginate \
-            -q '.artifacts[] | select(.name=="github-pages") | .id' | while read -r id; do
-              [ -n "$id" ] && gh api -X DELETE "repos/${GITHUB_REPOSITORY}/actions/artifacts/${id}" || true
-            done
-
-      - uses: actions/upload-pages-artifact@v5
         with:
-          path: ./_site
-      # 产物上传后 GitHub 侧登记有延迟，deploy 当场可能查不到，先轮询到可见
-      - name: Wait for pages artifact
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          for i in $(seq 1 12); do
-            n=$(gh api "repos/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}/artifacts" \
-              -q '[.artifacts[] | select(.name=="github-pages")] | length' 2>/dev/null || echo 0)
-            if [ "${n:-0}" -ge 1 ]; then echo "pages artifact ready"; exit 0; fi
-            sleep 5
-          done
-          echo "pages artifact not visible after 60s"; exit 1
+          fetch-depth: 1
 
-      - id: deployment
-        uses: actions/deploy-pages@v5
+      # 直接发布到 gh-pages 分支，Pages 从分支构建。
+      # 不走 upload-pages-artifact / deploy-pages，避免 GitHub 偶发的 artifact 元数据抓取失败。
+      - name: Publish to gh-pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./website
+          publish_branch: gh-pages
+          enable_jekyll: false
+          cname: etc.os.kg
+          commit_message: 'deploy: site update'
