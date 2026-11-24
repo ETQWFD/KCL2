@@ -1,0 +1,110 @@
+/* KCL 官网统一样式 —— 2026 重构版 */
+:root{
+  --ink:#122019; --ink-2:#22362b; --mut:#5b6f62;
+  --green:#0d6b41; --green-d:#08482c; --green-l:#e8f4ec;
+  --line:#dbe6df; --paper:#f6f9f7; --card:#ffffff;
+  --mono:"Cascadia Mono","JetBrains Mono",Consolas,"Courier New",monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:"Segoe UI","PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+  line-height:1.65;font-size:16px;-webkit-font-smoothing:antialiased}
+a{color:var(--green);text-decoration:none}
+img{max-width:100%}
+.wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+
+/* 顶栏 */
+.nav{position:sticky;top:0;z-index:20;background:#0c1b14;color:#e9f5ee}
+.nav .wrap{display:flex;align-items:center;gap:26px;height:64px}
+.brand{display:flex;align-items:center;gap:11px;font-weight:800;font-size:19px;color:#fff;letter-spacing:.02em}
+.brand img{width:32px;height:32px;border-radius:8px}
+.nav .sp{flex:1}
+.nav a.nl{color:#a9c6b7;font-size:15px}
+.nav a.nl:hover{color:#fff}
+.nav .ver{font-family:var(--mono);font-size:12.5px;color:#7fd3a7;border:1px solid #2c5342;border-radius:6px;padding:3px 8px}
+
+/* 首屏 */
+.hero{background:#0c1b14;color:#eaf6ef;padding:74px 0 58px;border-bottom:4px solid var(--green)}
+.hero .eyebrow{font-family:var(--mono);font-size:13px;letter-spacing:.16em;color:#7fd3a7;margin:0 0 16px}
+.hero h1{margin:0;font-size:clamp(34px,5.2vw,58px);line-height:1.1;letter-spacing:-.02em;font-weight:800}
+.hero h1 em{font-style:normal;color:#8fe0b4}
+.hero p.lead{margin:22px 0 30px;max-width:660px;color:#b8d2c4;font-size:17px}
+.hero .cta{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:12px 20px;border-radius:8px;font-weight:700;font-size:15.5px;border:1px solid transparent;transition:transform .12s ease,background .12s}
+.btn:hover{transform:translateY(-1px)}
+.btn.primary{background:#19a363;color:#fff}
+.btn.primary:hover{background:#148a53}
+.btn.ghost{background:transparent;color:#d9efe2;border-color:#3a6552}
+.btn.ghost:hover{border-color:#7fd3a7}
+.btn.paper{background:#fff;color:var(--green-d);border-color:#cfdfd5}
+.hero .meta{margin-top:26px;display:flex;gap:28px;flex-wrap:wrap;font-family:var(--mono);font-size:13px;color:#8fb8a3}
+.hero .meta b{color:#fff;font-weight:600}
+
+/* 通用区块 */
+section.blk{padding:58px 0}
+section.blk.tight{padding:36px 0}
+h2.sec{margin:0 0 8px;font-size:26px;letter-spacing:-.01em}
+p.sub{margin:0 0 30px;color:var(--mut)}
+.kicker{font-family:var(--mono);font-size:12.5px;letter-spacing:.14em;color:var(--green);text-transform:uppercase;margin:0 0 10px}
+
+/* 三端矩阵 */
+.matrix{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.matrix th,.matrix td{padding:14px 16px;text-align:left;border-bottom:1px solid var(--line);font-size:14.5px}
+.matrix thead th{background:#0d2b1e;color:#dff2e7;font-weight:700;font-size:14px}
+.matrix thead th:first-child{width:190px;color:#8fb8a3;font-weight:500}
+.matrix tbody tr:last-child td{border-bottom:0}
+.matrix td:first-child{color:var(--mut);font-weight:600}
+.matrix .yes{color:#0d6b41;font-weight:700}
+.matrix .no{color:#9aaba2}
+.matrix code{font-family:var(--mono);font-size:12.5px;background:#eff6f2;border:1px solid #dcebe2;border-radius:5px;padding:1px 6px;color:#24503a}
+
+/* 产品卡 */
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.p{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:22px;display:flex;flex-direction:column}
+.p .tag{font-family:var(--mono);font-size:11.5px;letter-spacing:.1em;color:var(--green);margin-bottom:8px}
+.p h3{margin:0 0 6px;font-size:19px}
+.p .desc{color:var(--mut);font-size:14.5px;margin:0 0 16px;flex:1}
+.p .row{display:flex;gap:8px;flex-wrap:wrap}
+.p .row .btn{padding:9px 14px;font-size:14px}
+.p .meta{font-family:var(--mono);font-size:12px;color:#73877b;margin-top:14px}
+
+/* 更新日志 */
+.logs{display:grid;gap:14px}
+.log{background:#fff;border:1px solid var(--line);border-left:4px solid var(--green);border-radius:8px;padding:18px 20px}
+.log h3{margin:0 0 6px;font-size:16.5px}
+.log .date{font-family:var(--mono);font-size:12px;color:#73877b}
+.log p{margin:8px 0 0;color:var(--ink-2);font-size:14.5px;white-space:pre-line}
+.logs-empty{color:var(--mut);font-size:14px}
+
+/* 截图 */
+.shots{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+.shots figure{margin:0;background:#fff;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.shots img{display:block;width:100%}
+.shots figcaption{padding:10px 14px;font-size:13.5px;color:var(--mut);border-top:1px solid var(--line)}
+
+/* 下载页产品块 */
+.dcard{background:#fff;border:1px solid var(--line);border-radius:12px;padding:26px 26px 22px;margin:0 0 22px;scroll-margin-top:90px}
+.dcard h2{margin:0 0 4px;font-size:22px}
+.dcard .sub2{color:var(--mut);font-size:14.5px;margin:0 0 18px}
+.dcard .dlrow{display:flex;gap:10px;flex-wrap:wrap}
+.dcard .alt{margin-top:14px;font-size:14px;color:var(--mut)}
+.notice{background:var(--green-l);border:1px solid #cde7d8;border-radius:10px;padding:16px 18px;color:#24503a;font-size:14px;margin:0 0 26px}
+.notice b{color:var(--green-d)}
+.pill{display:inline-block;font-family:var(--mono);font-size:12px;background:#eef7f1;border:1px solid #cde7d8;color:#24503a;border-radius:20px;padding:2px 10px;margin-left:8px;vertical-align:middle}
+
+footer{border-top:1px solid var(--line);margin-top:48px;padding:30px 0 44px;color:var(--mut);font-size:13.5px;background:#fff}
+footer .wrap{display:flex;gap:24px;flex-wrap:wrap;justify-content:space-between}
+footer a{color:var(--mut)}
+footer a:hover{color:var(--green)}
+
+@media(max-width:860px){
+  .grid3{grid-template-columns:1fr}
+  .shots{grid-template-columns:1fr}
+  .hero{padding:54px 0 42px}
+  .nav .wrap{height:56px;gap:14px}
+  .nav a.nl{font-size:13.5px}
+  .nav .ver{display:none}
+  .matrix thead th:first-child{width:auto}
+  .matrix th,.matrix td{padding:11px 10px;font-size:13.5px}
+}

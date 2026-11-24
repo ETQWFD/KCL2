@@ -1,0 +1,32 @@
+{
+  "id": 202611240001,
+  "significant": false,
+  "outdated": false,
+  "minVersion": -1,
+  "maxVersion": -1,
+  "specificLang": [
+    "zh",
+    "en"
+  ],
+  "title": [
+    {
+      "lang": "zh",
+      "text": "KCL Mobile 1.3.1-kcl.9 v9 KCL Engine 渲染调度层已发布"
+    },
+    {
+      "lang": "en",
+      "text": "KCL Mobile 1.3.1-kcl.9 v9: KCL Engine render scheduler"
+    }
+  ],
+  "date": "2026-11-24",
+  "content": [
+    {
+      "lang": "zh",
+      "text": "KCL Mobile 1.3.1-kcl.9（构建号 200059）已发布。\n① 自研渲染调度层 KCL Engine：按设备档位给 GL4ES 注入批处理参数（LIBGL_BATCH / LIBGL_BEGINEND），把大量 glBegin/glVertex 在 Java 侧合并后再进 C，低配机减少 JNI 往返；低配额外开 FASTMATH / SILENTSTUB 并改用 Serial GC。\n② 低配画面预设：仅低配机首次启动把分辨率比例设为 80%，减少每帧像素量。\n③ 渲染器库缺失自动回退：当前渲染器 .so 不存在时自动换同家族可用渲染器并提示。\n④ 失败自愈：非 0 退出且存活不足 120 秒连续两次，自动进入安全模式关闭激进参数。\n更新体积 88,249,792 字节，sha256 5d9ffb62…b434，与 GitHub Release 同一份。"
+    },
+    {
+      "lang": "en",
+      "text": "KCL Mobile 1.3.1-kcl.9 (200059) is out.\n① New in-house render scheduling layer (KCL Engine): injects GL4ES batching flags (LIBGL_BATCH / LIBGL_BEGINEND) per device tier, merging draw calls on the Java side before crossing JNI; LOW tier also enables FASTMATH / SILENTSTUB and Serial GC.\n② Low-end resolution preset: LOW devices set render ratio to 80% once.\n③ Renderer fallback when the native lib is missing.\n④ Self-healing: two short non-zero exits within 120s switch on safe mode."
+    }
+  ]
+}
