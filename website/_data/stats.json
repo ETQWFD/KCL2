@@ -1,33 +1,33 @@
 {
-  "generated_at": "2026-11-24T12:59:26.427967+00:00",
+  "generated_at": "2026-11-24T20:46:45.798383+00:00",
   "repos": {
     "kcl2": {
       "repo": "ETQWFD/KCL2",
       "tag": "continuous",
       "name": "KCL2 Continuous Build",
       "prerelease": false,
-      "published_at": "2026-11-24T12:54:03Z",
+      "published_at": "2026-11-24T13:09:41Z",
       "html_url": "https://github.com/ETQWFD/KCL2/releases/tag/continuous",
-      "latest_downloads": 0,
-      "total_downloads": 0,
+      "latest_downloads": 5,
+      "total_downloads": 5,
       "assets": [
         {
           "name": "KCL2-portable.zip",
-          "download_count": 0,
-          "size": 2565910,
-          "updated_at": "2026-11-24T12:54:02Z"
+          "download_count": 1,
+          "size": 2565944,
+          "updated_at": "2026-11-24T13:09:40Z"
         },
         {
           "name": "KCL2.exe",
-          "download_count": 0,
+          "download_count": 3,
           "size": 5628416,
-          "updated_at": "2026-11-24T12:54:03Z"
+          "updated_at": "2026-11-24T13:09:40Z"
         },
         {
           "name": "KCL2DependencySetup.exe",
-          "download_count": 0,
+          "download_count": 1,
           "size": 146944,
-          "updated_at": "2026-11-24T12:54:02Z"
+          "updated_at": "2026-11-24T13:09:40Z"
         }
       ]
     },
@@ -38,8 +38,8 @@
       "prerelease": false,
       "published_at": "2026-10-27T10:07:30Z",
       "html_url": "https://github.com/ETQWFD/KCL-CE/releases/tag/v2.15.11-kcl.1",
-      "latest_downloads": 158,
-      "total_downloads": 195,
+      "latest_downloads": 159,
+      "total_downloads": 197,
       "assets": [
         {
           "name": "KCL-CE-2.15.11-kcl.1-arm64.exe",
@@ -61,7 +61,7 @@
         },
         {
           "name": "KCL-CE-2.15.11-kcl.1-x64.zip",
-          "download_count": 122,
+          "download_count": 123,
           "size": 80558897,
           "updated_at": "2026-10-27T10:07:28Z"
         }
@@ -75,7 +75,7 @@
       "published_at": "2026-10-21T14:18:30Z",
       "html_url": "https://github.com/ETQWFD/KCL-Mobile/releases/tag/continuous",
       "latest_downloads": 5,
-      "total_downloads": 104,
+      "total_downloads": 105,
       "assets": [
         {
           "name": "KCL-Mobile.apk",
