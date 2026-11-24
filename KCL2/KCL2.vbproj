@@ -262,6 +262,9 @@
     <Compile Include="Pages\PageDownload\Resource\PageResource.xaml.vb">
       <DependentUpon>PageResource.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\PageDownload\Resource\PageDownloadBedrock.xaml.vb">
+      <DependentUpon>PageDownloadBedrock.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\PageDownload\Resource\PageDownloadDataPack.xaml.vb">
       <DependentUpon>PageDownloadDataPack.xaml</DependentUpon>
     </Compile>
@@ -510,6 +513,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Pages\PageDownload\Resource\PageDownloadBedrock.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Pages\PageDownload\Resource\PageDownloadDataPack.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -711,6 +718,7 @@
     <Compile Include="Modules\Base\ModAnimation.vb" />
     <Compile Include="Modules\Base\MyBitmap.vb" />
     <Compile Include="Modules\ModMain.vb" />
+    <Compile Include="Modules\Base\ModBedrock.vb" />
     <Compile Include="Modules\Base\ModBase.vb" />
     <Compile Include="My Project\AssemblyInfo.vb">
       <SubType>Code</SubType>

@@ -1250,6 +1250,10 @@ Public Class FormMain
         DownloadDataPack = 4
         DownloadResourcePack = 5
         DownloadShader = 6
+        ''' <summary>
+        ''' 基岩版 / 教育版。
+        ''' </summary>
+        DownloadBedrock = 7
         SetupLaunch = 0
         SetupLink = 1
         SetupUI = 2

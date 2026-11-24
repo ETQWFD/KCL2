@@ -7,11 +7,12 @@ Public Class PageDownloadLeft
     ''' 当前页面的编号。
     ''' </summary>
     Public PageID As FormMain.PageSubType = FormMain.PageSubType.DownloadInstall
+    Private Shared FrmBedrockPage As PageDownloadBedrock
 
     ''' <summary>
     ''' 勾选事件改变页面。
     ''' </summary>
-    Private Sub PageCheck(sender As FrameworkElement, e As RouteEventArgs) Handles ItemInstall.Check, ItemMod.Check, ItemPack.Check, ItemResourcePack.Check, ItemShader.Check, ItemDataPack.Check
+    Private Sub PageCheck(sender As FrameworkElement, e As RouteEventArgs) Handles ItemInstall.Check, ItemMod.Check, ItemPack.Check, ItemResourcePack.Check, ItemShader.Check, ItemDataPack.Check, ItemBedrock.Check
         '尚未初始化控件属性时，sender.Tag 为 Nothing，会导致切换到页面 0
         '若使用 IsLoaded，则会导致模拟点击不被执行（模拟点击切换页面时，控件的 IsLoaded 为 False）
         If sender.Tag IsNot Nothing Then PageChange(Val(sender.Tag))
@@ -35,6 +36,9 @@ Public Class PageDownloadLeft
             Case FormMain.PageSubType.DownloadShader
                 If FrmDownloadShader Is Nothing Then FrmDownloadShader = New PageDownloadShader
                 Return FrmDownloadShader
+            Case FormMain.PageSubType.DownloadBedrock
+                If FrmBedrockPage Is Nothing Then FrmBedrockPage = New PageDownloadBedrock
+                Return FrmBedrockPage
             Case FormMain.PageSubType.DownloadDataPack
                 If FrmDownloadDataPack Is Nothing Then FrmDownloadDataPack = New PageDownloadDataPack
                 Return FrmDownloadDataPack

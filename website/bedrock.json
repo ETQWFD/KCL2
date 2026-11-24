@@ -1,0 +1,152 @@
+{
+  "updated": "2026-11-25",
+  "source": "MCAPPX 版本库（mcappx.com）",
+  "source_note": "版本号、安装包类型、大小与校验值取自 MCAPPX 版本库 JSON 数据源（data.mcappx.com/v2/bedrock.json）与各版本下载页；本站只做索引与说明，不转存安装包。",
+  "notice": "基岩版为付费游戏：完整游玩与联机需要拥有该游戏的微软账号（Java 版正版用户可在官方启动器内免费领取基岩版）。教育版需要学校/机构的教育账号。KCL 只负责下载后的安装与启动，不提供账号或授权。",
+  "groups": [
+    {
+      "id": "bedrock",
+      "title": "基岩版 Minecraft: Bedrock Edition",
+      "desc": "当前主线版本。26.x 为 GDK 安装包（可选安装目录），1.21.x 为 UWP Appx（系统级安装）。",
+      "items": [
+        {
+          "name": "基岩版 26.65（最新正式版）",
+          "ver": "26.65",
+          "kind": "GDK 安装包（exe）",
+          "build": "1.26.6501",
+          "size": "875.71 MB",
+          "date": "2026-11-16",
+          "minos": "Windows 10 18362+",
+          "md5": "252fa99c2e9795728da32bdc1ffe7780",
+          "page": "https://www.mcappx.com/bedrock/26.60/26.65/",
+          "direct": "https://dl.mcappx.com/be-1-26-6501-x64-jp",
+          "arch": "x64",
+          "featured": true
+        },
+        {
+          "name": "基岩版 1.21.114（UWP Appx）",
+          "ver": "1.21.114",
+          "kind": "UWP Appx",
+          "build": "1.21.11401",
+          "size": "886.76 MB",
+          "date": "2025-10-16",
+          "minos": "Windows 10 19041+",
+          "md5": "b181ac1d6608e5cf6049518cd9701a7e",
+          "page": "https://www.mcappx.com/bedrock/1.21/1.21.114/",
+          "direct": "https://dl.mcappx.com/be-1-21-11401-x64-jp",
+          "arch": "x64"
+        },
+        {
+          "name": "基岩版 1.21.114（UWP Appx / 32 位）",
+          "ver": "1.21.114",
+          "kind": "UWP Appx",
+          "build": "1.21.11401",
+          "size": "859.82 MB",
+          "date": "2025-10-16",
+          "minos": "Windows 10 19041+",
+          "md5": "75664f682c4dceda7f498d1827ac9249",
+          "page": "https://www.mcappx.com/bedrock/1.21/1.21.114/",
+          "direct": "https://dl.mcappx.com/be-1-21-11401-x86-jp",
+          "arch": "x86"
+        },
+        {
+          "name": "基岩版 26.63",
+          "ver": "26.63",
+          "kind": "GDK 安装包（exe）",
+          "build": "1.26.6301",
+          "size": "≈870 MB",
+          "date": "2026-11-06",
+          "minos": "Windows 10 18362+",
+          "md5": "0a51108fc1bb2de066a0cadb796da0d6",
+          "page": "https://www.mcappx.com/bedrock/26.60/26.63/",
+          "direct": "https://dl.mcappx.com/be-1-26-6301-x64-jp",
+          "arch": "x64"
+        }
+      ]
+    },
+    {
+      "id": "edu-uwp",
+      "title": "教育版 Minecraft Education（UWP）",
+      "desc": "系统级 Appx 安装，适合有教育账号的机器；支持课堂模式与代码构建器。",
+      "items": [
+        {
+          "name": "教育版 26.33（UWP Appx）",
+          "ver": "26.33",
+          "kind": "Appx（UWP）",
+          "build": "1.26.3300",
+          "size": "1.18 GB",
+          "date": "2026-10-28",
+          "minos": "Windows 10 16299+",
+          "md5": "",
+          "page": "https://www.mcappx.com/education-uwp/26.30/26.33/",
+          "direct": "https://dl.mcappx.com/uwpee-1-26-3300-x64-jp",
+          "arch": "x64",
+          "featured": true
+        },
+        {
+          "name": "教育版 26.32（UWP Appx）",
+          "ver": "26.32",
+          "kind": "Appx（UWP）",
+          "build": "1.26.3200",
+          "size": "≈1.17 GB",
+          "date": "2026-08-04",
+          "minos": "Windows 10 16299+",
+          "md5": "",
+          "page": "https://www.mcappx.com/education-uwp/26.30/26.32/",
+          "direct": "https://dl.mcappx.com/uwpee-1-26-3200-x64-jp",
+          "arch": "x64"
+        }
+      ]
+    },
+    {
+      "id": "edu-win32",
+      "title": "教育版 Minecraft Education（Win32）",
+      "desc": "传统桌面安装包，可选安装目录，适合非 UWP 环境或需要便携目录的机器。",
+      "items": [
+        {
+          "name": "教育版 26.33（Win32 安装包）",
+          "ver": "26.33",
+          "kind": "桌面安装包（exe）",
+          "build": "1.26.3300",
+          "size": "1.16 GB",
+          "date": "2026-10-28",
+          "minos": "Windows 10+",
+          "md5": "",
+          "page": "https://www.mcappx.com/education-win32/26.30/26.33/",
+          "direct": "https://dl.mcappx.com/win32ee-1-26-3300-x64-jp",
+          "arch": "x64",
+          "featured": true
+        },
+        {
+          "name": "教育版 26.32（Win32 安装包）",
+          "ver": "26.32",
+          "kind": "桌面安装包（exe）",
+          "build": "1.26.3200",
+          "size": "≈1.16 GB",
+          "date": "2026-08-04",
+          "minos": "Windows 10+",
+          "md5": "",
+          "page": "https://www.mcappx.com/education-win32/26.30/26.32/",
+          "direct": "https://dl.mcappx.com/win32ee-1-26-3200-x64-jp",
+          "arch": "x64"
+        }
+      ]
+    }
+  ],
+  "tools": [
+    {
+      "name": "GDK 功能修补应用（Minecraft_LaunchHelper.exe）",
+      "desc": "给 GDK 版补齐磁贴、文件关联、URL Protocol；934 KB。",
+      "page": "https://www.mcappx.com/download/gdk-launcher/",
+      "direct": "https://dl.mcappx.com/gdk-launcher-us",
+      "size": "934 KB"
+    },
+    {
+      "name": "Xbox Gaming Services（运行依赖）",
+      "desc": "基岩版启动必需依赖，未安装会在启动时闪退。",
+      "page": "https://www.mcappx.com/download/xbox-gaming-services/",
+      "direct": "",
+      "size": ""
+    }
+  ]
+}
