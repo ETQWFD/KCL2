@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-25T03:59:46.946759+00:00",
+  "generated_at": "2026-11-25T14:10:01.143119+00:00",
   "repos": {
     "kcl2": {
       "repo": "ETQWFD/KCL2",
@@ -8,8 +8,8 @@
       "prerelease": false,
       "published_at": "2026-11-24T22:33:16Z",
       "html_url": "https://github.com/ETQWFD/KCL2/releases/tag/continuous",
-      "latest_downloads": 8,
-      "total_downloads": 8,
+      "latest_downloads": 32,
+      "total_downloads": 32,
       "assets": [
         {
           "name": "KCL2-portable.zip",
@@ -19,13 +19,13 @@
         },
         {
           "name": "KCL2.exe",
-          "download_count": 6,
+          "download_count": 27,
           "size": 5654528,
           "updated_at": "2026-11-24T22:33:16Z"
         },
         {
           "name": "KCL2DependencySetup.exe",
-          "download_count": 1,
+          "download_count": 4,
           "size": 146944,
           "updated_at": "2026-11-24T22:33:15Z"
         }
@@ -38,12 +38,12 @@
       "prerelease": false,
       "published_at": "2026-10-27T10:07:30Z",
       "html_url": "https://github.com/ETQWFD/KCL-CE/releases/tag/v2.15.11-kcl.1",
-      "latest_downloads": 159,
-      "total_downloads": 197,
+      "latest_downloads": 162,
+      "total_downloads": 201,
       "assets": [
         {
           "name": "KCL-CE-2.15.11-kcl.1-arm64.exe",
-          "download_count": 18,
+          "download_count": 19,
           "size": 81805867,
           "updated_at": "2026-10-27T10:07:28Z"
         },
@@ -55,7 +55,7 @@
         },
         {
           "name": "KCL-CE-2.15.11-kcl.1-x64.exe",
-          "download_count": 15,
+          "download_count": 17,
           "size": 86193474,
           "updated_at": "2026-10-27T10:07:29Z"
         },
@@ -75,7 +75,7 @@
       "published_at": "2026-10-21T14:18:30Z",
       "html_url": "https://github.com/ETQWFD/KCL-Mobile/releases/tag/continuous",
       "latest_downloads": 5,
-      "total_downloads": 105,
+      "total_downloads": 114,
       "assets": [
         {
           "name": "KCL-Mobile.apk",
