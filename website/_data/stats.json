@@ -1,33 +1,33 @@
 {
-  "generated_at": "2026-11-24T20:46:45.798383+00:00",
+  "generated_at": "2026-11-25T03:59:46.946759+00:00",
   "repos": {
     "kcl2": {
       "repo": "ETQWFD/KCL2",
       "tag": "continuous",
       "name": "KCL2 Continuous Build",
       "prerelease": false,
-      "published_at": "2026-11-24T13:09:41Z",
+      "published_at": "2026-11-24T22:33:16Z",
       "html_url": "https://github.com/ETQWFD/KCL2/releases/tag/continuous",
-      "latest_downloads": 5,
-      "total_downloads": 5,
+      "latest_downloads": 8,
+      "total_downloads": 8,
       "assets": [
         {
           "name": "KCL2-portable.zip",
           "download_count": 1,
-          "size": 2565944,
-          "updated_at": "2026-11-24T13:09:40Z"
+          "size": 2575619,
+          "updated_at": "2026-11-24T22:33:16Z"
         },
         {
           "name": "KCL2.exe",
-          "download_count": 3,
-          "size": 5628416,
-          "updated_at": "2026-11-24T13:09:40Z"
+          "download_count": 6,
+          "size": 5654528,
+          "updated_at": "2026-11-24T22:33:16Z"
         },
         {
           "name": "KCL2DependencySetup.exe",
           "download_count": 1,
           "size": 146944,
-          "updated_at": "2026-11-24T13:09:40Z"
+          "updated_at": "2026-11-24T22:33:15Z"
         }
       ]
     },
